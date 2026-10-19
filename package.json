@@ -1,0 +1,37 @@
+{
+  "name": "agency-portfolio",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "agents:install": "npm run agents:bmad && npm run agents:speckit",
+    "agents:bmad": "bmad install --directory . --modules bmm --tools github-copilot --set core.project_name=agency-portfolio --yes",
+    "agents:speckit": "uv venv --allow-existing .venv && uv pip install --python .venv --upgrade \"specify-cli @ git+https://github.com/github/spec-kit.git\" && .venv/bin/specify init --here --integration copilot --script sh --non-interactive --force --ignore-agent-tools",
+    "agents:update": "npm install --save-dev bmad-method@latest && npm run agents:install"
+  },
+  "private": true,
+  "packageManager": "npm@10.9.8",
+  "dependencies": {
+    "@angular/common": "^22.2.0",
+    "@angular/compiler": "^22.2.0",
+    "@angular/core": "^22.2.0",
+    "@angular/forms": "^22.2.0",
+    "@angular/platform-browser": "^22.2.0",
+    "@angular/router": "^22.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.2.3",
+    "@angular/cli": "^22.2.3",
+    "@angular/compiler-cli": "^22.2.0",
+    "bmad-method": "^6.12.4",
+    "jsdom": "^30.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~6.0.2",
+    "vitest": "^5.0.0"
+  }
+}
