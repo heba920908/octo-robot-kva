@@ -1,50 +1,126 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Agency Portfolio Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. BMAD-Driven Delivery
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+- BMAD Method is the primary delivery methodology. Every epic, story, and task MUST run the
+  loop **Plan → Act → Verify → Refine** without skipping a stage.
+- Other methodology skill packs (e.g. *superpowers*) MUST NOT be used in this repository.
+- spec-kit is the specification and verification layer. It MUST NOT be used as a competing
+  delivery workflow.
+- Planning artifacts MUST live in `_bmad-output/planning-artifacts/` and implementation
+  artifacts in `_bmad-output/implementation-artifacts/`, both committed.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+Rationale: a single methodology keeps agent behaviour predictable and its output traceable.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. Behaviour Models Before Code (NON-NEGOTIABLE)
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+- Every portfolio user action (e.g. viewing a case study, filtering categories, opening the
+  contact panel, submitting the contact form) MUST have an explicit behaviour model in
+  `src/app/behaviors/<feature>.behavior.ts` before implementation begins.
+- Each model MUST be typed and side-effect-free, and MUST declare `id`, `actor`, `trigger`,
+  `preconditions`, a finite set of `states`, `transitions` (`from` → `event` → `to`),
+  `effects`, and `acceptance` IDs matching the BMAD story's Given/When/Then criteria.
+- A story MUST NOT enter **Act** until its behaviour model is merged.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Rationale: explicit state machines make the expected behaviour reviewable and testable
+before any UI exists.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### III. Test-First, Colocated Verification
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+- The dev agent works test-first: a failing test MUST exist before the code that makes it pass.
+- Every component, service, validator, and behaviour model MUST have a colocated `*.spec.ts`.
+- Every behaviour-model transition MUST be covered by at least one unit test.
+- `npm test` (Vitest) MUST pass before a story is marked done.
+- Runtime behaviour-flow logs MUST be written as JSONL to
+  `.agents/workspace/bmad/<YYYY-MM-DD>/<story-id>/` and summarized (pass/fail, gaps) in the
+  story's implementation artifact.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+Rationale: tests are the executable form of the acceptance criteria.
+
+### IV. Schema- and Token-Governed Layouts
+
+- Every core layout (Hero, Services, Work/Portfolio grid, Contact panel, and shared layout
+  primitives) MUST align with at least one of:
+  1. a JSON Schema (draft 2020-12) in `src/app/core/schemas/` that local service data
+     validates against in unit tests; or
+  2. design tokens in `src/styles/_tokens.scss`, mirrored in
+     `src/app/core/schemas/design-tokens.json` (colour, typography, spacing, radius,
+     elevation, motion, breakpoints).
+- A component with neither MUST NOT be merged. Its spec under `specs/` MUST reference the
+  governing schema or token set and the relevant `.agents/workspace/spec-kit/` archive path.
+- Components MUST use tokens and MUST NOT hard-code colours or spacing.
+
+Rationale: content contracts and tokens keep layouts consistent and checkable by machine.
+
+### V. Modern Angular Discipline
+
+- Standalone components only; `NgModule`s MUST NOT be added.
+- Component state MUST use signals (`signal`, `computed`, `input()`, `output()`, `model()`);
+  `@Input`/`@Output` decorators MUST NOT appear in new code.
+- Every component MUST use `ChangeDetectionStrategy.OnPush`; the app is zoneless and MUST
+  NOT depend on `zone.js`.
+- Templates MUST use built-in control flow (`@if`, `@for` with `track`, `@switch`).
+- Dependency injection MUST use `inject()`.
+- TypeScript `strict` stays on; `any` MUST NOT be used (use `unknown` and narrow).
+- Code is organized by feature: `src/app/features/<feature>/`, shared pieces in
+  `src/app/shared/`, data and services in `src/app/core/`.
+
+Rationale: one modern, consistent idiom lowers review cost and runtime overhead.
+
+### VI. Accessible, Mobile-First, Budgeted UI
+
+- Layouts MUST be mobile-first and use semantic HTML.
+- The UI MUST meet WCAG 2.2 AA: labelled controls, visible focus states, and
+  `prefers-reduced-motion` support.
+- Production builds MUST stay within the `angular.json` budgets (initial bundle error at
+  1 MB, per-component styles error at 8 kB). Exceeding a warning threshold MUST be justified
+  in the story's implementation artifact.
+
+Rationale: an agency portfolio is judged on first impression, speed, and inclusiveness.
+
+## Technology & Tooling Constraints
+
+- Stack: Angular 22 (standalone, zoneless), SCSS, strict TypeScript, Vitest, Prettier
+  (`.prettierrc`) and `.editorconfig`.
+- **UI library is deliberately undecided.** It MUST be chosen during the BMAD Plan stage
+  (`bmad-ux` + `bmad-architecture`) against the PRD requirements and recorded as an ADR in
+  `_bmad-output/planning-artifacts/`. Until then, no UI library dependency MAY be added.
+- BMAD (`bmad-method` npm devDependency) and spec-kit (`.venv/bin/specify`) are installed
+  project-locally. Their generated files MUST NOT be committed, and installer-managed files
+  (`_bmad/config.toml`, `.specify/templates/*`, generated skills) MUST NOT be edited.
+  Team overrides go in `_bmad/custom/config.toml`.
+- Schemas in `src/app/core/schemas/` are the source of truth. `.agents/workspace/` holds only
+  git-ignored archives, snapshots, and logs, and MUST NOT be referenced from `src/`.
+
+## Development Workflow & Quality Gates
+
+A story advances only when its gate is met:
+
+1. **Plan → Act**: BMAD story with acceptance criteria exists; behaviour model merged;
+   feature spec in `specs/<NNN>-<feature>/` created (`speckit-specify`) and clarified
+   (`speckit-clarify`, `speckit-plan`); governing schema or token set identified.
+2. **Act → Verify**: tests written first and passing; every behaviour transition covered;
+   behaviour-flow logs recorded.
+3. **Verify → Done**: `npm test` and production build pass within budgets;
+   `bmad-code-review` findings resolved; `speckit-analyze` reports spec, plan, and code
+   consistent; implementation artifact updated.
+4. **Refine**: gaps feed back via `bmad-correct-course`; epics close with
+   `bmad-retrospective`.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- This constitution governs specification and verification. Day-to-day rules live in
+  `AGENTS.md` and `.agents/rules/` (`coding-standards.md`, `bmad-protocols.md`,
+  `spec-kit-rules.md`). They MUST NOT contradict each other; if they conflict, this
+  constitution prevails until the conflict is resolved by amendment.
+- Amendments are made with `speckit-constitution` in a dedicated commit that also updates any
+  affected rule file, and MUST be reviewed by a human before merge.
+- Versioning follows semantic versioning: MAJOR for removing or redefining a principle,
+  MINOR for adding a principle or section or materially expanding guidance, PATCH for
+  clarifications and wording.
+- Every code review and every `speckit-analyze` run MUST check compliance with these
+  principles. Any deviation MUST be justified in the story's implementation artifact.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-19
