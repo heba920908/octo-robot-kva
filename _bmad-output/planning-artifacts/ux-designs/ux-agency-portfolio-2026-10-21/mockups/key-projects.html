@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Key screen · Proyectos + Project detail view · kVA Instalaciones</title>
+<style>
+/*
+  KEY SCREEN: key-projects — Proyectos (title band + filtered grid) with the Project detail view open
+  (revised spines, 2026-10-21 Finalize).
+  Governing spine sections (the spines are the contract; this mock only illustrates):
+  - DESIGN.md › Colors (focus #D9A07A for current nav; focus-on-light for the inset ring; ink-2
+    carousel-stage; accent-strong active chip; scrim), Typography (h1 band title, h2 dialog title,
+    Project titles sentence case, overline Service, small counter/count), Layout & Spacing (#3 band
+    then paper-2 grid; Edge bleed for the bar heading; Heights are minimums / dialog body scrolls),
+    Elevation & Depth (one overlay shadow over scrim), Shapes (corner rule on band title; bar heading
+    under the dialog title to 66% of the details column), Components (Header condensed +
+    nav-link-current, Proyectos title band, Project filter + filter-count, Project card, Badge,
+    Project detail view incl. close in the dialog's top-right on paper / < 1024 paper top bar,
+    Project carousel incl. focus-ring-inset, 64% non-current thumbs, carousel-thumb-current bar).
+  - EXPERIENCE.md › IA (Projects launch seed; filter Todos · Instalaciones · Puesta en marcha y
+    Validaciones), Voice and Tone (filter count "{n} proyectos: {servicio}", carousel strings
+    "Fotos de {title}" / "{i} de {n}" / "Foto {i} de {n}: {alt}", Cerrar, CTA, Placeholder label),
+    Component Patterns (Project filter, Project card <article> + h3 button stretched, Badge, Project
+    detail view DOM order + launch rule, Project carousel APG structure), State Patterns (Project
+    filter Filtered; Project detail view Missing fields = omitted), Responsive & Platform (Project
+    detail view dialog ≥ 1024 / sheet < 768 without thumbnails), Key Flows › Flow 2 steps 1-3,
+    Alternate + "Ejemplo Ilustrativo" variant.
+  Fonts: local stacks only — 'Quicksand','Outfit',system-ui,sans-serif. The OFL fonts are not installed
+  yet, so this renders in the system-ui fallback.
+  No JS, no network. Dialog/scrim/focus states are rendered statically.
+*/
+/* ---- DESIGN.md tokens (verbatim) ---- */
+:root{
+  --ink:#1C1714;--ink-2:#2A2522;--paper:#FFFFFF;--paper-2:#F4F2F0;
+  --muted:#6B635D;--muted-on-dark:#A39B94;--border:#6B635D;--line:#D9D4CF;--line-on-dark:#4A433E;
+  --accent:#C8875A;--accent-hover:#D9A07A;--on-accent:#1C1714;
+  --accent-strong:#8A5430;--accent-strong-hover:#6F4326;--on-accent-strong:#FFFFFF;
+  --focus:#D9A07A;--focus-on-light:#8A5430;--danger:#B42318;--success:#1E7A46;
+  --overlay:#1C1714C7;--scrim:#1C171499;--clear:#1C171400;
+  --elev-overlay:0 24px 48px rgba(28,23,20,0.32);
+  /* Local stacks only (fonts not installed yet; system-ui fallback is expected). */
+  --ff-title:'Quicksand','Outfit',system-ui,sans-serif;
+  --ff-body:'Outfit','Quicksand',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+img{display:block;max-width:100%}
+ul,ol,dl{list-style:none}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+svg.i{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:miter}
+
+/* ---- Presentation board (not product UI; device chrome only) ---- */
+html{background:#BDB6AF}
+body{font-family:var(--ff-body);color:var(--ink);padding:48px}
+.board{display:flex;gap:64px;align-items:flex-start;width:max-content}
+.col{display:flex;flex-direction:column;gap:48px}
+.col-row{display:flex;gap:32px;align-items:flex-start}
+.cap{font:600 13px/1.45 system-ui,sans-serif;color:#1C1714;margin-bottom:12px;max-width:720px}
+.cap span{display:block;font-weight:400}
+.browser{width:1440px;background:var(--paper)}
+.chrome{height:40px;background:#E4E0DC;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #CFC9C3}
+.chrome i{width:10px;height:10px;border-radius:50%;background:#B9B2AC}
+.chrome .url{margin-left:16px;width:480px;height:24px;background:#fff;font:12px/24px system-ui,sans-serif;padding:0 12px;color:#6B635D}
+.phone{width:380px;padding:10px;background:#111}
+.phone-screen{width:360px;height:640px;overflow:hidden;position:relative;background:var(--paper)}
+.phone-screen.tall{height:auto;overflow:visible}
+.fold{position:absolute;left:-10px;right:-10px;border-top:2px dashed #C8875A;z-index:50}
+.fold b{position:absolute;right:0;top:-20px;font:600 11px/16px system-ui,sans-serif;background:#C8875A;color:#1C1714;padding:0 6px}
+.note{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B635D;border:1px dashed #A39B94;padding:2px 6px;display:inline-block;background:#fff}
+.note.dark{background:transparent;color:#A39B94;border-color:#6B635D}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---- Viewport scopes: base tokens < 1024, -lg tokens >= 1024.
+   --edge = distance from the content column to the viewport edge (rules bleed to it). ---- */
+.vp{position:relative;overflow:hidden;background:var(--paper)}
+.vp-d{--fs-display:60px;--lh-display:1.05;--fs-h1:44px;--w-h1:300;--lh-h1:1.1;--fs-h2:24px;--fs-h3:20px;--fs-stat:48px;--fs-lead:22px;--fs-body:18px;--m:48px;--sy:112px;--hh:80px;--logo-h:40px;--edge:120px}
+/* display < 768 = clamp(26px, 8.5vw, 32px) → 30.6px at the 360px Reference viewport */
+.vp-m{--fs-display:30.6px;--lh-display:1.1;--fs-h1:28px;--w-h1:400;--lh-h1:1.15;--fs-h2:20px;--fs-h3:18px;--fs-stat:36px;--fs-lead:20px;--fs-body:16px;--m:20px;--sy:64px;--hh:64px;--logo-h:32px;--edge:20px}
+
+/* ---- Typography tokens ---- */
+.t-display,.t-h1,.t-h2,.t-h3,.t-stat,.t-overline{font-family:var(--ff-title);text-transform:uppercase;overflow-wrap:break-word;hyphens:auto}
+.t-display{font-weight:300;font-size:var(--fs-display);line-height:var(--lh-display);letter-spacing:.04em}
+.t-h1{font-weight:var(--w-h1);font-size:var(--fs-h1);line-height:var(--lh-h1);letter-spacing:.06em}
+.t-h2{font-weight:400;font-size:var(--fs-h2);line-height:1.25;letter-spacing:.06em}
+.t-h3{font-weight:400;font-size:var(--fs-h3);line-height:1.3;letter-spacing:.04em}
+.t-stat{font-weight:300;font-size:var(--fs-stat);line-height:1.1;letter-spacing:.02em}
+.t-overline{font-weight:500;font-size:14px;line-height:1.3;letter-spacing:.18em}
+.t-ptitle{text-transform:none}
+.t-lead{font-family:var(--ff-body);font-weight:400;font-size:var(--fs-lead);line-height:1.5}
+.t-body{font-family:var(--ff-body);font-weight:400;font-size:var(--fs-body);line-height:1.6;max-width:72ch}
+.t-small{font-family:var(--ff-body);font-weight:400;font-size:14px;line-height:1.5}
+.t-label{font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.t-field-label{font-family:var(--ff-body);font-weight:500;font-size:15px;line-height:1.4}
+.c-muted{color:var(--muted)}
+.c-paper{color:var(--paper)}
+
+/* ---- Layout ---- */
+.wrap{max-width:calc(1200px + 2 * var(--m));margin:0 auto;padding:0 var(--m)}
+.sec{padding:var(--sy) 0;position:relative}
+.s-paper{background:var(--paper)}
+.s-paper2{background:var(--paper-2)}
+.photo-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ovl{position:absolute;inset:0;background:var(--overlay)}
+.lift{position:relative;z-index:1}
+
+/* ---- Shapes (monochrome linework: ink on light, paper on dark) ---- */
+.hd{display:inline-block;position:relative;max-width:100%}
+.crule{display:block;position:relative;height:1px;background:var(--ink);margin-top:16px;margin-left:calc(-1 * var(--edge));width:calc(100% + 32px + var(--edge))}
+.crule::after{content:"";position:absolute;right:0;bottom:0;width:1px;height:24px;background:inherit}
+.crule.mirror{margin-left:-32px;margin-right:calc(-1 * var(--edge))}
+.crule.mirror::after{right:auto;left:0}
+.on-dark .crule{background:var(--paper)}
+.subhd{display:flex;align-items:center;gap:16px}
+.srule{flex:1 1 auto;min-width:96px;height:1px;background:var(--ink);position:relative}
+.srule::after{content:"";position:absolute;right:0;width:1px;height:24px;background:inherit}
+.srule.up::after{bottom:0}
+.srule.down::after{top:0}
+.bk{position:absolute;pointer-events:none;border:0 solid var(--ink)}
+.bk.tr{border-top-width:1px;border-right-width:1px}
+.bk.bl{border-bottom-width:1px;border-left-width:1px}
+.on-dark .bk{border-color:var(--paper)}
+.bar{display:block;height:4px;background:var(--ink);margin-top:16px}
+
+/* ---- Buttons (min-heights; labels wrap) ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 24px;border:1px solid transparent;border-radius:0;text-decoration:none;white-space:normal;text-wrap:balance;text-align:center;font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary-light{background:var(--accent-strong);color:var(--on-accent-strong)}
+.btn-secondary{background:var(--paper);color:var(--ink);border-color:var(--ink)}
+.btn-ghost-dark{background:var(--clear);color:var(--paper);border-color:var(--paper)}
+.btn-text{background:var(--paper);color:var(--accent-strong);min-height:44px;padding:12px 0}
+.btn-block{width:100%}
+.btn-icon{width:44px;height:44px;flex:none;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:0;background:var(--paper);color:var(--ink)}
+.btn-icon.on-dark-i{background:var(--clear);color:var(--paper)}
+.ring-dark{outline:2px solid var(--focus);outline-offset:2px}
+.ring-light{outline:2px solid var(--focus-on-light);outline-offset:2px}
+.ring-inset{outline:2px solid var(--focus-on-light);outline-offset:-5px}
+
+/* ---- Links ---- */
+.lnk-light{color:var(--accent-strong);text-decoration:underline;text-underline-offset:3px}
+.lnk-dark{color:var(--paper);text-decoration:underline;text-underline-offset:3px}
+
+/* ---- Header ---- */
+.hdr{position:absolute;top:0;left:0;right:0;min-height:var(--hh);display:flex;align-items:center;z-index:5;color:var(--paper);background:var(--clear)}
+.hdr.condensed{min-height:56px;background:var(--ink);border-bottom:1px solid var(--line-on-dark)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;width:100%;gap:24px}
+.hdr-logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--paper)}
+.hdr-logo img{height:var(--logo-h);width:auto}
+.hdr-right{display:flex;align-items:center;gap:40px}
+.nav{display:flex;gap:32px}
+.nav a{text-decoration:none;padding:8px 0;border-bottom:2px solid transparent}
+.nav a[aria-current]{border-bottom-color:var(--focus)}
+.hdr-m-actions{display:flex;align-items:center;gap:8px}
+
+/* ---- Footer ---- */
+.ftr{background:var(--ink);color:var(--muted-on-dark);border-top:1px solid var(--line-on-dark);padding:48px 0}
+.ftr-grid{display:grid;grid-template-columns:auto 1fr auto;gap:48px;align-items:start}
+.ftr img{height:24px;width:auto}
+.ftr a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;min-height:24px}
+.ftr-ch{display:grid;grid-template-columns:auto auto;gap:8px 32px;justify-content:start;margin-top:8px}
+
+/* ---- Project filter + card + badge ---- */
+.chips{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 16px;background:var(--paper-2);color:var(--ink);border:1px solid var(--border);white-space:normal;font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.chip[aria-pressed="true"]{background:var(--accent-strong);color:var(--on-accent-strong);border-color:var(--accent-strong)}
+.count{margin-top:16px}
+.p-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
+.pcard{position:relative;background:var(--paper);display:flex;flex-direction:column}
+.pcard-ph{position:relative;aspect-ratio:4/3;background:var(--paper-2);overflow:hidden}
+.pcard-ph img{width:100%;height:100%;object-fit:cover}
+.pcard-b{padding:20px 24px 24px;display:flex;flex-direction:column;gap:8px}
+.pcard-b{order:2}
+.pcard h3 button{display:block;width:100%}
+.pcard h3 button::after{content:"";position:absolute;inset:0}
+.badge{position:absolute;top:16px;left:16px;background:var(--ink);color:var(--paper);padding:8px;font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+
+/* ---- Overlays ---- */
+.scrim{position:absolute;inset:0;background:var(--scrim);z-index:10}
+
+/* ---- Contact channels + copy status ---- */
+.ch-row{display:flex;align-items:center;gap:8px 24px;flex-wrap:wrap}
+.ch-email{display:inline-flex;align-items:center;gap:8px}
+.ch-link{display:inline-flex;align-items:center;gap:12px;color:var(--paper);text-decoration:underline;text-underline-offset:3px;font-size:var(--fs-body);line-height:1.6}
+.copy-status{display:inline-flex;align-items:center;gap:6px;font-size:14px;line-height:1.5}
+.copy-status.on-light{color:var(--success);background:var(--paper)}
+
+/* ---- Form field ---- */
+.fld{display:flex;flex-direction:column;gap:8px}
+.inp{min-height:48px;padding:12px;border:1px solid var(--border);background:var(--paper);color:var(--ink);width:100%;font-family:var(--ff-body);font-size:var(--fs-body);line-height:1.6;border-radius:0;appearance:none;-webkit-appearance:none}
+.inp.err{border-color:var(--danger)}
+.sel-wrap{position:relative}
+.sel-wrap svg{position:absolute;right:12px;top:12px;pointer-events:none;color:var(--ink)}
+.hint{font-size:14px;line-height:1.5;color:var(--muted)}
+.msg-err{display:flex;gap:8px;align-items:flex-start;color:var(--danger);font-size:14px;line-height:1.5}
+.consent{display:flex;flex-direction:column;gap:8px}
+.consent label{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5}
+.cb{width:24px;height:24px;flex:none;border:1px solid var(--border);background:var(--paper);display:inline-flex;align-items:center;justify-content:center}
+.cb.on{background:var(--accent-strong);border-color:var(--accent-strong);color:var(--on-accent-strong)}
+.cb svg{width:20px;height:20px}
+
+/* page-specific */
+.screen{height:900px}
+.pg{position:absolute;inset:0;padding-top:56px;background:var(--paper-2)}
+.band{position:relative;min-height:240px;display:grid;align-content:end;padding:96px 0 48px;background:var(--ink)}
+.band-logo{position:absolute;top:32px;right:var(--edge);height:40px;width:auto;z-index:1}
+.band .wrap{width:100%}
+.prj-body{padding:48px 0 var(--sy)}
+.dlg{position:absolute;z-index:11;left:50%;top:50%;transform:translate(-50%,-50%);width:1080px;height:810px;background:var(--paper);box-shadow:var(--elev-overlay);display:grid;grid-template-columns:7fr 5fr;grid-template-rows:auto 1fr auto}
+.dlg-close{position:absolute;top:16px;right:16px;z-index:2}
+.dlg-hd{grid-column:2;grid-row:1;padding:76px 32px 0;display:flex;flex-direction:column;gap:12px}
+.dlg-hd .bar{margin-left:-32px;width:calc((100% + 64px) * 0.66)}
+.dlg-cta{grid-column:2;grid-row:3;justify-self:start;margin:24px 32px 32px}
+.car{grid-column:1;grid-row:1 / 4;position:relative;background:var(--ink-2);color:var(--paper);padding:24px;display:grid;grid-template-rows:1fr auto auto;gap:16px;min-height:0}
+.car-ctrls{display:contents}
+.car-arrow{position:absolute;top:322px;z-index:2}
+.car-arrow.l{left:24px}
+.car-arrow.r{right:24px}
+.car-count{grid-row:2}
+.thumbs{grid-row:3;display:flex;gap:12px}
+.thumb{width:64px;padding:0;display:flex;flex-direction:column;gap:0;opacity:.64}
+.thumb img{width:64px;height:64px;object-fit:cover}
+.thumb[aria-current="true"]{opacity:1}
+.thumb[aria-current="true"]::after{content:"";display:block;height:4px;background:var(--paper)}
+.slides{grid-row:1;min-height:0;position:relative}
+.slide{position:absolute;inset:0}
+.slide img{width:100%;height:100%;object-fit:contain}
+/* mobile sheet */
+.sheet{display:flex;flex-direction:column}
+.sheet-bar{order:0;min-height:56px;display:flex;justify-content:flex-end;align-items:center;padding:0 8px;background:var(--paper)}
+.sheet .car-m{order:1;position:relative;background:var(--ink-2);color:var(--paper)}
+.sheet .car-m .slides{height:270px}
+.sheet .car-m .car-arrow{top:113px}
+.sheet .car-m .car-arrow.l{left:0}
+.sheet .car-m .car-arrow.r{right:0}
+.sheet .car-m .car-count{padding:12px 20px}
+.sheet .dlg-hd{order:2;padding:24px 20px 0}
+.sheet .dlg-hd .bar{margin-left:-20px;width:calc((100% + 40px) * 0.66)}
+.sheet .dlg-cta{order:3;margin:32px 20px 32px}
+.inset{width:360px;background:var(--paper-2);padding:20px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M20 12H4M10 6l-6 6 6 6"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11"/><path d="M5 15H4V4h11v1"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a1 1 0 0 1-1 1A17 17 0 0 1 4 4a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16v1.5"/></symbol>
+</svg>
+
+<div class="board">
+
+<!-- ===================== Column 1: desktop 1440×900 ===================== -->
+<div class="col">
+<div>
+<p class="cap">key-projects · Desktop 1440×900 — "Instalaciones" active (7 proyectos), Project detail view open on foto 2 de 4
+<span>Flow 2: "Proyectos" current (focus-token underline) → title band → chip "Instalaciones", visible + live count → opens "Canalización y Cableado (Industrial y Comercial)" → steps with → (inset ring on "Foto siguiente"). Close in the dialog's top-right corner on paper. Launch rule: no Alcance/Resultado/proof fields yet, so none render. Esc / Cerrar / scrim / Back close; focus returns to the card's button; filter unchanged.</span></p>
+<div class="browser">
+<div class="chrome"><i></i><i></i><i></i><div class="url">https://kvainstalaciones.mx/#proyectos</div></div>
+<div class="vp vp-d screen">
+
+  <header class="hdr condensed" inert>
+    <div class="wrap">
+      <a class="hdr-logo" href="#inicio"><img src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="kVA"><span class="t-label">Instalaciones</span></a>
+      <div class="hdr-right">
+        <nav class="nav t-label" aria-label="Secciones">
+          <a href="#servicios">Servicios</a><a href="#proyectos" aria-current="location">Proyectos</a><a href="#nosotros">Nosotros</a><a href="#confianza">Confianza</a><a href="#contacto">Contacto</a>
+        </nav>
+        <a class="btn btn-primary" href="#contacto">Cotiza tu proyecto</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="pg" inert>
+    <section id="proyectos" aria-labelledby="prj-t">
+      <div class="band on-dark">
+        <img class="photo-bg" src="../../../../../assets/media/brochure/backgrounds/wiring-technician.jpg" alt="">
+        <div class="ovl"></div>
+        <img class="band-logo" src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="">
+        <div class="wrap lift"><div class="hd"><h2 id="prj-t" class="t-h1 c-paper" tabindex="-1">Proyectos</h2><span class="crule" aria-hidden="true"></span></div></div>
+      </div>
+      <div class="prj-body">
+        <div class="wrap">
+          <div class="chips" role="group" aria-label="Filtrar proyectos por servicio">
+            <button class="chip" aria-pressed="false">Todos</button>
+            <button class="chip" aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Instalaciones</button>
+            <button class="chip" aria-pressed="false">Puesta en marcha y Validaciones</button>
+          </div>
+          <p class="t-small c-muted count" role="status">7 proyectos: Instalaciones</p>
+          <div class="p-grid">
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/red-ambiental-01.jpg" alt=""></div><div class="pcard-b"><p id="s1" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s1">Red Ambiental</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/larousse-01.jpg" alt=""></div><div class="pcard-b"><p id="s2" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s2">Larousse</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-01.jpg" alt=""></div><div class="pcard-b"><p id="s3" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s3">Canalización y Cableado (Industrial y Comercial)</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/site-paralelo-redundante-farmaceutica-01.jpg" alt=""></div><div class="pcard-b"><p id="s4" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s4">Site en Sistema Paralelo Redundante, Industria Farmacéutica</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/maniobras-equipos-electricos-01.jpg" alt=""></div><div class="pcard-b"><p id="s5" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s5">Maniobras de Equipos Eléctricos</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/acometidas-media-baja-tension-01.jpg" alt=""></div><div class="pcard-b"><p id="s6" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s6">Acometidas en Media y Baja Tensión</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-alimentadores-01.jpg" alt=""></div><div class="pcard-b"><p id="s7" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s7">Canalización y Cableado de Alimentadores</button></h3></div></article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="scrim" aria-hidden="true"></div>
+
+  <!-- DOM order per spec: Close, title block, carousel, details, CTA -->
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlg-t">
+    <button class="btn-icon dlg-close" aria-label="Cerrar"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button>
+    <div class="dlg-hd">
+      <p class="t-overline c-muted">Instalaciones</p>
+      <h2 id="dlg-t" class="t-h2 t-ptitle" tabindex="-1">Canalización y Cableado (Industrial y Comercial)</h2>
+      <span class="bar" aria-hidden="true"></span>
+    </div>
+    <section class="car" aria-roledescription="carrusel" aria-label="Fotos de Canalización y Cableado (Industrial y Comercial)">
+      <div class="car-ctrls">
+        <button class="btn-icon car-arrow l" aria-label="Foto anterior"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg></button>
+        <button class="btn-icon car-arrow r ring-inset" aria-label="Foto siguiente"><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+        <p class="t-small car-count">2 de 4</p>
+        <div class="thumbs">
+          <button class="thumb" aria-label="Ver foto 1"><img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-01.jpg" alt=""></button>
+          <button class="thumb" aria-label="Ver foto 2" aria-current="true"><img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-02.jpg" alt=""></button>
+          <button class="thumb" aria-label="Ver foto 3"><img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-03.jpg" alt=""></button>
+          <button class="thumb" aria-label="Ver foto 4"><img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-04.jpg" alt=""></button>
+        </div>
+      </div>
+      <div class="slides">
+        <div class="slide" role="group" aria-roledescription="foto" aria-label="2 de 4">
+          <img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-02.jpg" alt="Charolas con tubería y cableado colgadas del techo de una nave industrial">
+        </div>
+      </div>
+      <p class="sr" aria-live="polite">Foto 2 de 4: Charolas con tubería y cableado colgadas del techo de una nave industrial</p>
+    </section>
+    <!-- details: none yet (launch rule — Alcance, Resultado, proof fields omitted until kVA supplies them) -->
+    <button class="btn btn-primary-light dlg-cta">Cotiza un proyecto similar</button>
+  </div>
+
+</div>
+</div>
+</div>
+</div>
+
+<!-- ===================== Column 2: mobile sheet + placeholder inset ===================== -->
+<div class="col">
+<div>
+<p class="cap" style="max-width:380px">Project detail view &lt; 768 · full-screen sheet (scroll capture)
+<span>Paper top bar (56px) with Cerrar above the carousel — never over a photo. Contained photo, arrows on paper squares, "2 de 4" counter; no thumbnails &lt; 768. Bar heading bleeds from the sheet edge to 66% of the column. Dashed line = 640px fold.</span></p>
+<div class="phone"><div class="phone-screen tall vp vp-m sheet" role="dialog" aria-modal="true" aria-labelledby="dlg-tm">
+  <div class="fold" style="top:640px"><b>640</b></div>
+  <div class="sheet-bar"><button class="btn-icon" aria-label="Cerrar"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <div class="dlg-hd">
+    <p class="t-overline c-muted">Instalaciones</p>
+    <h2 id="dlg-tm" class="t-h2 t-ptitle" tabindex="-1">Canalización y Cableado (Industrial y Comercial)</h2>
+    <span class="bar" aria-hidden="true"></span>
+  </div>
+  <section class="car-m" aria-roledescription="carrusel" aria-label="Fotos de Canalización y Cableado (Industrial y Comercial)">
+    <button class="btn-icon car-arrow l" aria-label="Foto anterior"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg></button>
+    <button class="btn-icon car-arrow r" aria-label="Foto siguiente"><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+    <div class="slides">
+      <div class="slide" role="group" aria-roledescription="foto" aria-label="2 de 4">
+        <img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-02.jpg" alt="Charolas con tubería y cableado colgadas del techo de una nave industrial">
+      </div>
+    </div>
+    <p class="t-small car-count">2 de 4</p>
+  </section>
+  <button class="btn btn-primary-light dlg-cta">Cotiza un proyecto similar</button>
+</div></div>
+</div>
+
+<div>
+<p class="cap" style="max-width:380px">Inset · Placeholder project card (FR-9)
+<span>"Ejemplo Ilustrativo" badge on the photo (text, not image); the card button's name is "{title}, Ejemplo Ilustrativo". No summary (optional, absent).</span></p>
+<div class="inset vp vp-m">
+  <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/backgrounds/helmet-technician.jpg" alt=""><span class="badge">Ejemplo Ilustrativo</span></div><div class="pcard-b"><p id="sp" class="t-overline c-muted">Desarrollo e Ingeniería de Proyecto</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="sp" aria-label="Análisis de calidad de energía, Ejemplo Ilustrativo">Análisis de calidad de energía</button></h3></div></article>
+</div>
+</div>
+</div>
+
+</div>
+</body>
+</html>
