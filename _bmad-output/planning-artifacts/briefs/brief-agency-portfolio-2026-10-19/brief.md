@@ -2,7 +2,7 @@
 title: "Product Brief: kVA Instalaciones Landing Page"
 status: final
 created: 2026-10-19
-updated: 2026-10-19
+updated: 2026-10-21
 ---
 
 # Product Brief: kVA Instalaciones Landing Page
@@ -51,7 +51,7 @@ five sections, and contact is always one step away from any of them:
 - **Trust.** Years in business (3+), standards followed, and certifications or registrations
   once kVA confirms them.
 - **Contact.** A short form that reaches kVA by email, plus the visible address
-  info@kvainstalaciones.mx `[ASSUMPTION]` (it is the address on the current site). The form
+  proyectos1@kvainstalaciones.mx. The form
   collects only what is needed to qualify a lead, under an up-to-date privacy notice (*aviso de
   privacidad*).
 
@@ -100,9 +100,10 @@ version `[ASSUMPTION]`; CMS or self-service editing (content changes go through 
   Before launch, kVA needs to supply real projects, photos, client names (with permission), and
   standards or registrations it can prove (for example, REPSE, the government register of
   specialized service contractors).
-- **Email only vs. WhatsApp.** Research shows click-to-WhatsApp converts much better than forms
-  in Mexican B2B. Email is the v1 decision; whether to add WhatsApp is open for kVA to decide.
-- **"Data services" is undefined.** It stays generic for now and must be defined before copywriting.
+- **Email first, WhatsApp later.** Research shows click-to-WhatsApp converts much better than
+  forms in Mexican B2B. v1 is email-led, with a WhatsApp placeholder that switches on once kVA
+  supplies a number.
+- **"Data services"** means data analytics, business intelligence (BI), and IT data management.
 - **Domain and hosting.** kvainstalaciones.mx is live with a placeholder page that this site
   replaces. Who controls DNS and the current host, and whether to keep that host, is unknown.
 - **Legal.** The privacy notice must follow the 2025 reform of the LFPDPPP (Mexico's federal
