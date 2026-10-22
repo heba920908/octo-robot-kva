@@ -5,13 +5,14 @@ This addendum holds detail for later documents (the PRD and architecture) rather
 ## Content as a single source of truth (for `bmad-architecture`)
 
 - **Source of truth:** Agency content (services, project references, company facts, contact
-  details) is written as Markdown docs in the repo and synced into the page, so there is one
-  source of truth.
-- **Implication:** The Markdown docs, the local content service, and the JSON Schemas required
-  by constitution principle IV must be one pipeline. Docs are parsed or validated against the
-  schemas at build time, and the page never keeps its own copy of the content.
-- **Open:** Who edits the docs (kVA staff or the dev team), how edits are approved, and whether
-  "sync to the official page" means a build-time import or publishing to an existing site.
+  details) is written as Markdown docs in the repo. They are the centralized editorial source
+  of truth for technical staff and AI coding assistants.
+- **Implication:** Markdown is not rendered or built into the page. Technical staff update the
+  docs and matching typed Angular content in one reviewed GitHub pull request. Angular content
+  validates against the JSON Schemas required by constitution principle IV, and review checks
+  parity with the Markdown docs.
+- **Resolved 2026-10-22:** Technical staff edit and approve changes through GitHub. "Sync to the
+  official page" means updating Angular content from the Markdown reference, not importing it.
 
 ## Technical notes (for `bmad-architecture`)
 
@@ -27,7 +28,7 @@ This addendum holds detail for later documents (the PRD and architecture) rather
   protection.
 - **Placeholder projects:** Projects use placeholder fixtures that must still validate against
   the portfolio-item JSON Schema (constitution principle IV), so swapping in real content is a
-  docs-only change.
+  Content-only change.
 - **Repo naming:** Repo and workspace names still say "agency-portfolio" (from the original
   blueprint). The product is a contractor credibility page for **kVA Instalaciones** (short
   name **kVA**), so decide whether to rename them.

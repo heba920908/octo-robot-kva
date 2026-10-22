@@ -18,8 +18,10 @@ market research. It was updated on 2026-10-21 to reflect the final UX spines
 [EXPERIENCE.md](../../ux-designs/ux-agency-portfolio-2026-10-21/EXPERIENCE.md)), which drew the
 Services, Projects, Clientes list, Nosotros copy, and contact details from kVA's 2025 brochure.
 The spines govern visual and interaction detail; on scope, content, or published channels, this
-PRD wins. All work is governed by the project constitution (`.specify/memory/constitution.md`,
-v1.0.0). Terms defined in §3 are used verbatim. FRs are grouped by feature and numbered
+PRD wins. On 2026-10-22 it was reconciled with the architecture decisions: Markdown Content docs
+are the editorial source of truth for typed Angular content, not a rendering or build input,
+and Angular Material is the preferred UI foundation. All work is governed by the project
+constitution (`.specify/memory/constitution.md`, v1.0.0). Terms defined in §3 are used verbatim. FRs are grouped by feature and numbered
 globally; assumptions are tagged inline and indexed in §11; technology choices are in
 `addendum.md`.
 
@@ -37,8 +39,10 @@ one step away.
 The page is static, promotional, and has no backend. Every contact leaves through the Visitor's
 own device: an email from their email client to proyectos1@kvainstalaciones.mx, or a call to
 kVA's published phone number. Everything kVA says about itself (Services, Projects, Trust items,
-the Clientes list, the Nosotros section, copy) lives in Markdown **Content docs** in the
-repository, so adding a Service or a Project is a content edit rather than a redesign.
+the Clientes list, the Nosotros section, copy) is defined in Markdown **Content docs** in the
+repository. Technical staff use them, through GitHub and AI coding assistants, to update the
+matching **Executable content** in Angular, so adding a Service or a Project is a **Content-only
+change** rather than a redesign.
 
 ## 2. Target User
 
@@ -151,7 +155,7 @@ This section guides the copy in the Content docs; the final wording lives in tho
 - **Project carousel** — the viewer in the Project detail view that shows a Project's photos one
   at a time.
 - **Nosotros section** — the About section: kVA's philosophy, mission, vision, and values,
-  rendered from its Content doc (FR-18).
+  defined in its Content doc and shown from matching Executable content (FR-18).
 - **Trust section** — the section reached by the "Confianza" header link (`#confianza`; §4.6).
 - **Trust item** — one credibility claim (for example, years in business, a standard followed,
   a registration or certification), defined in a **Content doc**. It is *confirmed* when kVA has
@@ -181,8 +185,14 @@ This section guides the copy in the Content docs; the final wording lives in tho
 - **WhatsApp CTA** — a click-to-chat link to kVA's WhatsApp number; a placeholder in v1, hidden
   until a real number is set in a **Content doc** (FR-17).
 - **Content doc** — a Markdown file in the repository (front matter plus body) that is the single
-  source of truth for one piece of site content.
-- **Content schema** — the JSON Schema that every **Content doc** of a given type must validate
+  editorial source of truth for one piece of site content. It is a reference for technical staff
+  and AI coding assistants, not a file that Angular reads, renders, parses, or builds from. Where
+  this PRD says content comes from a Content doc, the page uses the matching Executable content.
+- **Executable content** — typed Angular data that implements the Content docs for the page. It
+  is updated in the same reviewed GitHub pull request as the Content docs it implements.
+- **Content-only change** — a reviewed change that updates Content docs and their Executable
+  content, with no component, template, style, or behaviour-model change.
+- **Content schema** — the JSON Schema that each type of Executable content must validate
   against (constitution principle IV).
 - **Legal identity** — kVA's registered company name (*razón social*) and address
   (*domicilio*), shown in the footer and the Privacy notice. kVA has not supplied it yet; until
@@ -259,8 +269,8 @@ primary CTA (for example, "Cotiza tu proyecto") that opens the Contact composer,
 CTA that goes to Services.
 
 **Consequences (testable):**
-- Headline, supporting line, and CTA labels are read from the hero Content doc; changing the doc
-  and rebuilding changes the page without code changes.
+- Headline, supporting line, and CTA labels come from the hero Content doc; updating them is a
+  Content-only change.
 - The Hero headline is the page's only `<h1>`.
 - The first screen on the Reference viewport also shows the kVA logo and at least one Hero
   proof point (for example, years in business or nationwide coverage).
@@ -279,14 +289,14 @@ Sub-services are ordered as §2.4 describes. The set is extensible (FR-5). Reali
 A Visitor sees one card per Service, in the order defined in the Content docs.
 
 **Consequences (testable):**
-- With four Service Content docs there are four cards; adding a fifth valid doc and rebuilding
-  produces five cards and five Contact composer options, with no code change. The Project filter
+- With four Services there are four cards; adding a fifth valid Service as a Content-only change
+  produces five cards and five Contact composer options. The Project filter
   gains the new Service once it has a Project (FR-7).
 - Each card lists its Sub-services in Content doc order. Every Sub-service is present in the
   served HTML, even where a narrow viewport shows a shortened list with a control to expand it.
 - A card shows its image band only when its Service Content doc sets an image; otherwise the
   card renders without an empty slot.
-- A Service Content doc that fails its Content schema fails the build (FR-15).
+- Service Executable content that fails its Content schema fails content validation (FR-15).
 
 #### FR-6: Service CTA pre-fills the Contact composer
 
@@ -333,7 +343,7 @@ them, without leaving the page. Realizes UJ-2.
   position ("{i} de {n}") to assistive technology; nothing rotates automatically. A Project with
   one photo shows no carousel controls.
 - Every photo has meaningful `alt` text from the Content doc; a Project photo without `alt`
-  fails the build.
+  fails content validation.
 - Scope (Alcance), outcome (Resultado), and the proof fields are optional and each renders only
   when present, never as an empty label. Proof fields are client name, location (state), year,
   and standards applied.
@@ -352,9 +362,9 @@ Placeholder projects are allowed but must not pass as real kVA work.
 
 **Consequences (testable):**
 - A Project Content doc marked as placeholder renders with a visible "Ejemplo Ilustrativo" label.
-- Replacing a Placeholder project with a real one is a Content-doc-only change.
+- Replacing a Placeholder project with a real one is a Content-only change.
 - Every Project photo, real or placeholder, records its `source` and `license` in the Content
-  doc; a Project photo without either fails the build. A photo from kVA's 2025 brochure records
+  doc; a Project photo without either fails content validation. A photo from kVA's 2025 brochure records
   the brochure as its source and "supplied by kVA" as its license until kVA answers Q8 (§10).
   Placeholder images are kVA's own, supplied by kVA, or licensed for commercial use.
 
@@ -372,10 +382,9 @@ A Visitor can read kVA's philosophy, mission, vision, and values in one section 
 the header. Supports the §2.4 shortlist substance; no user journey depends on it.
 
 **Consequences (testable):**
-- The philosophy, mission, vision, and values are read from the Nosotros Content doc; changing
-  the doc (including adding or removing a value) and rebuilding changes the page without code
-  changes.
-- If the Nosotros Content doc is absent, the section and its header link are not rendered.
+- The philosophy, mission, vision, and values come from the Nosotros Content doc; changing them
+  (including adding or removing a value) is a Content-only change.
+- If the Nosotros content is absent, the section and its header link are not rendered.
 - The published copy contains none of the unsupported superlatives listed in §2.4 and writes
   the brand as "kVA" (not the brochure's "KVA").
 
@@ -396,7 +405,7 @@ A Visitor sees each Trust item that is marked as confirmed in its Content doc.
 - A Trust item whose Content doc is not marked as confirmed does not render.
 - A Trust item can carry an evidence reference (for example, a registration number or
   certificate ID), which is shown next to it. A registration or certification Trust item without
-  an evidence reference fails the build.
+  an evidence reference fails content validation.
 - If no Trust items are confirmed and no client group is permitted (FR-19), the Trust section
   and its header link are hidden rather than shown empty. Otherwise only the empty part (Trust
   items or Clientes list) is omitted.
@@ -415,7 +424,7 @@ permission. Realizes UJ-2.
   present, and its items in Content doc order.
 - If no client group is permitted, the Clientes list is not rendered; Trust items are
   unaffected (Trust section hiding follows FR-10).
-- Adding, removing, or granting permission for a client group is a Content-doc-only change.
+- Adding, removing, or granting permission for a client group is a Content-only change.
 
 ### 4.7 Contact
 
@@ -462,16 +471,16 @@ Every email generated by the page can be identified as a Lead.
 
 #### FR-17: WhatsApp CTA placeholder
 
-The page has a slot for a WhatsApp CTA in the Contact section, ready to switch on without code
-changes.
+The page has a slot for a WhatsApp CTA in the Contact section, ready to switch on through a
+Content-only change.
 
 **Consequences (testable):**
 - While the site Content doc has no WhatsApp number, the WhatsApp CTA is not rendered, so no
   fake number is ever published [ASSUMPTION: hidden rather than shown disabled].
-- When a valid Mexican number (E.164, `+52…`) is set in the site Content doc and the site is
-  rebuilt, the CTA appears and opens `https://wa.me/<number>` with a pre-written Spanish
+- When a valid Mexican number (E.164, `+52…`) is set through a Content-only change and the site
+  is deployed, the CTA appears and opens `https://wa.me/<number>` with a pre-written Spanish
   message that starts with the Lead subject tag.
-- The number is validated by the Content schema; an invalid number fails the build.
+- The number is validated by the Content schema; an invalid number fails content validation.
 - WhatsApp routes the Visitor's data through Meta's service, so the change that sets the number
   also updates the Privacy notice Content doc to cover the WhatsApp channel (FR-14).
 
@@ -491,7 +500,7 @@ Contact composer. Realizes UJ-1 (edge case) and UJ-3.
   nothing about their use.
 - The Contact channels come from the site Content doc. A missing contact name or phone is
   omitted; proyectos1@kvainstalaciones.mx is required, and a missing address or an invalid
-  Mexican phone number fails the build.
+  Mexican phone number fails content validation.
 - Only the Contact channels in the site Content doc are rendered; proyectos2@kvainstalaciones.mx
   and (56) 4029 4029 appear nowhere on the page or in its metadata.
 
@@ -511,25 +520,31 @@ state.
 **Consequences (testable):**
 - The Privacy notice opens from the consent control and the footer, and closing it keeps the
   values already entered in the Contact composer.
-- Its text is rendered from a Content doc; a missing or invalid doc fails the build.
+- Its text comes from a Content doc; missing or invalid Privacy notice content fails content
+  validation.
 
 ### 4.9 Content Management
 
-**Description:** All site copy and data come from Content docs, validated at build time. A
-developer updates the site by editing them and rebuilding; there is no CMS (§7).
+**Description:** Content docs are the editorial source of truth for all site copy and data.
+Technical staff update them, with AI coding assistants when useful, together with the matching
+Executable content in one reviewed GitHub pull request. Angular does not read, render, parse, or
+build from Markdown; there is no CMS (§7).
 
 #### FR-15: Content docs are the single source of truth
 
 **Consequences (testable):**
-- Every user-visible string or data item comes from a Content doc. This covers section content
+- Every user-visible string or data item comes from Executable content that matches a Content
+  doc. This covers section content
   (Hero, Services and their Sub-services, Projects, the Nosotros section, Trust items, the
   Clientes list, Contact channels, footer, Privacy notice, SEO metadata) and all UI strings.
 - An automated check (test or lint) fails if a component template contains literal text nodes
   or literal `aria-label`, `alt`, `title`, or `placeholder` values; only bindings are allowed.
-- Every Content doc validates against its Content schema. Any failure stops the build and names
-  the file and field.
+- Every type of Executable content validates against its Content schema. Any failure fails
+  content validation and names the content item and field.
+- A pull request that changes a Content doc also changes its Executable content, or states why
+  no executable change is needed; review checks that both say the same thing.
 - Adding, editing, or removing a Service, Sub-service, Project, Trust item, Client, or Nosotros
-  value needs no source-code change.
+  value is a Content-only change.
 
 ### 4.10 Search and Sharing
 
@@ -568,11 +583,12 @@ or by email.
   stored or transmitted by the site. HTTPS only. A Content Security Policy applies this
   baseline: `default-src 'self'`, inline JSON-LD (a data block that is not executed, so it
   needs no script hash), self-hosted fonts and images, no third-party origins, `base-uri 'self'`,
-  and `frame-ancestors 'none'` [ASSUMPTION]. Architecture checks that Angular SSG critical-CSS
-  inlining works under this policy. A `<meta>` CSP is acceptable until hosting headers exist
-  (`frame-ancestors` then needs a header).
+  and `frame-ancestors 'none'` [ASSUMPTION]. Critical-CSS inlining is disabled so the static
+  build has no executable inline scripts. On GitHub Pages, which cannot set custom response
+  headers, the CSP is delivered as a `<meta>` tag and `frame-ancestors` waits for a
+  header-capable host or CDN.
 - **NFR-5 Extensibility:** new Services, Sub-services, Projects, Trust items, Clients, and
-  Nosotros values are added through Content docs only (FR-5, FR-15, FR-18, FR-19). Copy is kept
+  Nosotros values are added through Content-only changes (FR-5, FR-15, FR-18, FR-19). Copy is kept
   out of components so a future language can be added.
 
 ## 6. Constraints and Guardrails
@@ -587,11 +603,14 @@ or by email.
   by the `contact-cta` and `section-navigation` models. The Nosotros section, Trust items, and
   Clientes list are static and need no behaviour model. Every layout is governed by a Content
   schema or design tokens (principle IV), and work is test-first (principle III).
-- **Platform:** a single-page web application (Angular SPA) built to static files that any
-  static host can serve. Hosting and DNS are deferred and do not block development.
-- **UI library:** the UX spines recommend no styled component library: custom components on the
-  design tokens, using Angular CDK accessibility primitives (focus trap, live announcer). The
-  final decision is made in `bmad-architecture` against NFR-1 and NFR-2 and recorded as an ADR.
+- **Platform:** a single-page web application (Angular SPA) built to static files. It is hosted
+  first on GitHub Pages at `https://heba920908.github.io/octo-robot-kva/`, deployed by GitHub
+  Actions from `main`; the build stays host-neutral so another static host can replace it later.
+- **UI library:** Angular Material is the preferred UI foundation, chosen to reuse ready-made
+  controls and reduce maintenance. It is themed through its supported APIs and design tokens;
+  brochure fidelity may yield to framework conventions. Angular CDK is used only where Material
+  has no suitable control. The architecture records the decision and verifies it against NFR-1
+  and NFR-2 before the dependency is added.
 - **Legal (LFPDPPP 2025):** the Privacy notice must name the Legal identity (responsible party
   and *domicilio*), state the purpose (responding to the Lead), the data involved, the retention
   period, and the ARCO-rights process, and reference SABG, not INAI. It must be specific, with no
@@ -602,10 +621,11 @@ or by email.
 
 ## 7. Non-Goals (Explicit)
 
-- Not a CMS. Content changes go through a developer.
+- Not a CMS. Technical staff make content changes through reviewed GitHub pull requests,
+  optionally using AI coding assistants.
 - No backend, database, form-to-email service, or analytics in v1.
 - No blog or news, client portal or login, e-commerce or payments, or careers page.
-- No English version in v1 (the architecture must not rule one out).
+- No English version; the site is Spanish (es-MX) only.
 - No live chat. WhatsApp is limited to the FR-17 placeholder until kVA supplies a number.
 - No second contact channel: kVA's proyectos2@kvainstalaciones.mx address and (56) 4029 4029
   phone, both listed in its brochure, are not published (FR-20). Reason: user decision
@@ -617,7 +637,8 @@ or by email.
 
 - One es-MX page with every §4 feature: Page shell, Hero, Services, Projects, Nosotros section,
   Trust, Contact, Privacy notice, and footer.
-- Content docs with Content schemas for every content type, validated at build time.
+- Content docs as the editorial source of truth, with typed Executable content and Content schemas
+  for every content type, checked by content validation.
 - SEO and share metadata, structured data, robots and sitemap.
 - The real Projects from kVA's 2025 brochure, with scope, outcome, and proof fields shown only
   when present; the Placeholder project mechanism, labeled "Ejemplo Ilustrativo".
@@ -630,23 +651,23 @@ or by email.
   although research suggests WhatsApp converts better than email.
 - A phone field and a free-text message field in the Contact composer (removed to keep friction
   low).
-- Choice of host and an automated deployment pipeline (deferred; see §8.3).
+- A production host other than GitHub Pages, and header-only security protections that need one.
 - A separate page per Service for SEO reach (v2 candidate).
 - Analytics and conversion tracking (v2; Leads are counted manually, SM-1).
 
 ### 8.3 Launch Readiness
 
-Development can proceed now. Going live at kvainstalaciones.mx additionally needs:
+Development can proceed now. Going live additionally needs:
 
-- **Hosting with HTTPS and the NFR-4 CSP, plus the DNS cutover** (owner: dev team, Arturo),
-  tracked as a launch story outside the build epics.
+- **GitHub Pages deployment with HTTPS and the NFR-4 `<meta>` CSP** (owner: dev team, Arturo),
+  published by GitHub Actions from `main`.
 - **Share image (1200×630 px, FR-16) and favicon** (owner: dev team), produced from the
   supplied PNG logo and the best available brochure photo, using the composition DESIGN.md
   proposes. kVA's vector logo and high-resolution photo originals replace them when supplied
   (§10, Q5).
 - **SM-2 check** passing on the built output.
-- **SM-3 check** (moved from §9): adding a Service and adding a Project each works by a Content
-  doc change alone, verified once on the built output (FR-5, FR-15).
+- **SM-3 check** (moved from §9): adding a Service and adding a Project each works through a
+  Content-only change, verified once on the built output (FR-5, FR-15).
 
 Accepted risks (fallbacks for §10 questions; none blocks launch):
 
@@ -656,7 +677,7 @@ client group's permission is recorded by launch, the Clientes list is not render
 
 **Accepted risk (copy approval, §10 Q7):** copy kVA has not approved by launch (Hero, Nosotros,
 Service descriptions) ships as the default copy from the UX spines (EXPERIENCE.md launch seed
-and Default UI strings). kVA's later corrections are Content-doc-only changes.
+and Default UI strings). kVA's later corrections are Content-only changes.
 
 **Accepted risk (photo licenses, §10 Q8):** brochure photos publish as "supplied by kVA"
 (FR-9) before kVA confirms their rights. A photo later found to be unlicensed is replaced or
@@ -664,7 +685,7 @@ removed when discovered; a Project left with no photo is unpublished until it ha
 
 **Accepted risk (phone format, §10 Q11):** (56) 4000 3344 is shown as given in the brochure,
 and its `tel:` link and JSON-LD `telephone` use +52 56 4000 3344 (FR-20). If kVA reports a
-different format, the call link fails until the site Content doc is corrected.
+different format, the call link fails until a Content-only change corrects it.
 
 **Accepted risk (legal, §10 Q6):** the site may go live before kVA supplies its Legal identity
 and retention period, with the Privacy notice incomplete under the LFPDPPP (§6 Legal). Owner:
@@ -705,9 +726,8 @@ None blocks development or launch; §8.3 records launch-content fallbacks as acc
    items (for example, a REPSE number). Owner: kVA. Status: non-blocking (accepted risk, §8.3).
 3. **Privacy notice review:** kVA's legal review of the generic v1 notice is recommended before
    launch. Owner: kVA. Status: non-blocking (recommended, not required).
-4. **Hosting and DNS:** who controls kvainstalaciones.mx DNS and the current host
-   (216.245.211.66)? Owner: kVA / dev team. Status: non-blocking; the build only produces static
-   files, and the answer feeds the hosting and DNS launch story (§8.3).
+4. **Hosting:** resolved 2026-10-22. GitHub Pages is the initial host, deployed by GitHub
+   Actions; DNS is not in scope. Status: closed.
 5. **Brand assets:** the logo is supplied (`assets/media/icon.png`: white mark on a solid black
    background, 406×213 px, no transparency). DESIGN.md proposes the palette (a dark and light
    scheme with a single copper accent) and fonts (Quicksand and Outfit, open-license lookalikes

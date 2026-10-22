@@ -17,12 +17,11 @@ detection, SCSS, strict TypeScript, Vitest unit tests, Prettier (`.prettierrc`).
   Put custom validators in `shared/validators/`.
 
 ## Styling
-* **UI library: not chosen yet, and this is deliberate.** BMAD makes the choice during the
-  **Plan** stage (`bmad-ux` + `bmad-architecture`), weighed against the PRD requirements
-  (bundle/performance budget, design fidelity, accessibility, and the token system below).
-  Candidates include plain SCSS + tokens, Tailwind CSS, Angular Material/CDK, or a hybrid.
-  Record the decision as an ADR in `_bmad-output/planning-artifacts/` and update this
-  section. Until then, do not add any UI library dependency.
+* **UI library: Angular Material first**, decided in the architecture spine
+  (`_bmad-output/planning-artifacts/architecture/architecture-agency-portfolio-2026-10-22/
+  ARCHITECTURE-SPINE.md`, AD-4). Use Angular CDK only where Material has no suitable control.
+  Theme Material only through its supported theme and override APIs, fed by project tokens.
+  Do not style private Material DOM classes or add another component library.
 * SCSS with design tokens as CSS custom properties defined in `src/styles/_tokens.scss`
   (see `spec-kit-rules.md`). Components must use tokens, not hard-coded colours or spacing.
 * Mobile-first layouts and semantic HTML. Meet WCAG 2.2 AA: labelled controls,

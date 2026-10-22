@@ -18,8 +18,9 @@ sources:
 
 One es-MX page, mobile-first: an Angular SPA prerendered at build time (single route, static
 files; addendum). No backend: every contact leaves through the Visitor's own email client
-(`mailto:`), phone dialer (`tel:`), or clipboard. All copy comes from Content docs; the
-microcopy below is the **default copy for the UI strings Content doc** (FR-15). Visual identity
+(`mailto:`), phone dialer (`tel:`), or clipboard. Content docs are the editorial source for
+Angular content, not a rendering or build input. The microcopy below is the **default copy for
+the UI strings Content doc** (FR-15). Visual identity
 and tokens live in `DESIGN.md`, cited here as `{colors.accent}` etc. Brochure renders
 (`imports/brochure-pages/`) and key screens are references; **the spines win on any
 conflict**. Glossary terms are the PRD's (§3), verbatim.
@@ -29,9 +30,9 @@ Key-screen mockups (drafted copy is illustrative; the Default UI strings win):
 [key-projects](mockups/key-projects.html) (Flow 2, steps 1–4),
 [key-contact](mockups/key-contact.html) (Flow 1, steps 4–7).
 
-UI library (for the architecture ADR, PRD §6): no styled component library; custom components
-on the DESIGN.md tokens, with Angular CDK a11y primitives (focus trap, live announcer)
-[ASSUMPTION].
+UI library (architecture decision, 2026-10-22): Angular Material first, prioritizing ready-made
+controls and lower maintenance over brochure fidelity. Theme it through supported APIs and
+DESIGN.md tokens; use Angular CDK only where Material has no suitable control.
 
 **Overrides to the PRD** (from the UX decision log; see Open Question 1):
 1. **Services:** 4 Service cards from the brochure (p05) + data services (see IA).
@@ -93,7 +94,8 @@ hidden by its State Pattern also drops its header link. Modal overlays never sta
 Privacy notice above the Contact composer. Section surfaces and rhythm: DESIGN.md › Layout &
 Spacing.
 
-The tables below are the **launch seed for Content docs**; once the docs exist, the docs win.
+The tables below are the **launch seed for Content docs**; once the docs exist, they are the
+editorial source for Angular content.
 
 **Services** ([brochure-text.md](imports/brochure-text.md) page 5). Sub-services carrying the
 PRD §2.4 hook come first, so they show while the list is collapsed:
@@ -273,7 +275,7 @@ in Foundation.
   (`aria-roledescription="carrusel"`, "Fotos de {title}") holds the controls, then a slides
   container; each slide is `role="group"`, `aria-roledescription="foto"`, "{i} de {n}", with
   its `<img alt>`. Arrows and thumbnails sit outside the slides. Slide change announces
-  "Foto {i} de {n}: {alt}" (CDK LiveAnnouncer, polite). Inputs: arrows, ←/→ (only while focus
+  "Foto {i} de {n}: {alt}" (polite live announcement). Inputs: arrows, ←/→ (only while focus
   is in the region), swipe ≥ 40px (`touch-action: pan-y`), thumbnails ≥ 768 (`aria-current`).
   Wraps last → first [ASSUMPTION]; no autoplay. One-photo Projects show no controls.
 - **Nosotros** — Static content from its Content doc [NOTE FOR UX: new Content schema].
@@ -368,7 +370,7 @@ are not repeated.
   (FR-2). Under 400px viewport height it stays condensed.
 - **Modal overlays** (Contact composer, Project detail view, Privacy notice) — `role="dialog"`
   + `aria-modal="true"`, labeled by the title. While one is open, every app-shell element
-  outside it (skip link, header, main, footer, any lower overlay) is `inert`; the CDK focus
+  outside it (skip link, header, main, footer, any lower overlay) is `inert`; the framework focus
   trap wraps only the topmost; body scroll locked. On close, focus returns to the invoker.
 - **Overlay history** (modal overlays and Mobile menu) — Open pushes one entry; Back pops it
   and closes the topmost. Non-Back closes (close button, Esc, scrim, "Listo", menu toggle)

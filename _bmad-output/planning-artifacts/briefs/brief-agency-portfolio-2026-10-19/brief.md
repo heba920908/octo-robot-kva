@@ -84,17 +84,18 @@ must also give enough substance to pass a shortlist review.
 - Every section of the page has a visible path to contact (design intent: every visitor is one
   step from contacting kVA).
 - The page loads fast on mobile within the project's build budgets and meets WCAG 2.2 AA.
-- A developer can add or change a service or project by editing a Markdown doc and rebuilding,
-  with no code changes.
+- Technical staff can add or change a service or project by updating its Markdown doc and the
+  matching Angular content in one reviewed GitHub pull request, without changing components.
 
 ## Scope
 
 **In (v1):** one static, Spanish-only promotional page at kvainstalaciones.mx (Hero, Services,
-Projects, Trust, Contact); content kept as Markdown docs in the repo; contact form delivered by
+Projects, Trust, Contact); Markdown docs in the repo as the editorial source of truth; contact form delivered by
 email; privacy notice; placeholder project content.
 
 **Out (v1):** blog or news; client portal or login; online payments or e-commerce; English
-version `[ASSUMPTION]`; CMS or self-service editing (content changes go through a developer).
+version `[ASSUMPTION]`; CMS or self-service editing (technical staff make content changes through
+GitHub).
 
 ## Risks and Open Questions
 

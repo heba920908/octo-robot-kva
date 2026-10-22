@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://heba920908.github.io/octo-robot-kva/schemas/site.schema.json",
+  "title": "Site content",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "language",
+    "brandName",
+    "pageTitle",
+    "heading",
+    "description",
+    "canonicalUrl",
+    "iconPath"
+  ],
+  "properties": {
+    "id": { "const": "site" },
+    "language": { "const": "es-MX" },
+    "brandName": { "const": "kVA Instalaciones" },
+    "pageTitle": { "type": "string", "minLength": 1, "maxLength": 70 },
+    "heading": { "type": "string", "minLength": 1, "maxLength": 60 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "canonicalUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "iconPath": { "type": "string", "pattern": "^media/[a-z0-9-]+\\.png$" }
+  }
+}

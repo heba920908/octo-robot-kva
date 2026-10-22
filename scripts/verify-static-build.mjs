@@ -1,0 +1,72 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const outputDir = 'dist/agency-portfolio';
+const indexPath = join(outputDir, 'browser', 'index.html');
+const failures = [];
+
+function check(condition, message) {
+  if (!condition) {
+    failures.push(message);
+  }
+}
+
+check(existsSync(indexPath), `Missing prerendered page: ${indexPath}`);
+check(!existsSync(join(outputDir, 'server')), 'Static output must not include a server bundle');
+
+if (existsSync(indexPath)) {
+  const html = readFileSync(indexPath, 'utf8');
+  const cspMatch = html.match(
+    /<meta[^>]+http-equiv="Content-Security-Policy"[^>]+content="([^"]+)"/i,
+  );
+  const csp = cspMatch?.[1] ?? '';
+  const requiredDirectives = [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data:",
+    "font-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+  ];
+  const inlineScripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter(
+    ([, attributes, body]) =>
+      !/\bsrc=/i.test(attributes) &&
+      !/type="application\/(?:ld\+)?json"/i.test(attributes) &&
+      body.trim().length > 0,
+  );
+  const externalResources = [
+    ...html.matchAll(/<(?:script|link|img|source)\b[^>]*(?:src|href|srcset)="(https?:[^"]+)"/gi),
+  ].map(([, url]) => url);
+
+  check(/<html[^>]+lang="es-MX"/i.test(html), 'Document language must be es-MX');
+  check(/<base href="\/octo-robot-kva\/">/i.test(html), 'Base href must be /octo-robot-kva/');
+  check(/<title>kVA Instalaciones \|[^<]+<\/title>/i.test(html), 'Prerendered title is missing');
+  check((html.match(/<h1\b/gi) ?? []).length === 1, 'Page must contain exactly one h1');
+  check(html.includes('kVA Instalaciones'), 'Brand name must be prerendered');
+  check(/<link[^>]+rel="icon"[^>]+href="media\/kva-icon\.png"/i.test(html), 'kVA icon is missing');
+  check(existsSync(join(outputDir, 'browser', 'media', 'kva-icon.png')), 'Icon file is missing');
+  check(
+    /<app-root\b[^>]*\bng-server-context="ssg"/i.test(html),
+    'App root must be prerendered for hydration',
+  );
+  check(
+    /<script id="ng-state" type="application\/json">/i.test(html),
+    'Hydration state block is missing',
+  );
+  requiredDirectives.forEach((directive) =>
+    check(csp.includes(directive), `CSP is missing: ${directive}`),
+  );
+  check(inlineScripts.length === 0, 'Executable inline scripts are not allowed');
+  check(
+    externalResources.length === 0,
+    `External resources found: ${externalResources.join(', ')}`,
+  );
+}
+
+if (failures.length > 0) {
+  console.error(`Static build verification failed:\n- ${failures.join('\n- ')}`);
+  process.exit(1);
+}
+
+console.log('Static build verification passed.');

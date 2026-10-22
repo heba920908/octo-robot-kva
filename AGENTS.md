@@ -15,6 +15,37 @@ Before modifying any code, you must read and align with the rulesets:
 ## 🛠️ Sandbox Workspace
 Use `.agents/workspace/` to run temporary test benches, stage `bmad` execution logs, or stash archived `spec-kit` snapshots. Do not pollute the main application directory `/src`.
 
+## ✅ Local Verification Before GitHub Changes
+Run and verify changes locally before committing, pushing, opening pull requests, or changing
+GitHub settings. Use the local Angular CLI through `npx ng`; do not assume a global `ng`.
+
+```bash
+npm ci
+npx ng test --watch=false
+npm run build:pages
+npm run verify:static
+```
+
+### Browser testing
+After any UI, content, metadata, routing, or build change, test in a real browser:
+
+1. Development: run `npx ng serve` and open `http://localhost:4200/`.
+2. GitHub Pages output: run `npm run build:pages`, then `npm run preview:pages`, and open
+   `http://localhost:4300/octo-robot-kva/`.
+3. Check the page, title, `lang="es-MX"`, single `h1`, keyboard flow for changed controls,
+   failed network requests, console errors, CSP violations, and the hydration log
+   (`Angular hydrated ... component(s)` in development; no hydration warnings or `NG05xx` errors).
+4. In production preview, confirm `app-root[ng-server-context="ssg"]` and `#ng-state` exist.
+
+**GitHub Copilot:** use the integrated browser tools (`open_browser_page`, `read_page`,
+`screenshot_page`, and `run_playwright_code` for console and network checks).
+
+**Other harnesses or humans:** use Playwright against the same URLs, for example
+`npx playwright open http://localhost:4300/octo-robot-kva/`, or a Playwright script that records
+`console` and `requestfailed` events. Do not add Playwright as a dependency without a story.
+
+Stop dev and preview servers when finished.
+
 ## 🧰 Agent Tooling (BMAD + spec-kit)
 
 Both frameworks are installed **project-locally** and their generated files are

@@ -43,7 +43,7 @@ Rationale: tests are the executable form of the acceptance criteria.
 
 - Every core layout (Hero, Services, Work/Portfolio grid, Contact panel, and shared layout
   primitives) MUST align with at least one of:
-  1. a JSON Schema (draft 2020-12) in `src/app/core/schemas/` that local service data
+  1. a JSON Schema (draft 2020-12) in `src/app/core/schemas/` that typed Executable content
      validates against in unit tests; or
   2. design tokens in `src/styles/_tokens.scss`, mirrored in
      `src/app/core/schemas/design-tokens.json` (colour, typography, spacing, radius,
@@ -84,9 +84,16 @@ Rationale: an agency portfolio is judged on first impression, speed, and inclusi
 
 - Stack: Angular 22 (standalone, zoneless), SCSS, strict TypeScript, Vitest, Prettier
   (`.prettierrc`) and `.editorconfig`.
-- **UI library is deliberately undecided.** It MUST be chosen during the BMAD Plan stage
-  (`bmad-ux` + `bmad-architecture`) against the PRD requirements and recorded as an ADR in
-  `_bmad-output/planning-artifacts/`. Until then, no UI library dependency MAY be added.
+- **UI library: Angular Material first** (ADR: `_bmad-output/planning-artifacts/architecture/
+  architecture-agency-portfolio-2026-10-22/ARCHITECTURE-SPINE.md`, AD-4). Angular CDK MAY be
+  used only where Material has no suitable control. Material MUST be themed through its
+  supported theme and override APIs using project tokens; private Material DOM/CSS overrides
+  and other component libraries MUST NOT be added.
+- Markdown Content docs in `content/` are the editorial source of truth. Angular MUST NOT
+  import, fetch, parse, render, or build from them; typed Executable content in
+  `src/app/core/content/` implements them and is changed in the same reviewed pull request.
+- The app MUST build to static, prerendered output. GitHub Actions deploys it to GitHub Pages
+  using built-in Pages permissions; the build MUST remain host-neutral.
 - BMAD (`bmad-method` npm devDependency) and spec-kit (`.venv/bin/specify`) are installed
   project-locally. Their generated files MUST NOT be committed, and installer-managed files
   (`_bmad/config.toml`, `.specify/templates/*`, generated skills) MUST NOT be edited.
@@ -123,4 +130,4 @@ A story advances only when its gate is met:
 - Every code review and every `speckit-analyze` run MUST check compliance with these
   principles. Any deviation MUST be justified in the story's implementation artifact.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-19
+**Version**: 1.1.0 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-22

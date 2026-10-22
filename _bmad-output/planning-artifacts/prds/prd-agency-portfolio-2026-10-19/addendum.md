@@ -3,7 +3,8 @@
 Detail that the PRD links to, plus technical notes for `bmad-ux` and `bmad-architecture`.
 Updated 2026-10-21 (review fixes 2026-10-22) to match the final UX spines
 ([DESIGN.md](../../ux-designs/ux-agency-portfolio-2026-10-21/DESIGN.md),
-[EXPERIENCE.md](../../ux-designs/ux-agency-portfolio-2026-10-21/EXPERIENCE.md)).
+[EXPERIENCE.md](../../ux-designs/ux-agency-portfolio-2026-10-21/EXPERIENCE.md)), then
+reconciled on 2026-10-22 with the architecture decisions on content ownership and UI library.
 
 ## Contact mechanism: options considered
 
@@ -49,30 +50,36 @@ kVA's brochure lists two addresses and two phones: proyectos1@kvainstalaciones.m
 ### Platform, SEO, and hosting
 
 - **Platform: SPA.** The user asked to focus on a single-page web application. Head metadata
-  (title, description, canonical, Open Graph, JSON-LD) must be written into `index.html` at
-  build time from the Content docs, because link-preview crawlers do not run JavaScript
-  (FR-16). The user chose build-time prerendering (Angular SSG) of the single route.
+  (title, description, canonical, Open Graph, JSON-LD) must be present in prerendered HTML,
+  using Executable content that matches the Content docs, because link-preview crawlers do not
+  run JavaScript (FR-16). The user chose build-time prerendering (Angular SSG) of the single route.
   Prerendering still produces static files and keeps the app an SPA; it also puts Service,
   Nosotros, Clientes, and contact copy in the HTML for search (FR-16) and helps LCP.
 - **Structured data:** JSON-LD for schema.org `ElectricalContractor`, with `areaServed: MX`,
   `email`, and `telephone` (`+52 56 4000 3344`, the published phone only).
-- **UI library (UX recommendation):** no styled component library; custom components on the
-  DESIGN.md tokens, with Angular CDK accessibility primitives (focus trap, live announcer). The
-  final call is an architecture ADR, checked against NFR-1 and NFR-2.
-- **Hosting (deferred by decision):** kvainstalaciones.mx currently resolves to 216.245.211.66
-  (placeholder template). Any static host with HTTPS and custom headers (for the CSP) works.
+- **UI library (architecture decision):** Angular Material is preferred, prioritizing ready-made
+  controls and lower maintenance over brochure fidelity. Theme it through supported Material
+  APIs and project tokens; avoid private DOM or CSS overrides. Use Angular CDK only where Material
+  has no suitable control. Verify compatibility and NFR-1/NFR-2 impact before adding it.
+- **Hosting (decided 2026-10-22):** GitHub Pages, deployed by a GitHub Actions workflow from
+  `main` using built-in Pages permissions (no stored token). The site is served at
+  `https://heba920908.github.io/octo-robot-kva/`. Pages cannot set custom headers, so the CSP
+  is a `<meta>` tag; header-only protections wait for a future host or CDN.
 
 ### Content and assets
 
-- **Content pipeline:** Markdown Content docs (front matter plus body) live in the repo, for
-  example `content/services/*.md`, `content/projects/*.md`, `content/trust/*.md`,
-  `content/clients/*.md` (one doc per client group), `content/nosotros.md`,
-  `content/site/*.md`. At build time they are parsed, validated against JSON Schemas
-  (draft 2020-12) in `src/app/core/schemas/`, and emitted as typed data for the local content
-  service. Validation errors fail the build. Exact paths and tooling are decided in architecture.
+- **Content ownership:** Markdown Content docs (front matter plus body) live in the repo as the
+  editorial source of truth, for example `content/services/*.md`, `content/projects/*.md`,
+  `content/trust/*.md`, `content/clients/*.md` (one doc per client group),
+  `content/nosotros.md`, and `content/site/*.md`. Technical staff and AI coding assistants use
+  them to update typed Executable content in Angular through reviewed GitHub pull requests.
+  Angular does not read, render, parse, or build from Markdown. Executable content validates
+  against JSON Schemas (draft 2020-12) in `src/app/core/schemas/`; review checks parity with the
+  Content docs. Exact paths and checks are decided in architecture.
 - **Launch seed:** EXPERIENCE.md › Information Architecture holds the launch seed for the
   Services, Sub-services, Projects, Nosotros, and Clientes Content docs, taken from the brochure
-  (`imports/brochure-text.md` in the UX folder). Once the docs exist, the docs win.
+  (`imports/brochure-text.md` in the UX folder). Once the docs exist, they are the editorial
+  source for Executable content.
 - **Logo asset:** `assets/media/icon.png` is a 406×213 RGB PNG with no alpha channel (white
   "kVA" mark on solid black), so it works on dark backgrounds only. Angular 22 serves static
   files from `public/`, so architecture decides whether to copy it there or reference it as a
@@ -87,7 +94,7 @@ kVA's brochure lists two addresses and two phones: proyectos1@kvainstalaciones.m
   `%0D%0A` line breaks. Keep the URL under about 2,000 characters for older clients. Neither the
   browser nor the site can detect whether a mail client opened, which is why the FR-12
   post-submit message is always shown. Direct contact `mailto:` links (FR-20) use the subject
-  `[kvainstalaciones.mx] Contacto`, encoded at build time so they work without JavaScript.
+  `[kvainstalaciones.mx] Contacto`, present in prerendered HTML so they work without JavaScript.
 - **`tel:` construction:** `tel:+525640003344` for (56) 4000 3344, pending kVA's confirmation of
   the format (PRD §10 Q11).
 - **WhatsApp CTA (FR-17):** the link format is `https://wa.me/52XXXXXXXXXX?text=<encoded>`, with
@@ -108,7 +115,7 @@ kVA's brochure lists two addresses and two phones: proyectos1@kvainstalaciones.m
   proyectos1@kvainstalaciones.mx, and SABG as the authority. It gains a WhatsApp paragraph with
   the WhatsApp CTA (FR-17).
 - **Interim responsible party:** see "Legal identity: options considered". The *razón social*,
-  *domicilio*, and retention period are Content doc fields added later, with no code change.
+  *domicilio*, and retention period are added later through a Content-only change.
 
 ### Constitution mapping
 
