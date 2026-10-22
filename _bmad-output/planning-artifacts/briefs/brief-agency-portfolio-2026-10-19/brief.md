@@ -2,7 +2,7 @@
 title: "Product Brief: kVA Instalaciones Landing Page"
 status: final
 created: 2026-10-19
-updated: 2026-10-21
+updated: 2026-10-22
 ---
 
 # Product Brief: kVA Instalaciones Landing Page
@@ -43,8 +43,10 @@ five sections, and contact is always one step away from any of them:
 
 - **Hero.** A clear statement of what kVA does and for whom, with a prominent contact call to
   action.
-- **Services.** Structured cabling, electrical installations, power consumption analysis, and
-  data services. The list is built from content docs and is easy to extend as the offer grows.
+- **Services.** Four Services, following kVA's 2025 brochure: Desarrollo e Ingeniería de
+  Proyecto (including power-quality analysis), Instalaciones (including structured cabling),
+  Puesta en marcha y Validaciones, and Servicios de Datos. The list is built from content docs
+  and is easy to extend as the offer grows.
 - **Projects.** A grid of project references, filterable by category, that shows the kind of work
   kVA does. It launches with placeholders. `[ASSUMPTION]` Real projects are added as kVA supplies
   them.

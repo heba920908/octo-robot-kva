@@ -2,7 +2,7 @@
 title: "DESIGN: kVA Instalaciones Landing Page"
 status: final
 created: 2026-10-21
-updated: 2026-10-21
+updated: 2026-10-22
 sources:
   - ../../prds/prd-agency-portfolio-2026-10-19/prd.md
   - ../../prds/prd-agency-portfolio-2026-10-19/addendum.md
@@ -442,9 +442,9 @@ Stroke tokens: `backgroundColor` is the stroke color (see the frontmatter export
   groups in 2 columns ≥ 1024. No logos.
 - **Contact section** — `contact-section`: full-bleed photo + `overlay`; ≥ 1024 the block sits
   in the right 6/12 with the white logo top-right (p18). `h1` + mirrored rule;
-  contact name `h3` paper; two channel rows, each an email paired with its phone (proyectos1@
-  + (56) 4000 3344; proyectos2@ + (56) 4029 4029): underlined `body` paper links, a copy
-  `button-icon-on-dark` after each email (Copy-address fallback); `button-primary` opens the
+  contact name `h3` paper; one channel row, the email paired with its phone (proyectos1@
+  + (56) 4000 3344; proyectos2@ is not published): underlined `body` paper links, a copy
+  `button-icon-on-dark` after the email (Copy-address fallback); `button-primary` opens the
   Contact composer.
 - **WhatsApp CTA** — `button-ghost-on-dark` + chat icon in the Contact section; hidden until
   its number is set.
@@ -474,8 +474,8 @@ Stroke tokens: `backgroundColor` is the stroke color (see the frontmatter export
   light, `focus-ring-inset` on paper controls over photos; never off.
 - **Scrim** — full-viewport `scrim` behind each overlay.
 - **Skip link** — `skip-link`; hidden until focused, then fixed top-left at `{spacing.2}`.
-- **Footer** — `footer`; white logo `{spacing.logo-footer}`, Legal identity, email + phone
-  pairs, year, "Aviso de privacidad"; `footer-link` links ≥ 24px tall, rows `{spacing.2}` apart.
+- **Footer** — `footer`; white logo `{spacing.logo-footer}`, Legal identity, the email + phone
+  pair, year, "Aviso de privacidad"; `footer-link` links ≥ 24px tall, rows `{spacing.2}` apart.
 
 ## Do's and Don'ts
 

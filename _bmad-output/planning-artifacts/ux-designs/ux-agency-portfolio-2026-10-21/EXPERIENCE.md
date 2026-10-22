@@ -3,7 +3,7 @@ title: "EXPERIENCE: kVA Instalaciones Landing Page"
 name: kVA Instalaciones
 status: final
 created: 2026-10-21
-updated: 2026-10-21
+updated: 2026-10-22
 sources:
   - ../../prds/prd-agency-portfolio-2026-10-19/prd.md
   - ../../prds/prd-agency-portfolio-2026-10-19/addendum.md
@@ -37,11 +37,12 @@ on the DESIGN.md tokens, with Angular CDK a11y primitives (focus trap, live anno
 1. **Services:** 4 Service cards from the brochure (p05) + data services (see IA).
 2. **Projects:** real brochure Projects at launch, even without Alcance/Resultado; the
    Placeholder project mechanism stays.
-3. **Contact channels:** contact name, both emails, and both phones as `tel:` links in the
-   Contact section and footer. Leads still go to proyectos1@kvainstalaciones.mx.
+3. **Contact channels:** contact name, proyectos1@kvainstalaciones.mx, and (56) 4000 3344 as a
+   `tel:` link in the Contact section and footer. proyectos2@ and (56) 4029 4029 are not
+   published (user, 2026-10-21; PRD §7).
 4. **Nosotros:** new section (philosophy, mission, vision, values) and header link.
 
-**Spine terms** (pending the PRD Glossary update):
+**Spine terms** (now in the PRD Glossary, updated 2026-10-21):
 
 - *Project carousel* — the one-photo-at-a-time viewer in the Project detail view.
 - *Copy status* — the "Copiado" confirmation beside a copy control.
@@ -279,11 +280,11 @@ in Foundation.
 - **Trust section** — Renders only confirmed Trust items, each with an optional evidence
   reference (FR-10). The Clientes list renders only entries whose Content doc records the
   client's permission [ASSUMPTION: same rule as FR-8].
-- **Contact section** — Emails as `mailto:` links, each paired with its phone as a `tel:`
-  link; a copy button per email (Copy-address fallback, FR-12); a Contact composer button; the
-  WhatsApp CTA slot (FR-17). Every direct `mailto:` here and in the footer carries `?subject=`
-  + the encoded "[kvainstalaciones.mx] Contacto" (FR-13, so SM-1 counts it); the copy control
-  is the only untagged path.
+- **Contact section** — The published email as a `mailto:` link paired with its phone as a `tel:`
+  link (FR-20); a copy button beside the email (Copy-address fallback, FR-12); a Contact composer
+  button; the WhatsApp CTA slot (FR-17). Every direct `mailto:` here and in the footer carries
+  `?subject=` + the encoded "[kvainstalaciones.mx] Contacto" (FR-13, so SM-1 counts it); the copy
+  control is the only untagged path.
 - **Direct contact links** (`direct-contact-links`) — Plain `<a>` hand-off to the OS (mail app
   or dialer); no JS, no tracking, page state unchanged.
 - **Copy status** — A persistent, empty `role="status"` (polite, atomic) beside each copy
@@ -346,14 +347,14 @@ are not repeated.
 | Nosotros | No Content doc | Section and its header link hidden. |
 | Confianza | No confirmed Trust item | Section + header link hidden (FR-10); Hero proof stays. |
 | Confianza | No permitted clients | Clientes block hidden. |
-| Contacto | Name, phone, or proyectos2@ missing | That item omitted; proyectos1@ is required. |
+| Contacto | Name or phone missing | That item omitted; proyectos1@ is required. |
 | Contact composer | Pristine | Service pre-filled from a Service or Project CTA; no errors shown. |
 | Contact composer | Field error | `{colors.danger}` message + icon; focus first invalid; summary. |
 | Contact composer | Reopened | Values restored; Service replaced only if the CTA pre-fills one. |
 | Contact composer | Reopened after submit | Filled form, not the post-submit state. |
 | Contact composer | Notice open | Composer pane `inert` beneath; values intact on return (FR-14). |
 | WhatsApp CTA | No number | Not rendered; no gap left in the layout (FR-17). |
-| Footer | No Legal identity | Launch-blocking (PRD Q6); a build check flags it [NOTE FOR UX]. |
+| Footer | No Legal identity | Shows "kVA Instalaciones" + proyectos1@; not blocking (PRD Q6). |
 | Any | Reduced motion | No smooth scroll, reveals, slides, or scale; instant state changes. |
 | Any | Offline | Page already loaded; `mailto:`/`tel:` still hand off to the OS; nothing else. |
 
@@ -376,8 +377,8 @@ are not repeated.
   (`stopPropagation`) and is ignored while a native `<select>` is open.
 - **Swipe** — Every swipe has a button path; nothing is drag-only (WCAG 2.5.7).
 - **Copy to clipboard** — Async Clipboard API; fallback selects the address text.
-- **`tel:` / `mailto:` links** — Native; phones as `tel:+52…` [ASSUMPTION: +52 56 4000 3344 and
-  +52 56 4029 4029]. `mailto:` built with `encodeURIComponent` and `%0D%0A` (addendum).
+- **`tel:` / `mailto:` links** — Native; phones as `tel:+52…` [ASSUMPTION: +52 56 4000 3344].
+  `mailto:` built with `encodeURIComponent` and `%0D%0A` (addendum).
 - **Scroll reveal** — Fade + `{motion.reveal-distance}` rise over `{motion.duration-slow}`,
   once. Applied by JS after hydration, only to elements below the fold at that moment; the
   Hero, anything already in view, and prerendered CSS never hide content. Observer threshold
@@ -499,7 +500,7 @@ Ana, general contractor, assembling bids.
 
 1. She skims the Hero and the four Service cards to confirm enterprise electrical work.
 2. She clicks "Contacto"; focus lands on the section heading.
-3. She sees Ing. Alfredo Hernández, then each email beside its phone.
+3. She sees Ing. Alfredo Hernández, then proyectos1@kvainstalaciones.mx beside (56) 4000 3344.
 4. She clicks the copy button beside proyectos1@kvainstalaciones.mx.
 5. **Climax:** "Copiado" appears and is announced; the address is in her clipboard, ready for
    her company webmail with the bid documents attached (an untagged email still counts as a
@@ -535,7 +536,7 @@ Ana, general contractor, assembling bids.
 
 ## Open Questions
 
-1. **PRD update required** (overrides O1–O4 and spine decisions), stale locations: §1 Vision
+1. **PRD update** (done 2026-10-21). Locations it covered, in pre-update numbering: §1 Vision
    (Services list; email-only contact); §2.3 UJ-1 and UJ-2 (old Service names); §2.4
    Per-Service hooks; §3 Glossary › Service, Lead (calls, proyectos2@), Copy-address fallback,
    Contact composer (form factor now decided); §4.1 description (anchor list; footer
@@ -550,7 +551,8 @@ Ana, general contractor, assembling bids.
    `site` phones, contact name, proyectos2@; `project` photo `alt`/`source`/`license`,
    optional scope/outcome); addendum › Spam exposure and Structured data.
 2. **Legal identity** (*razón social*, *domicilio*) and retention period: still TBD (PRD Q6),
-   launch-blocking for the footer and Privacy notice.
+   not launch-blocking (user, 2026-10-21). Until supplied, the footer and Privacy notice name
+   "kVA Instalaciones" and proyectos1@ as the responsible party.
 3. **Photo licenses:** are the brochure photos (backgrounds and Projects) licensed for web?
 4. **Fonts:** keep the OFL lookalikes or license All Round Gothic / Apparat for web?
 5. **Project → Service mapping** (IA table) to be confirmed by kVA. Instalaciones holds 7 of 9
@@ -563,6 +565,6 @@ Ana, general contractor, assembling bids.
    and lead.
 8. **Project facts:** scope and outcome (plus optional location, year, standards) requested
    from kVA; until then Projects publish under the launch rule.
-9. **Phones:** confirm `tel:` format (+52 56…) and whether proyectos2@ is a public channel
-   (its tagged emails reach a second inbox).
+9. **Phones:** confirm `tel:` format (+52 56…). Resolved: proyectos2@ and (56) 4029 4029 are
+   not published (user, 2026-10-21).
 10. **Higher-resolution originals** of the background photos (also needed for the share image).
