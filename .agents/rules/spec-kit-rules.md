@@ -7,8 +7,10 @@ build matches a written, checkable spec.
 ## Governing documents
 * **Constitution**: `.specify/memory/constitution.md` (committed). Set it up with
   `speckit-constitution`. It must not contradict `coding-standards.md` or `bmad-protocols.md`.
-* **Feature specs**: `specs/<NNN>-<feature>/` (committed), created with `speckit-specify`,
-  then refined with `speckit-clarify`, `speckit-plan`, and `speckit-checklist`.
+* **Feature specs**: one per BMAD epic, in `specs/<NNN>-epic-<E>-<slug>/` (committed),
+  created with `speckit-specify`, then refined with `speckit-clarify`, `speckit-plan`, and
+  `speckit-checklist`. Each BMAD story maps to one spec user story; a story's section must
+  be clarified before that story enters **Act**. Do not create per-story specs.
 * Run `speckit-analyze` before a story leaves **Verify** to check that spec, plan, and
   code are consistent.
 

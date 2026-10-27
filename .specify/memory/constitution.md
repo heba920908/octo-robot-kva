@@ -103,10 +103,18 @@ Rationale: an agency portfolio is judged on first impression, speed, and inclusi
 
 ## Development Workflow & Quality Gates
 
+**Feature spec granularity**: spec-kit feature specs are written **one per BMAD epic**, in
+`specs/<NNN>-epic-<E>-<slug>/`. The epic spec MUST cover every story in the epic, with one
+spec user story per BMAD story and acceptance scenarios traceable to that story's
+Given/When/Then criteria. The epic spec, its plan, and its tasks MAY be extended story by
+story, but a story's section MUST be present and clarified before that story enters Act.
+Per-story specs MUST NOT be created.
+
 A story advances only when its gate is met:
 
-1. **Plan → Act**: BMAD story with acceptance criteria exists; behaviour model merged;
-   feature spec in `specs/<NNN>-<feature>/` created (`speckit-specify`) and clarified
+1. **Plan → Act**: BMAD story with acceptance criteria exists; behaviour model merged (when
+   the story introduces one); the story's section of its epic spec in
+   `specs/<NNN>-epic-<E>-<slug>/` created (`speckit-specify`) and clarified
    (`speckit-clarify`, `speckit-plan`); governing schema or token set identified.
 2. **Act → Verify**: tests written first and passing; every behaviour transition covered;
    behaviour-flow logs recorded.
@@ -130,4 +138,4 @@ A story advances only when its gate is met:
 - Every code review and every `speckit-analyze` run MUST check compliance with these
   principles. Any deviation MUST be justified in the story's implementation artifact.
 
-**Version**: 1.1.0 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-22
+**Version**: 1.2.0 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-27
