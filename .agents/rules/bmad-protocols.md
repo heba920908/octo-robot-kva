@@ -32,13 +32,21 @@ config before implementation**. Examples: viewing a case study, filtering portfo
 categories, sorting agency capabilities, opening the contact form slider, submitting
 the contact form.
 
-* Location: `src/app/behaviors/<feature>.behavior.ts`. These are typed, side-effect-free
-  descriptors that are imported by the feature and its tests.
-* Each model declares: `id`, `actor`, `trigger`, `preconditions`, `states`
-  (finite set), `transitions` (`from` → `event` → `to`), `effects`, and
-  `acceptance` (Given/When/Then IDs that match the BMAD story ACs).
-* Every transition must be covered by at least one unit test.
-* A story cannot move to **Act** until its behaviour model is merged.
+* Each model module exports finite discriminated `State` and `Event` types and conforms to
+  the shared `BehaviorModel<State, Event>` type in
+  `src/app/behaviors/behavior-model.ts`. It declares `id`, `actor`, `trigger`, descriptive
+  `preconditions`, stable acceptance IDs, and a pure deterministic `transition(state,event)`
+  returning `{ state, effects }` or `null` for an unsupported pair. The function is the
+  single source of transition truth; feature handlers apply only its result.
+* Runtime guards are represented in `State`/`Event` and enforced by the transition function.
+  Effects use the closed discriminated union owned by `core/effects` (`focus`, `layer`,
+  `navigate`, `copy`, `announce`, `scroll`), with one typed payload and documented meaning
+  per effect kind. The feature adapter submits non-null effects once, in returned order, and
+  none for `null`. Global/modal event ownership follows AD-5.
+* Colocated table-driven tests call the production function; interaction tests verify the
+  feature adapter applies each non-null result once and applies no effects for `null`.
+* A story cannot move to **Act** until its behaviour model and colocated transition tests are
+  merged.
 
 ## Behaviour-flow logging
 

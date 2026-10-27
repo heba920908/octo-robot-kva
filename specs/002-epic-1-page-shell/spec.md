@@ -8,7 +8,8 @@
 
 **Input**: BMAD Epic 1 in
 [epics.md](../../_bmad-output/planning-artifacts/epics.md) (Stories 1.1–1.9). Constitution
-v1.2.0 requires one spec-kit feature spec per epic, so this spec covers every Epic 1 story.
+Constitution v2.0.0 requires one spec-kit feature spec per epic, so this spec covers every
+Epic 1 story.
 
 ## Epic Summary
 
@@ -26,15 +27,18 @@ pattern.
 | US2 | 1.2 | Self-hosted fonts and icon set | Drafted |
 | US3 | 1.3 | Content facade and UI strings | Drafted |
 | US4 | 1.4 | Image derivative pipeline and shared responsive image | Drafted |
-| US5 | 1.5 | Footer with direct contact links and in-page privacy notice | Drafted; blocked by behaviour-model shape conflict |
-| US6 | 1.6 | Contact section with direct links and copy-address fallback | Drafted; blocked by behaviour-model shape conflict |
+| US5 | 1.5 | Footer with direct contact links and in-page privacy notice | Drafted |
+| US6 | 1.6 | Contact section with direct links and copy-address fallback | Drafted |
 | US7 | 1.7 | Hero section | Drafted |
-| US8 | 1.8 | Sticky header and section navigation | Drafted; blocked by behaviour-model shape conflict |
-| US9 | 1.9 | Mobile menu | Drafted; blocked by behaviour-model shape conflict |
+| US8 | 1.8 | Sticky header and section navigation | Drafted |
+| US9 | 1.9 | Mobile menu | Drafted |
 
 A drafted story MUST be clarified (`speckit-clarify`) and added to [plan.md](./plan.md)
 (`speckit-plan`) before it enters Act. The BMAD story's Given/When/Then criteria in
 `epics.md` are authoritative. The scenarios below restate them so they can be traced.
+Behavior-bearing scenarios cite the stable BMAD criterion IDs; model `acceptance` metadata
+MUST use those same IDs. Stories 1.5, 1.6, 1.8 and 1.9 introduce behaviour models. Their pure
+transition functions and colocated tests MUST be merged during Plan before Act.
 
 ## Clarifications
 
@@ -171,17 +175,17 @@ the in-page privacy notice.
 
 1. **Given** the extended site content, **When** it is validated, **Then** a missing email or
    an invalid Mexican phone fails, and no secondary address or number exists in content
-   (FR20).
+   (FR20; BMAD `1.5-AC-01`).
 2. **Given** the contact-link builder, **When** it is tested, **Then** it produces the tagged
-   email link and `tel:+525640003344` with every value encoded (AD-9, FR13).
+   email link and `tel:+525640003344` with every value encoded (AD-9, FR13; BMAD `1.5-AC-02`).
 3. **Given** the prerendered footer, **When** it is viewed, **Then** it shows the logo, the
    legal identity (or the "kVA Instalaciones" stand-in), the tagged email link, the phone
    link named "Llamar al (56) 4000 3344", "© {year} kVA Instalaciones" with the year from
    content, and "Aviso de privacidad". All links are at least 24 px tall and work without
-   JavaScript (FR3, FR20, UX-DR26).
+   JavaScript (FR3, FR20, UX-DR26; BMAD `1.5-AC-03`).
 4. **Given** the Visitor activates "Aviso de privacidad", **When** the page responds,
    **Then** it jumps to the in-page notice section; invalid notice content fails validation
-   (FR14, UX-DR24).
+   (FR14, UX-DR24; BMAD `1.5-AC-04`).
 
 ---
 
@@ -196,17 +200,22 @@ view the section with scripts disabled.
 **Acceptance Scenarios**:
 
 1. **Given** the page shell, **When** sections render, **Then** they follow the shared
-   section rhythm and heading anchors with decorative corner rules (UX-DR6, UX-DR7, UX-DR11).
+   section rhythm and heading anchors with decorative corner rules
+   (UX-DR6, UX-DR7, UX-DR11; BMAD `1.6-AC-01`).
 2. **Given** the prerendered Contact section, **When** it is viewed, **Then** it shows the
    title, the contact name, the tagged email and phone links, and a contact button that is a
    plain tagged email link. A missing name or phone is left out without leaving a gap
-   (FR20, UX-DR21, UX-DR30).
-3. **Given** scripts are enabled, **When** the Visitor copies the address, **Then** it is
-   copied and "Copiado" is announced about 100 ms later and held for 2.5 s (FR12, UX-DR22).
-4. **Given** the copy fails, **When** the Visitor activates copy, **Then** the address text
-   is selected and the failure message is announced.
-5. **Given** scripts are disabled, **When** the section renders, **Then** the copy button is
-   hidden and the address stays visible.
+   (FR20, UX-DR21, UX-DR30; BMAD `1.6-AC-02`).
+3. **Given** the `copy-address` model, **When** table-driven tests call its production
+   transition function, **Then** supported and unsupported state/event pairs return the
+   specified state and effects (AD-7; BMAD `1.6-AC-03`).
+4. **Given** scripts are enabled, **When** the Visitor copies the address, **Then** it is
+   copied and "Copiado" is announced about 100 ms later and held for 2.5 s
+   (FR12, UX-DR22; BMAD `1.6-AC-04`).
+5. **Given** the copy fails, **When** the Visitor activates copy, **Then** the address text
+   is selected and the failure message is announced (BMAD `1.6-AC-05`).
+6. **Given** scripts are disabled, **When** the section renders, **Then** the copy button is
+   hidden and the address stays visible (BMAD `1.6-AC-06`).
 
 ---
 
@@ -246,16 +255,19 @@ current-link indication; with reduced motion, check that scrolling is instant.
 
 1. **Given** the page shell, **When** it renders, **Then** the header shows the logo linking
    to the top, section links in order for visible sections only, and the contact CTA
-   (FR1–FR3, UX-DR8).
+   (FR1–FR3, UX-DR8; BMAD `1.8-AC-01`).
 2. **Given** any scroll position, **When** the Visitor scrolls, **Then** the header stays
-   visible, turning solid after 24 px of scroll.
+   visible, turning solid after 24 px of scroll (BMAD `1.8-AC-02`).
 3. **Given** scripts are enabled, **When** a section link is activated, **Then** the page
    scrolls (instantly under reduced motion), focus moves to the section heading, the
-   fragment updates without a new history entry, and the current link is marked (FR1).
+   fragment updates without a new history entry, and the current link is marked
+   (FR1; BMAD `1.8-AC-04`).
 4. **Given** the `section-navigation` behaviour model, **When** its tests run, **Then** every
-   transition is covered (AD-7).
+   supported and unsupported result is asserted by calling the production transition
+   function, and the adapter applies returned state/effects once
+   (AD-7; BMAD `1.8-AC-03`).
 5. **Given** the Visitor presses Tab on page load, **When** focus lands, **Then** the skip link
-   is first, visible, and moves focus to the main content (UX-DR9).
+   is first, visible, and moves focus to the main content (UX-DR9; BMAD `1.8-AC-05`).
 
 ---
 
@@ -269,18 +281,21 @@ choose a link, and check focus and history each time.
 **Acceptance Scenarios**:
 
 1. **Given** a viewport under 1024 px with scripts enabled, **When** the page renders,
-   **Then** a "Menú" disclosure button replaces the inline links (UX-DR10).
+   **Then** a "Menú" disclosure button replaces the inline links
+   (UX-DR10; BMAD `1.9-AC-01`).
 2. **Given** the menu is closed, **When** it is opened, **Then** a full-height sheet shows
    the links and the contact CTA, the rest of the page is inert, focus is trapped, scrolling
-   is locked, and one history entry is added (AD-5).
+   is locked, and one history entry is added (AD-5; BMAD `1.9-AC-03`).
 3. **Given** the menu is open, **When** the Visitor presses Esc, uses Back or activates the
-   toggle, **Then** it closes, the history entry is consumed, and focus returns to the toggle.
+   toggle,    **Then** it closes, the history entry is consumed, and focus returns to the toggle
+   (BMAD `1.9-AC-04`).
 4. **Given** the menu is open, **When** a section link is chosen, **Then** the menu closes
-   and focus lands on the target section heading (FR1).
+   and focus lands on the target section heading (FR1; BMAD `1.9-AC-05`).
 5. **Given** scripts are disabled, **When** the page renders under 1024 px, **Then** the
-   section links show as a wrapped row (UX-DR30).
-6. **Given** the `mobile-menu` behaviour model, **When** its tests run, **Then** every
-   transition is covered (AD-7).
+   section links show as a wrapped row (UX-DR30; BMAD `1.9-AC-06`).
+6. **Given** the `mobile-menu` model, **When** table-driven tests call its production
+   transition function, **Then** every supported and unsupported result is asserted and the
+   adapter applies returned state/effects once (AD-7; BMAD `1.9-AC-02`).
 
 ### Edge Cases
 
@@ -416,6 +431,9 @@ choose a link, and check focus and history each time.
 - Fonts (US2) are out of scope for US1. The theme refers to the token font families. Until
   US2 lands, the browser shows the metric fallbacks.
 - Behaviour models: US1–US4 and US7 introduce none. US5 (`direct-contact-links`), US6
-  (`copy-address`), US8 (`section-navigation`) and US9 (`mobile-menu`) each introduce one,
-  and stay blocked until the behaviour-model shape conflict (constitution §II vs AD-7) is
-  resolved.
+  (`copy-address`), US8 (`section-navigation`) and US9 (`mobile-menu`) each introduce one.
+  Each conforms to the shared `BehaviorModel<State, Event>` type. Its pure transition
+  function is the single source of state/effect changes. The model's acceptance metadata
+  references the stable BMAD criterion IDs; table-driven tests call the production function
+  and interaction tests verify the adapter applies each non-null result once and applies no
+  effects for `null`. Models and tests merge during Plan, before Act.

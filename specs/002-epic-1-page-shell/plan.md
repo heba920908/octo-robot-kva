@@ -4,7 +4,7 @@
 
 **Input**: Feature specification from `/specs/002-epic-1-page-shell/spec.md`
 
-**Scope of this plan revision**: US1 (BMAD Story 1.1) only. Constitution v1.2.0 allows an epic
+**Scope of this plan revision**: US1 (BMAD Story 1.1) only. Constitution v2.0.0 allows an epic
 plan to grow story by story. Each later story is added here, through its own
 `speckit-clarify` / `speckit-plan` pass, before it enters Act.
 
@@ -54,7 +54,7 @@ no `.mat-*` / `.mdc-*` selectors in project styles; no hard-coded colors or spac
 | Principle | US1 status | Notes |
 |---|---|---|
 | I. BMAD-driven delivery | PASS | Delivered by `bmad-build` on Story 1.1; planning and implementation artifacts in `_bmad-output/` |
-| II. Behaviour models before code | N/A | US1 adds no user action, so it needs no behaviour model. The §II/AD-7 shape conflict does not block US1 (it blocks US5, US6, US8 and US9) |
+| II. Behaviour models before code | N/A | US1 adds no user action, so it needs no behaviour model. Stories introducing a model merge its shared `BehaviorModel` implementation and transition/adapter tests during Plan, before Act. |
 | III. Test-first, colocated | PASS (planned) | Drift spec written before the generator; style-guard spec before the theme; both colocated. No behaviour transitions, so behaviour-flow JSONL logs are N/A |
 | IV. Schema- and token-governed | PASS | This story creates the token set at the constitution's paths (`src/styles/_tokens.scss`, `src/app/core/schemas/design-tokens.json`), which resolves readiness finding 4 |
 | V. Modern Angular | PASS | No components or NgModules added. Material is used for theming only in US1 |
@@ -120,9 +120,11 @@ in `scripts/` (like `verify-static-build.mjs`) and is reached from specs only th
 5. Record the bundle size after the change, and the difference. Run `npm run verify:static`
    and the [quickstart](quickstart.md) browser check.
 
-## Open items carried by the epic (not blocking US1)
+## Epic-wide implementation gate (not blocking US1)
 
-- Behaviour-model shape conflict (constitution §II vs AD-7) blocks US5, US6, US8 and US9.
+- Stories 1.5, 1.6, 1.8 and 1.9 merge their shared `BehaviorModel` implementation and
+  colocated transition/adapter tests during Plan, before Act, as required by constitution §II
+  and AD-7.
 - Architecture Deferred table is out of date (readiness finding 3): token sync is now built
   by US1. Update with `bmad-architecture`.
 

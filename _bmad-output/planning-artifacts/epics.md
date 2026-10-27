@@ -59,7 +59,7 @@ NFR5: Extensibility — new Services, Sub-services, Projects, Trust items, Clien
 - AD-4: Angular Material 22.2.4 (and CDK only where Material lacks a control); theme via supported APIs fed by project tokens; no private DOM class styling; record production-bundle impact against NFR1 before adding.
 - AD-5: `core/layers` alone opens/closes Mobile menu, Contact composer, Project detail view, Privacy notice; sole owner of `history.pushState/replaceState/back` and `popstate`; serialized history ops; features never call `MatDialog` directly; dialogs use `closeOnNavigation: false`; only stack is Privacy notice over Contact composer; Project detail → composer replaces the history entry and keeps the card as final focus target.
 - AD-6: Feature-local signals; cross-feature state in named core services; `core/contact` owns the in-memory Contact draft; no cookies/storage/network.
-- AD-7: Each behavior model `src/app/behaviors/<id>.behavior.ts` exports `State`, `Event`, pure `transition()` returning next state + declarative effects from a closed union (focus, layer, navigate, copy, announce, scroll); only `core/effects` executes effects; table-driven unit test for every transition.
+- AD-7: Each behavior model in `src/app/behaviors/<id>.behavior.ts` exports finite discriminated `State` and `Event` types and conforms to the shared `BehaviorModel<State, Event>` type in `src/app/behaviors/behavior-model.ts`. It declares `id`, `actor`, `trigger`, descriptive `preconditions`, stable acceptance IDs, and a pure deterministic `transition(state, event)` returning `{ state, effects }` or `null` for an unsupported pair. The function is the single source of transition truth; feature handlers apply only its result. Effects use one closed discriminated union owned by `core/effects` with kinds `focus`, `layer`, `navigate`, `copy`, `announce`, and `scroll`; each kind has a typed payload and documented meaning defined there. The feature adapter submits non-null effects once in returned order and none for `null`; global/modal event ownership follows AD-5. Table-driven tests call the production function; interaction tests verify the adapter applies returned state/effects once. The model and tests merge before the story enters Act.
 - AD-8: One prerendered route; prerendered HTML is the no-JS baseline; one `enhanced` signal set after first browser render drives JS-only affordances (start `hidden`); responsive collapse CSS-only; no `@defer` around search-visible content; no `new Date()` during render (footer year from content/build config); head metadata and JSON-LD from Executable content.
 - AD-9: One pure contact-link builder in `core/contact` builds every `mailto:`, `tel:`, and WhatsApp URL (Lead tag, Spanish body, encoding, E.164 → `tel:`/`wa.me`).
 - AD-10: Self-host fonts, icons, images; no Google Fonts, icon fonts, analytics; disable critical CSS inlining and SRI; no event replay; CSP meta `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'`; build test rejects executable inline scripts.
@@ -159,6 +159,11 @@ The page is findable and previews well on WhatsApp, LinkedIn, and email, and pas
 ## Epic 1: Branded Page Shell, Hero and Navigation
 
 A Visitor lands on a kVA-branded page, understands within seconds who kVA is and for whom, moves to any section from a sticky header or mobile menu, and reaches kVA through the Contact section and the footer. Establishes the design system, image pipeline, content facade, and UI-strings pattern every later epic uses.
+
+For behavior-model traceability, each Given/When/Then block in a behavior-bearing story has
+a stable ID `1.<story>-AC-<nn>` (for example `1.6-AC-01`); its `And` clauses share that ID.
+Behavior-model `acceptance` metadata and the epic spec MUST cite these IDs. New criteria
+append IDs; existing IDs MUST NOT be reordered or reused.
 
 ### Story 1.1: Brand Design Tokens and Material Theme
 
@@ -265,19 +270,23 @@ So that I can contact kVA directly or read how my data is handled from anywhere 
 
 **Acceptance Criteria:**
 
+**1.5-AC-01**
 **Given** `content/site.md` and `site.schema.json` extended with company facts usable as the Hero proof point (years in business, coverage), contact name, `proyectos1@kvainstalaciones.mx`, phone `+525640003344` displayed as "(56) 4000 3344", optional Legal identity and retention period, optional WhatsApp number, and the footer year
 **When** content validation runs
 **Then** a missing email or an invalid Mexican E.164 phone fails validation, and no `proyectos2@` address or "(56) 4029 4029" exists anywhere in content (FR20)
 
+**1.5-AC-02**
 **Given** the pure contact-link builder in `src/app/core/contact/`
 **When** its unit tests run
 **Then** it builds `mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto` and `tel:+525640003344`, owns the Lead subject tag `[kvainstalaciones.mx]`, and URL-encodes all values (AD-9, FR13)
 
+**1.5-AC-03**
 **Given** the footer
 **When** the page is prerendered
 **Then** it shows the white logo (24 px), the Legal identity or "kVA Instalaciones" stand-in, the email as a tagged `mailto:` link, the phone as a `tel:` link named "Llamar al (56) 4000 3344", "© {year} kVA Instalaciones" with the year from content/build config (no `new Date()` during render), and an "Aviso de privacidad" link (FR3, FR20, UX-DR26, AD-8)
-**And** links are ≥ 24 px tall and work without JavaScript, change no page state, and record nothing (`direct-contact-links` behavior model with tests)
+**And** links are ≥ 24 px tall and work without JavaScript, change no page state, and record nothing (`direct-contact-links` behavior model with tests that call its production `transition` function)
 
+**1.5-AC-04**
 **Given** `content/privacy-notice.md` and its typed content validated by `privacy-notice.schema.json`
 **When** the Visitor activates "Aviso de privacidad"
 **Then** the page jumps to an in-flow `<section id="aviso">` showing the generic notice with the stand-in responsible party (FR14 no-JS baseline, UX-DR24)
@@ -291,11 +300,13 @@ So that I can contact kVA from whatever tool I use, even webmail.
 
 **Acceptance Criteria:**
 
+**1.6-AC-01**
 **Given** the page shell
 **When** sections render
 **Then** the shell lays out sections in the order and surfaces of UX-DR7 (1200 px content column, 20/32/48 px margins, 4/12-column grid, 64 → 112 px section padding) so later sections slot in without layout changes
 **And** each section title is an `<h2 tabindex="-1">` anchor target with the decorative `aria-hidden` corner rule and no skipped heading level (UX-DR6, UX-DR11)
 
+**1.6-AC-02**
 **Given** the Contact section `#contacto` over the `cable-tray-technician.jpg` photo + overlay (via the shared responsive-image component)
 **When** the page is prerendered
 **Then** it shows the title "Contacto" with the mirrored corner rule, the contact name "Ing. Alfredo Hernández" as `h3`, the email as a tagged `mailto:` link and the phone as a `tel:` link built by the contact-link builder, and a contact button that is a plain tagged `mailto:` link (FR20, UX-DR21, UX-DR30)
@@ -303,18 +314,22 @@ So that I can contact kVA from whatever tool I use, even webmail.
 **And** `#contacto` joins the visible-section list
 **And** a missing contact name or phone is omitted without leaving a gap
 
+**1.6-AC-03**
 **Given** `core/effects` created with the closed effect union (focus, layer, navigate, copy, announce, scroll) and executors for copy and announce
 **When** the `copy-address` behavior model's table-driven tests run
-**Then** copy success, copy failure, and status reset transitions are covered, and only `core/effects` executes them (AD-7)
+**Then** table-driven tests call the production `transition` function and assert copy success, failure, status reset, and unsupported results; interaction tests verify the adapter applies each non-null result once and applies no effects for `null`; only `core/effects` executes the effects (AD-7)
 
+**1.6-AC-04**
 **Given** JavaScript is enabled
 **When** the Visitor activates "Copiar correo proyectos1@kvainstalaciones.mx"
 **Then** the address is written via the Async Clipboard API and the persistent empty `role="status"` beside it is cleared, then set to "Copiado" ~100 ms later, held 2500 ms (FR12, UX-DR22)
 
+**1.6-AC-05**
 **Given** the clipboard write fails
 **When** the Visitor activates the copy button
 **Then** the address text is selected and "No se pudo copiar. Selecciona el correo y cópialo." is announced
 
+**1.6-AC-06**
 **Given** JavaScript is disabled
 **When** the section renders
 **Then** the copy button is hidden and the address stays visible as text and link
@@ -355,24 +370,29 @@ So that I can find what I need and always reach the quote CTA.
 
 **Acceptance Criteria:**
 
+**1.8-AC-01**
 **Given** the page shell
 **When** it renders
 **Then** the header shows the white kVA logo linking to `#inicio` with accessible name "kVA Instalaciones", the "Instalaciones" wordmark ≥ 768 px, section links in the order Servicios · Proyectos · Nosotros · Confianza · Contacto (≥ 1024 px), and the Header contact CTA "Cotiza tu proyecto" (visible "Cotiza" < 768 px) linking to `#contacto` (FR2, FR3, UX-DR8)
 **And** only sections in the facade's visible-section list get a header link (FR1)
 
+**1.8-AC-02**
 **Given** any scroll position on mobile or desktop
 **When** the Visitor scrolls
 **Then** the header stays sticky, is transparent over the Hero until scrollY > 24 px, then condenses to solid `ink` with a divider, and `scroll-padding-top` tracks the current header height (UX-DR8)
 
+**1.8-AC-03**
 **Given** the `section-navigation` behavior model in `src/app/behaviors/section-navigation.behavior.ts`
 **When** its table-driven unit tests run
-**Then** every state-event transition is covered and effects come only from the closed union executed by `core/effects`, extended here with focus, scroll, and navigate executors (AD-7)
+**Then** table-driven tests call the production `transition` function and assert supported/unsupported results; interaction tests verify the adapter applies each non-null result once and applies no effects for `null`; effects come only from the closed union executed by `core/effects`, extended here with focus, scroll, and navigate executors (AD-7)
 
+**1.8-AC-04**
 **Given** `core/layers` created in this story as the sole owner of `history.replaceState` and the only `popstate` listener, with serialized history operations (AD-5)
 **When** the Visitor activates a section link with JavaScript enabled
 **Then** the page scrolls smoothly (instantly under `prefers-reduced-motion`), focus moves to the section `<h2 tabindex="-1">`, and the fragment updates via `history.replaceState` requested through `core/layers` (FR1, UX-DR11)
 **And** the current section link carries `aria-current="location"` via scroll-spy with the copper underline
 
+**1.8-AC-05**
 **Given** the skip link "Saltar al contenido"
 **When** the Visitor presses Tab on page load
 **Then** it is the first focusable element, becomes visible, and moves focus to `<main id="main" tabindex="-1">` (UX-DR9)
@@ -385,26 +405,32 @@ So that I can navigate the page on a small screen.
 
 **Acceptance Criteria:**
 
+**1.9-AC-01**
 **Given** a viewport narrower than 1024 px with JavaScript enabled
 **When** the page renders
 **Then** a "Menú" button (`aria-expanded`, `aria-controls="menu-movil"`) shows instead of inline links, and `<nav id="menu-movil" aria-label="Secciones">` is inside the header (UX-DR10)
 
+**1.9-AC-02**
 **Given** the `mobile-menu` behavior model
 **When** its table-driven tests run
-**Then** open, close, Esc, Back, toggle, and link-choice transitions are all covered (AD-7)
+**Then** table-driven tests call the production `transition` function and assert open, close, Esc, Back, toggle, link-choice, and unsupported results; interaction tests verify the adapter applies each non-null result once and applies no effects for `null` (AD-7)
 
+**1.9-AC-03**
 **Given** the menu is closed
 **When** the Visitor activates "Menú"
 **Then** the full-height `ink` sheet opens with section links and the Header contact CTA at the bottom, `<main>` and `<footer>` become `inert`, focus is trapped across header + sheet, body scroll locks, and `core/layers` (extended in this story with `pushState` and guarded `history.back()`) pushes one history entry (AD-5)
 
+**1.9-AC-04**
 **Given** the menu is open
 **When** the Visitor presses Esc, uses browser Back, or activates the toggle
 **Then** the menu closes, the history entry is consumed, and focus returns to the toggle
 
+**1.9-AC-05**
 **Given** the menu is open
 **When** the Visitor chooses a section link
 **Then** the menu closes, the history entry is consumed, the fragment is replaced, and focus lands on the target section heading (FR1)
 
+**1.9-AC-06**
 **Given** JavaScript is disabled
 **When** the page renders below 1024 px
 **Then** the menu button is hidden and section links show as a wrapped row (UX-DR30)
@@ -933,4 +959,3 @@ So that we can launch with confidence.
 **Given** a temporary branch
 **When** a fifth Service and a tenth Project are added as Content-only changes and the page is rebuilt
 **Then** a fifth card, a fifth composer option, and the new Project appear with no component, template, style, or behavior-model change, and the branch is discarded (SM-3, NFR5)
-

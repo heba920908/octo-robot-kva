@@ -88,7 +88,7 @@ flowchart TD
 
 - **Binds:** every interactive component listed in EXPERIENCE.md
 - **Prevents:** UI state transitions that are untested or differ from accepted behavior
-- **Rule:** Each model in `src/app/behaviors/<id>.behavior.ts` exports `State` and `Event` types plus a pure `transition(state, event)` returning the next state and declarative effects. Effects come from one closed core union: focus, layer, navigate, copy, announce, and scroll. Only `core/effects` executes them. Behavior files import types only. Every state-event transition has a table-driven unit test.
+- **Rule:** Each `src/app/behaviors/<id>.behavior.ts` exports finite discriminated `State` and `Event` types and conforms to the shared `BehaviorModel<State, Event>` type in `src/app/behaviors/behavior-model.ts`. It declares `id`, `actor`, `trigger`, descriptive `preconditions`, stable BMAD acceptance IDs, and a pure deterministic `transition(state, event)` returning `{ state, effects }` or `null` for an unsupported pair. This function is the single source of transition truth; feature handlers apply only its result and MUST NOT duplicate transition logic. Runtime guards live in the state/event types and function. Effects use one closed discriminated union owned by `core/effects` with kinds `focus`, `layer`, `navigate`, `copy`, `announce`, and `scroll`; each kind has one typed payload and documented meaning defined there. The feature adapter submits non-null effects once, in returned order, and none for `null`; global/modal event ownership follows AD-5. Colocated table-driven tests call the production function; interaction tests verify the adapter applies each non-null result once and applies no effects for `null`. The model and tests merge before the story enters Act.
 
 ### AD-8 — One prerendered static route
 
@@ -215,5 +215,4 @@ flowchart LR
 | Alternative production host or CDN | GitHub Pages is the initial host; revisit if header-only security is required |
 | Header-only protections: `frame-ancestors`, HSTS policy, Referrer-Policy, Permissions-Policy, X-Content-Type-Options | GitHub Pages cannot set custom response headers |
 | Lighthouse automation | Can run after the first Pages deployment exists |
-| Image derivative tooling | AD-14 fixes the runtime contract; generation tooling can follow |
-| Token-sync implementation | Parity is required; tooling can follow story work |
+| Image derivative tooling | AD-14 fixes the runtime contract; generation is owned by Epic 1 Story 1.4 |

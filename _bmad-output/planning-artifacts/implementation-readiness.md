@@ -2,7 +2,7 @@
 type: implementation-readiness
 date: 2026-10-27
 verdict: CONCERNS
-decision: proceed (resolve concerns 1–2 before the first story enters Act)
+decision: proceed (Story 1.1 is ready for Act; later stories must clear their individual spec and behaviour-model gates)
 inputs:
   - prds/prd-agency-portfolio-2026-10-19/prd.md
   - ux-designs/ux-agency-portfolio-2026-10-21/DESIGN.md
@@ -23,41 +23,34 @@ The plan can be built. Brief, PRD, UX, architecture, and epics are all final.
 - AD-2 and AD-11 are covered by the `specs/001` baseline. The other ADs are cited by stories.
 - Epics have no forward dependencies, and PRD §10 has no blocking question.
 
-Two governance conflicts would make a developer decide something the documents do not record.
+The previously identified governance conflicts are resolved. Story 1.1's epic-spec section is
+clarified and planned, and it introduces no behaviour model, so it can enter Act. Later stories
+must clear their own spec and behaviour-model gates before Act.
 
 ## Findings (by severity)
 
-### 1. Behaviour model shape conflict (medium; blocks Story 1.6)
+### 1. Behaviour-model contract (medium)
 
-- **Constitution §II:** a model declares `id`, `actor`, `trigger`, `preconditions`, `states`,
-  `transitions`, `effects`, and `acceptance`.
-- **Architecture AD-7:** a model exports `State` and `Event` types and a pure `transition()`
-  that returns the next state and its effects.
-- **Rule:** the constitution prevails until it is amended.
-- **Fix:** amend the constitution to accept the AD-7 shape, with `id` and `acceptance`
-  metadata (`speckit-constitution`). Or change AD-7 (`bmad-correct-course`).
+**Status: resolved (2026-10-27).** Constitution v2.0.0, BMAD protocols, the source epic and
+AD-7 now require the same shared `BehaviorModel` contract: a pure transition function with
+metadata and stable acceptance IDs. The function returns state and ordered typed effects (or
+`null` for an unsupported pair), is exercised directly by table-driven tests, and is the only
+transition source; interaction tests verify the adapter applies non-null results once and
+applies no effects for `null`. Models and their colocated tests merge during Plan before the
+story enters Act.
 
-### 2. Plan → Act gate not planned (medium; blocks every story)
+### 2. Plan → Act gate (medium)
 
-**Status: spec granularity resolved (2026-10-27).** Constitution v1.2.0 sets one spec-kit
-feature spec per epic. Behaviour-model PR sequencing is still open; Story 1.1 builds no
-model, so it is not blocked.
-
-- The constitution requires a merged behaviour model and a clarified `specs/NNN-*` feature
-  spec before Act.
-- The stories build the model and its implementation together.
-- No spec beyond `specs/001` is planned.
-- **Decide:**
-  - Spec granularity: one spec per epic or one per story.
-  - Whether each behaviour model ships as a separate PR before the story's Act PR.
-- **Fix:** record the decision with `speckit-constitution` or `bmad-correct-course`.
+**Status: resolved (2026-10-27).** Constitution v2.0.0 establishes one spec per epic and
+defines the pure transition-function model. Story 1.1's section is clarified and planned.
+Stories that introduce a model must merge that model and its transition/adapter tests during
+Plan before their Act implementation begins.
 
 ### 3. Architecture Deferred table out of date (low)
 
-- `ARCHITECTURE-SPINE.md` › Deferred lists image derivative tooling and token sync.
-- Stories 1.4 (`sharp`, `npm run images:build`) and 1.1 (token export and parity test) build
-  them.
-- **Fix:** update the Deferred table (`bmad-architecture`).
+**Status: resolved (2026-10-27).** Token sync is assigned to Story 1.1 and removed from
+Deferred. Image derivative tooling remains deferred from the architecture but is explicitly
+owned by Story 1.4.
 
 ### 4. `design-tokens.json` path not pinned (low)
 

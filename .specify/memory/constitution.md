@@ -1,3 +1,14 @@
+<!--
+Sync Impact Report
+- Version change: 1.2.0 → 2.0.0 (MAJOR: replaces the declarative transition-table contract
+  with a pure transition function as the single source of transition truth)
+- Modified principles: II. Behaviour Models Before Code (model representation, effect
+  execution, transition testing, and Plan → Act gate)
+- Added sections: none
+- Removed sections: none
+- Follow-up completed: synchronized AD-7, BMAD protocols, Epic 1 story ACs/spec and
+  implementation-readiness report to the pure transition-function contract.
+-->
 # Agency Portfolio Constitution
 
 ## Core Principles
@@ -19,10 +30,26 @@ Rationale: a single methodology keeps agent behaviour predictable and its output
 - Every portfolio user action (e.g. viewing a case study, filtering categories, opening the
   contact panel, submitting the contact form) MUST have an explicit behaviour model in
   `src/app/behaviors/<feature>.behavior.ts` before implementation begins.
-- Each model MUST be typed and side-effect-free, and MUST declare `id`, `actor`, `trigger`,
-  `preconditions`, a finite set of `states`, `transitions` (`from` → `event` → `to`),
-  `effects`, and `acceptance` IDs matching the BMAD story's Given/When/Then criteria.
-- A story MUST NOT enter **Act** until its behaviour model is merged.
+- Each model MUST export finite discriminated `State` and `Event` types and conform to the
+  shared `BehaviorModel<State, Event>` type in
+  `src/app/behaviors/behavior-model.ts`. It MUST declare `id`, `actor`, `trigger`,
+  descriptive `preconditions`, and stable `acceptance` IDs matching the BMAD story criteria.
+  Preconditions describe the scenario context; runtime guards MUST be represented in
+  `State`/`Event` and enforced by the transition function.
+- `BehaviorModel.transition(state, event)` MUST be pure and deterministic. It MUST return
+  `{ state, effects }` for a supported pair, or `null` for an unsupported pair. This function
+  is the single source of transition truth. Feature handlers MUST apply only its returned
+  state/effects and MUST NOT duplicate transition logic.
+- Effects MUST use one closed discriminated union owned by `core/effects`; each effect kind
+  (`focus`, `layer`, `navigate`, `copy`, `announce`, `scroll`) MUST have a typed payload and
+  documented meaning defined once in that package. Only `core/effects` executes effects. The
+  feature adapter MUST submit a non-null transition's effects once, in returned order, and
+  MUST submit none for a `null` result. Global/modal event ownership MUST follow AD-5.
+- Table-driven unit tests MUST call the production transition function and assert each
+  supported and unsupported result. Colocated interaction tests MUST verify that the feature
+  adapter applies the returned state/effects once.
+- A story MUST NOT enter **Act** until its behaviour model and colocated transition tests are
+  merged.
 
 Rationale: explicit state machines make the expected behaviour reviewable and testable
 before any UI exists.
@@ -112,10 +139,11 @@ Per-story specs MUST NOT be created.
 
 A story advances only when its gate is met:
 
-1. **Plan → Act**: BMAD story with acceptance criteria exists; behaviour model merged (when
-   the story introduces one); the story's section of its epic spec in
-   `specs/<NNN>-epic-<E>-<slug>/` created (`speckit-specify`) and clarified
-   (`speckit-clarify`, `speckit-plan`); governing schema or token set identified.
+1. **Plan → Act**: BMAD story with acceptance criteria exists; its criteria are traceable to
+   the story section in `specs/<NNN>-epic-<E>-<slug>/`, created (`speckit-specify`) and
+   clarified (`speckit-clarify`, `speckit-plan`); governing schema or token set is identified.
+   When a story introduces a behaviour model, the model and its colocated transition tests
+   MUST be merged before Act.
 2. **Act → Verify**: tests written first and passing; every behaviour transition covered;
    behaviour-flow logs recorded.
 3. **Verify → Done**: `npm test` and production build pass within budgets;
@@ -138,4 +166,4 @@ A story advances only when its gate is met:
 - Every code review and every `speckit-analyze` run MUST check compliance with these
   principles. Any deviation MUST be justified in the story's implementation artifact.
 
-**Version**: 1.2.0 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-27
+**Version**: 2.0.0 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-27
