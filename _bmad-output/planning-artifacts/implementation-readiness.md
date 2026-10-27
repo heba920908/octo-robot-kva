@@ -61,6 +61,9 @@ model, so it is not blocked.
 
 ### 4. `design-tokens.json` path not pinned (low)
 
+**Status: resolved (2026-10-27)** in `specs/002-epic-1-page-shell` (FR-001):
+`src/app/core/schemas/design-tokens.json`.
+
 - Story 1.1 does not give a path.
 - Constitution §IV requires `src/app/core/schemas/design-tokens.json`.
 - **Fix:** follow the constitution path in Story 1.1.
