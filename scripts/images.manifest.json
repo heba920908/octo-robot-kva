@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "photos": [
+    {
+      "id": "cable-tray-technician",
+      "source": "assets/media/brochure/backgrounds/cable-tray-technician.jpg",
+      "base": "media/backgrounds/cable-tray-technician",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 250000
+    },
+    {
+      "id": "cover-blueprint-tools",
+      "source": "assets/media/brochure/backgrounds/cover-blueprint-tools.jpg",
+      "base": "media/backgrounds/cover-blueprint-tools",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 250000
+    },
+    {
+      "id": "electrical-panel-technician",
+      "source": "assets/media/brochure/backgrounds/electrical-panel-technician.jpg",
+      "base": "media/backgrounds/electrical-panel-technician",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 250000
+    },
+    {
+      "id": "helmet-technician",
+      "source": "assets/media/brochure/backgrounds/helmet-technician.jpg",
+      "base": "media/backgrounds/helmet-technician",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 250000
+    },
+    {
+      "id": "wiring-technician",
+      "source": "assets/media/brochure/backgrounds/wiring-technician.jpg",
+      "base": "media/backgrounds/wiring-technician",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 250000
+    },
+    {
+      "id": "acometidas-media-baja-tension-01",
+      "source": "assets/media/brochure/projects/acometidas-media-baja-tension-01.jpg",
+      "base": "media/projects/acometidas-media-baja-tension-01",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "acometidas-media-baja-tension-02",
+      "source": "assets/media/brochure/projects/acometidas-media-baja-tension-02.jpg",
+      "base": "media/projects/acometidas-media-baja-tension-02",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "canalizacion-cableado-alimentadores-01",
+      "source": "assets/media/brochure/projects/canalizacion-cableado-alimentadores-01.jpg",
+      "base": "media/projects/canalizacion-cableado-alimentadores-01",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "canalizacion-cableado-alimentadores-02",
+      "source": "assets/media/brochure/projects/canalizacion-cableado-alimentadores-02.jpg",
+      "base": "media/projects/canalizacion-cableado-alimentadores-02",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "canalizacion-cableado-alimentadores-03",
+      "source": "assets/media/brochure/projects/canalizacion-cableado-alimentadores-03.jpg",
+      "base": "media/projects/canalizacion-cableado-alimentadores-03",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "canalizacion-cableado-alimentadores-04",
+      "source": "assets/media/brochure/projects/canalizacion-cableado-alimentadores-04.jpg",
+      "base": "media/projects/canalizacion-cableado-alimentadores-04",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "canalizacion-cableado-alimentadores-05",
+      "source": "assets/media/brochure/projects/canalizacion-cableado-alimentadores-05.jpg",
+      "base": "media/projects/canalizacion-cableado-alimentadores-05",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "canalizacion-cableado-industrial-comercial-01",
+      "source": "assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-01.jpg",
+      "base": "media/projects/canalizacion-cableado-industrial-comercial-01",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "canalizacion-cableado-industrial-comercial-02",
+      "source": "assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-02.jpg",
+      "base": "media/projects/canalizacion-cableado-industrial-comercial-02",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "canalizacion-cableado-industrial-comercial-03",
+      "source": "assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-03.jpg",
+      "base": "media/projects/canalizacion-cableado-industrial-comercial-03",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "canalizacion-cableado-industrial-comercial-04",
+      "source": "assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-04.jpg",
+      "base": "media/projects/canalizacion-cableado-industrial-comercial-04",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "larousse-01",
+      "source": "assets/media/brochure/projects/larousse-01.jpg",
+      "base": "media/projects/larousse-01",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "larousse-02",
+      "source": "assets/media/brochure/projects/larousse-02.jpg",
+      "base": "media/projects/larousse-02",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "maniobras-equipos-electricos-01",
+      "source": "assets/media/brochure/projects/maniobras-equipos-electricos-01.jpg",
+      "base": "media/projects/maniobras-equipos-electricos-01",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "mantenimiento-equipos-01",
+      "source": "assets/media/brochure/projects/mantenimiento-equipos-01.jpg",
+      "base": "media/projects/mantenimiento-equipos-01",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "red-ambiental-01",
+      "source": "assets/media/brochure/projects/red-ambiental-01.jpg",
+      "base": "media/projects/red-ambiental-01",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "red-ambiental-02",
+      "source": "assets/media/brochure/projects/red-ambiental-02.jpg",
+      "base": "media/projects/red-ambiental-02",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "sistema-tierras-pararrayos-01",
+      "source": "assets/media/brochure/projects/sistema-tierras-pararrayos-01.jpg",
+      "base": "media/projects/sistema-tierras-pararrayos-01",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "site-paralelo-redundante-farmaceutica-01",
+      "source": "assets/media/brochure/projects/site-paralelo-redundante-farmaceutica-01.jpg",
+      "base": "media/projects/site-paralelo-redundante-farmaceutica-01",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    },
+    {
+      "id": "site-paralelo-redundante-farmaceutica-02",
+      "source": "assets/media/brochure/projects/site-paralelo-redundante-farmaceutica-02.jpg",
+      "base": "media/projects/site-paralelo-redundante-farmaceutica-02",
+      "widths": [320, 640, 960, 1280],
+      "budgetBytes": 120000
+    }
+  ],
+  "logos": [
+    {
+      "id": "header-32",
+      "source": "assets/media/brochure/logo/kva-logo-white.png",
+      "base": "media/logo/kva-logo-white",
+      "heights": [32],
+      "densities": [1, 2]
+    },
+    {
+      "id": "header-40-footer-hero-band",
+      "source": "assets/media/brochure/logo/kva-logo-white.png",
+      "base": "media/logo/kva-logo-white",
+      "heights": [40, 24, 200],
+      "densities": [1, 2]
+    }
+  ]
+}

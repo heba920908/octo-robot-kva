@@ -33,6 +33,17 @@ function check(condition, message) {
 check(existsSync(indexPath), `Missing prerendered page: ${indexPath}`);
 check(!existsSync(join(outputDir, 'server')), 'Static output must not include a server bundle');
 
+if (existsSync('package.json')) {
+  const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+  check(!pkg.dependencies?.sharp, 'Sharp must remain development-only');
+  check(pkg.devDependencies?.sharp === '0.35.5', 'Sharp encoder must stay pinned at 0.35.5');
+  for (const [name, command] of Object.entries(pkg.scripts ?? {})) {
+    if (name !== 'images:build') {
+      check(!/images:build|build-images/.test(command), `${name} must not generate images`);
+    }
+  }
+}
+
 for (const name of ['quicksand', 'outfit']) {
   const fontPath = join(outputDir, 'browser', 'media', 'fonts', `${name}-latin-wght.woff2`);
   try {

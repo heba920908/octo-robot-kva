@@ -149,16 +149,22 @@ describe('template content guard (AC4)', () => {
 });
 
 describe('production validation exclusion (AC5)', () => {
-  it.each(['ajv', 'ajv/dist/2020', 'ajv-formats', './schemas/ui-strings.schema.json'])(
-    'rejects runtime graph leakage: %s',
-    (dependency) => {
-      expect(
-        validationLeaks({ sources: { 'src/main.ts': `import value from '${dependency}';` } }).join(
-          '\n',
-        ),
-      ).toContain(dependency);
-    },
-  );
+  it.each([
+    'ajv',
+    'ajv/dist/2020',
+    'ajv-formats',
+    './schemas/ui-strings.schema.json',
+    'sharp',
+    '@img/sharp-linux-x64',
+    '../../../../scripts/build-images.mjs',
+    '../../../../scripts/images.manifest.json',
+  ])('rejects runtime graph leakage: %s', (dependency) => {
+    expect(
+      validationLeaks({ sources: { 'src/main.ts': `import value from '${dependency}';` } }).join(
+        '\n',
+      ),
+    ).toContain(dependency);
+  });
 
   it.each([
     'ajv-formats',
@@ -166,6 +172,11 @@ describe('production validation exclusion (AC5)', () => {
     'https://json-schema.org/draft/2020-12/schema',
     'ui-strings.schema.json',
     'validateFormats',
+    'node_modules/sharp/lib/index.js',
+    'node_modules/@img/sharp-linux-x64',
+    'build-images.mjs',
+    'images.manifest.json',
+    'libvips',
   ])('rejects emitted validation code: %s', (marker) => {
     expect(validationLeaks({ artifacts: { 'browser/main.js': marker } }).join('\n')).toContain(
       'browser/main.js',
@@ -210,6 +221,12 @@ describe('production validation exclusion (AC5)', () => {
     const clean = runStaticVerificationFixture();
     expect(clean.status, clean.output).toBe(0);
     const contaminated = runStaticVerificationFixture('validateFormats');
+    expect(contaminated.status, contaminated.output).toBe(1);
+    expect(contaminated.output).toContain('emitted validation code or content schema');
+  });
+
+  it('rejects a real static-verifier output contaminated by the image encoder', () => {
+    const contaminated = runStaticVerificationFixture('node_modules/sharp/lib/index.js');
     expect(contaminated.status, contaminated.output).toBe(1);
     expect(contaminated.output).toContain('emitted validation code or content schema');
   });

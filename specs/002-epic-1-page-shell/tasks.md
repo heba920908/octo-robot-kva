@@ -1,8 +1,8 @@
-# Tasks: Epic 1, US1-US3 / BMAD Stories 1.1-1.3
+# Tasks: Epic 1, US1-US4 / BMAD Stories 1.1-1.4
 
-Scope: US1-US3, as allowed by constitution v2.0.0. US3 is approved and implemented;
-US4-US9 remain drafted and are not authorized for implementation by this task list.
-Sources: Stories 1.1-1.3 implementation specs and this feature's plan, research,
+Scope: US1-US4, as allowed by constitution v2.0.0. US4 is approved and implemented;
+US5-US9 remain drafted and are not authorized for implementation by this task list.
+Sources: Stories 1.1-1.4 implementation specs and this feature's plan, research,
 data model and contracts. A drafted BMAD spec is not implementation authorization.
 
 ## Phase 1: Setup
@@ -118,4 +118,25 @@ describe the historical US1/US2 revisions, not US3's current readiness.
 | FR-014 / AC5                 | T022-T024            |
 | Shared static/security gates | T022-T024            |
 
-US3 behavior models and flow logs are inapplicable. US4-US9 remain unplanned.
+US3 behavior models and flow logs are inapplicable. US4-US9 remained unplanned at that handoff.
+
+## US4 - Image Pipeline and Shared Renderer
+
+The approved Story 1.4 spec authorizes US4 only. Execute sequentially, test first.
+FR-015 and Story 1.4 AC1-4 govern these tasks; US5-US9 remain unplanned.
+
+- [x] T025 [US4] Clarify/plan spec.md, plan.md, data-model.md and contracts/responsive-images.md before Act (AC1-4).
+- [x] T026 [US4] Establish scripts/build-images.spec.ts discovery and fixture red tests (AC1-2).
+- [x] T027 [US4] Implement scripts/build-images.mjs/.d.mts, images.manifest.json and pinned dev-only Sharp with explicit images:build (AC1-2).
+- [x] T028 [US4] Generate all public/media photos/logo roles; decode, budget-check and compare two-run hashes; retain PROVENANCE.md (AC1-2).
+- [x] T029 [US4] Test then implement images.content.ts/.spec.ts, image.schema.json, facade exposure and content/images.md (AC3).
+- [x] T030 [US4] Test then implement shared/responsive-image component, template and styles (AC3).
+- [x] T031 [US4] Extend static checks/README; full tests, clean install, tokens, formatting, build/static, bundle delta and build-independence checks (AC4).
+- [x] T032 [US4] Temporary browser fixtures, archives, independent BMAD review and US4-scoped spec-kit analysis; record evidence and advance only Story 1.4 when gates pass (AC1-4).
+
+| Acceptance | Tasks           |
+| ---------- | --------------- |
+| AC1        | T026-T028, T032 |
+| AC2        | T026-T028, T032 |
+| AC3        | T029-T030, T032 |
+| AC4        | T031-T032       |

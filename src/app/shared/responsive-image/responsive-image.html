@@ -1,0 +1,15 @@
+<picture>
+  <source type="image/avif" [attr.srcset]="avif()" [attr.sizes]="sizes()" />
+  <source type="image/webp" [attr.srcset]="webp()" [attr.sizes]="sizes()" />
+  <img
+    [src]="fallback()"
+    [attr.srcset]="jpeg()"
+    [attr.sizes]="sizes()"
+    [attr.width]="image().width"
+    [attr.height]="image().height"
+    [alt]="image().alt"
+    [attr.loading]="priority() ? 'eager' : 'lazy'"
+    [attr.fetchpriority]="priority() ? 'high' : null"
+    decoding="async"
+  />
+</picture>

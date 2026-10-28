@@ -4,7 +4,7 @@
 
 **Input**: Feature specification from `/specs/002-epic-1-page-shell/spec.md`
 
-**Scope of this plan revision**: US1-US3 (BMAD Stories 1.1-1.3). Constitution v2.0.0 allows an epic
+**Scope of this plan revision**: US1-US4 (BMAD Stories 1.1-1.4). Constitution v2.0.0 allows an epic
 plan to grow story by story. Each later story is added here, through its own
 `speckit-clarify` / `speckit-plan` pass, before it enters Act.
 
@@ -195,4 +195,45 @@ Constitution pre/post-design and final US3-scoped analysis: PASS. No behavior mo
 US3 adds no portfolio user action. The content schema governs strings; the existing
 token set continues to govern the unchanged shell. Markdown remains editorial only;
 no schema/Ajv import reaches browser code. No new sections, links or network origins.
-US4-US9 remain unplanned. No commit, branch creation or publication is authorized.
+US4-US9 remained unplanned at the US3 handoff. No commit, branch creation or publication is authorized.
+
+## US4 Plan (2026-10-28)
+
+The approved Story 1.4 spec is the sole source of implementation intent. Extend,
+do not replace, this existing epic plan. Follow
+[contracts/responsive-images.md](contracts/responsive-images.md).
+
+1. T025: Clarify US4 and record manifest/metadata/schema/token contracts here,
+   in spec.md, data-model.md and tasks.md before application changes.
+2. T026: Establish discovery of scripts/build-images.spec.ts through the Angular
+   test runner. Write fixture-first tests for invalid paths/widths, collisions,
+   no-upscale, formats, deterministic inventory/bytes, budgets and logo alpha.
+3. T027: Pin development-only Sharp; implement exported generator/CLI/declarations,
+   explicit images:build command and all 25 manifest photos plus white-logo roles.
+4. T028: Generate public/media derivatives twice; compare inventories/SHA-256;
+   record original hashes, encoder settings, derivative hashes and resolution limits.
+5. T029: Test then add image.schema.json, typed images.content.ts and editorial
+   content/images.md; expose immutable images through ContentFacade only.
+6. T030: Test then implement standalone OnPush/signal-input ResponsiveImage,
+   AVIF/WebP sources and JPEG fallback, sizes, intrinsic ratio, content alt and priority.
+7. T031: Extend static/runtime exclusion checks and README. Run full tests,
+   clean install, tokens, Pages/static and formatting. Compare derivative hashes
+   before/after builds and record bundle delta from 230.25kB.
+8. T032: Use removable fixtures for dev/Pages desktop/mobile/320px and no-JS
+   browser checks. Archive schema/data/layout cases; independent BMAD review and
+   US4-scoped spec-kit analysis precede completion. Remove fixtures/stop servers.
+
+Constitution pre/post-design: PASS. No behavior model applies to this non-interactive
+infrastructure. No new tokens are needed: the shared primitive uses structural
+display/width/height rules, with no literal colors or spacing. Schema and Sharp
+remain test/tool-only. No application import may reach scripts or schemas. No
+later-story UI, generation during builds/CI, remote service, commit or branch.
+
+US4 verification and independent review completed on 2026-10-28: 246 tests,
+token parity, production/static gates and both browser paths pass. Reviewed
+generator determinism and build-independent assets are verified. Final bundle
+235.14kB (+4.89kB); source resolution remains the physical ceiling. No behavior
+model applies. Schema/metadata/layout cases are archived and owned servers stopped.
+Final US4-scoped spec-kit analysis passes with all applicable requirements and
+tasks covered, no inconsistencies and no constitution conflicts. T025-T032 are
+complete; only Story 1.4 advances to review. All work remains uncommitted.

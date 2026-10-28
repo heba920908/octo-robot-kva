@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { siteContent } from './site.content';
+import { images } from './images.content';
 import { uiStrings, type UiStringKey, type UiStringParameters } from './ui-strings.content';
 
 interface UiString {
@@ -71,6 +72,7 @@ export function formatUiString(item: UiString, values: unknown = {}): string {
 export class ContentFacade {
   readonly site = freezeContent(siteContent);
   readonly ui = freezeContent(uiStrings);
+  readonly images = freezeContent(images);
   readonly visibleSections = populatedSections([]);
 
   format<Key extends UiStringKey>(

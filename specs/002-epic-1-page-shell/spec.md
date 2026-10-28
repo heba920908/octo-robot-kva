@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: US1-US3 implemented; US3 verified and reviewed; US4-US9 drafted
+**Status**: US1-US4 implemented; US4 verified and reviewed; US5-US9 drafted
 
 **Input**: BMAD Epic 1 in
 [epics.md](../../_bmad-output/planning-artifacts/epics.md) (Stories 1.1–1.9). Constitution
@@ -26,7 +26,7 @@ pattern.
 | US1        | 1.1        | Brand design tokens and component theme                     | Clarified, planned: ready for Act  |
 | US2        | 1.2        | Self-hosted fonts and icon set                              | Implemented, verified and reviewed |
 | US3        | 1.3        | Content facade and UI strings                               | Implemented, verified and reviewed |
-| US4        | 1.4        | Image derivative pipeline and shared responsive image       | Drafted                            |
+| US4        | 1.4        | Image derivative pipeline and shared responsive image       | Implemented, verified and reviewed |
 | US5        | 1.5        | Footer with direct contact links and in-page privacy notice | Drafted                            |
 | US6        | 1.6        | Contact section with direct links and copy-address fallback | Drafted                            |
 | US7        | 1.7        | Hero section                                                | Drafted                            |
@@ -199,6 +199,36 @@ photo is shown through one shared component, so photos load fast and consistentl
 
 **Independent Test**: Run the image command twice (second run changes nothing), check size
 limits, and render the shared image component from content metadata.
+
+**Clarification (2026-10-28)**: The approved Story 1.4 spec resolves all critical
+ambiguities; no questions remain. Generate all five backgrounds and 20 project
+photos as AVIF/WebP/JPEG at sorted unique targets 320/640/960/1280 capped to each
+source, including the capped largest target. Never upscale. Enforce decimal byte
+limits on every candidate: Hero 250,000; project card 120,000. Generate white-logo
+PNG roles at header heights 32/40, footer 24, Hero 200 and band 40, with 1x/2x
+physical heights capped to the 241px original. Preserve alpha and deduplicate
+identical physical sizes. Full 2x Hero is unavailable. Pin Sharp as development-only;
+application builds and CI never generate images. Keep the current shell unchanged.
+No Hero composition/preload, project entities or behavior model is introduced.
+
+**Planning contract**: [contracts/responsive-images.md](contracts/responsive-images.md).
+The draft-2020-12 image schema governs metadata and the existing design tokens
+govern the shared primitive. Archive schema, accepted metadata and layout cases
+under `.agents/workspace/spec-kit/{baselines,data,layout-cases}/`. Generated assets
+are version-controlled deliverables but remain uncommitted pending permission.
+
+**Verification (2026-10-28)**: All 246 tests across 11 files, token parity,
+Pages build and static checks pass. Two reviewed-generator runs produce identical
+inventories and hashes for 230 derivatives plus provenance; production consumes
+all 231 files verbatim. Actual candidates pass full pixel decoding and budget
+checks. All three independent BMAD review layers completed; accepted corrections
+cover budget ceilings, provenance symlinks, zero dimensions, derived provenance
+and verification gaps. Browser fixtures pass AVIF/WebP/JPEG and no-JS checks on
+both base paths. Final unchanged-shell checks pass at 1440/390/320px with no
+console/network/hydration errors; owned servers are stopped. Initial bundle is
+235.14kB (+4.89kB). Final US4-scoped spec-kit analysis passes with full task
+coverage and no blocking finding. Schema/data/layout archives are retained. US5-US9 remain
+unplanned; no commit, branch or publication is authorized.
 
 **Acceptance Scenarios**:
 
@@ -414,7 +444,7 @@ choose a link, and check focus and history each time.
 - **FR-012**: Global styles MUST consume the token custom properties for page color,
   background and type. No hard-coded color or spacing may be added in this story.
 
-**US2-US3 (clarified) and US4-US9 (drafted; refine in their clarify pass)**
+**US2-US4 (clarified) and US5-US9 (drafted; refine in their clarify pass)**
 
 - **FR-013** (US2): Fonts and icons MUST be served from the site origin only, with no
   third-party request (UX-DR3, UX-DR4, AD-10). The US2 clarification above and

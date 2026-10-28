@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kva.invalid/schemas/image.schema.json",
+  "title": "Responsive image metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["base", "widths", "width", "height", "alt"],
+  "properties": {
+    "base": {
+      "type": "string",
+      "pattern": "^media/(backgrounds|projects)/[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "widths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 1 }
+    },
+    "width": { "type": "integer", "minimum": 1 },
+    "height": { "type": "integer", "minimum": 1 },
+    "alt": { "type": "string" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "base": { "type": "string", "pattern": "^media/projects/" } },
+        "required": ["base"]
+      },
+      "then": { "properties": { "alt": { "type": "string", "pattern": "\\S" } } }
+    }
+  ]
+}

@@ -109,3 +109,34 @@ the foundation shell exposes no invented navigation sections. Footer is not a
 section-navigation destination. Later stories extend this boundary with real data.
 
 No lifecycle, behavior model, storage or runtime content fetch is introduced.
+
+## US4 - Responsive Images
+
+### ImageManifest
+
+Version 1 object: `photos` and `logos` arrays. Photo: unique `id`, original `source`
+under assets/media/brochure, extensionless output `base` under media/backgrounds
+or media/projects, positive integer `widths` and `budgetBytes`. Logo: unique `id`,
+white original `source`, `base` under media/logo, positive integer `heights` and
+`densities` of 1/2. Reject unknown fields, traversal, absolute paths, symlink
+escapes, duplicate IDs/destinations and invalid dimensions with item diagnostics.
+Encoder settings are fixed in the generator and recorded in provenance.
+
+### ResponsiveImageMetadata
+
+Readonly `base` (safe base-relative path without extension), sorted unique
+`widths`, positive intrinsic `width`/`height`, and content-owned `alt`. Decorative
+backgrounds permit empty alt; projects require a descriptive nonblank alt. All
+candidates must exist in AVIF/WebP/JPEG, decode to the expected aspect ratio and
+never exceed the intrinsic source width. No project business entities are added.
+
+### LogoDerivative
+
+Role/density maps to a capped physical height. Files use base-height.png; identical
+heights share a file. Preserve RGBA alpha. Source is 459x241; Hero 2x caps to 241px,
+so it must not be described as a full 400px derivative.
+
+The schema is src/app/core/schemas/image.schema.json. Accepted snapshots live in
+.agents/workspace/spec-kit/baselines/image@2026-10-28.json; metadata samples in
+.agents/workspace/spec-kit/data/images; layout cases in
+.agents/workspace/spec-kit/layout-cases/responsive-image. No runtime validation.

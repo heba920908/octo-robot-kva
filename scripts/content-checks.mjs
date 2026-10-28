@@ -309,6 +309,7 @@ export function scanContentProject(root = process.cwd()) {
 function forbiddenDependency(name) {
   return (
     /(?:^|\/)ajv(?:-formats)?(?:\/|$)/.test(name) ||
+    /(?:^|\/)sharp(?:\/|$)|@img\/sharp|build-images|images\.manifest/.test(name) ||
     /(?:^|\/)schemas\/|\.schema\.json$|content-checks/.test(name)
   );
 }
@@ -350,7 +351,7 @@ export function validationLeaks({
   for (const [file, text] of Object.entries(artifacts)) {
     if (
       /\.schema\.json$/.test(file) ||
-      /ajv-formats|node_modules\/ajv(?:\/|\b)|json-schema\.org\/draft\/2020-12|\.schema\.json|validateFormats|must pass .* keyword validation/.test(
+      /ajv-formats|node_modules\/ajv(?:\/|\b)|json-schema\.org\/draft\/2020-12|\.schema\.json|validateFormats|must pass .* keyword validation|node_modules\/(?:sharp\/|@img\/sharp)|build-images\.mjs|images\.manifest\.json|libvips/.test(
         text,
       )
     )
