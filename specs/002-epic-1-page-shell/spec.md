@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: Draft — US1 (Story 1.1) clarified and ready for Act; US2–US9 drafted
+**Status**: US1 and US2 clarified and planned; US3-US9 drafted
 
 **Input**: BMAD Epic 1 in
 [epics.md](../../_bmad-output/planning-artifacts/epics.md) (Stories 1.1–1.9). Constitution
@@ -21,17 +21,17 @@ pattern.
 
 ### Story readiness
 
-| Spec story | BMAD story | Title | Readiness |
-|------------|------------|-------|-----------|
-| US1 | 1.1 | Brand design tokens and component theme | Clarified, planned: ready for Act |
-| US2 | 1.2 | Self-hosted fonts and icon set | Drafted |
-| US3 | 1.3 | Content facade and UI strings | Drafted |
-| US4 | 1.4 | Image derivative pipeline and shared responsive image | Drafted |
-| US5 | 1.5 | Footer with direct contact links and in-page privacy notice | Drafted |
-| US6 | 1.6 | Contact section with direct links and copy-address fallback | Drafted |
-| US7 | 1.7 | Hero section | Drafted |
-| US8 | 1.8 | Sticky header and section navigation | Drafted |
-| US9 | 1.9 | Mobile menu | Drafted |
+| Spec story | BMAD story | Title                                                       | Readiness                          |
+| ---------- | ---------- | ----------------------------------------------------------- | ---------------------------------- |
+| US1        | 1.1        | Brand design tokens and component theme                     | Clarified, planned: ready for Act  |
+| US2        | 1.2        | Self-hosted fonts and icon set                              | Implemented, verified and reviewed |
+| US3        | 1.3        | Content facade and UI strings                               | Drafted                            |
+| US4        | 1.4        | Image derivative pipeline and shared responsive image       | Drafted                            |
+| US5        | 1.5        | Footer with direct contact links and in-page privacy notice | Drafted                            |
+| US6        | 1.6        | Contact section with direct links and copy-address fallback | Drafted                            |
+| US7        | 1.7        | Hero section                                                | Drafted                            |
+| US8        | 1.8        | Sticky header and section navigation                        | Drafted                            |
+| US9        | 1.9        | Mobile menu                                                 | Drafted                            |
 
 A drafted story MUST be clarified (`speckit-clarify`) and added to [plan.md](./plan.md)
 (`speckit-plan`) before it enters Act. The BMAD story's Given/When/Then criteria in
@@ -52,6 +52,32 @@ transition functions and colocated tests MUST be merged during Plan before Act.
   properties.
 
 ## User Scenarios & Testing _(mandatory)_
+
+US2 clarification (2026-10-28): the approved Story 1.2 spec resolves all material
+questions. Ship latin variable WOFF2 Quicksand and Outfit with a 300-600 axis,
+swap, measured local metric fallbacks, and only a crossorigin Quicksand preload.
+Quicksand roles and label use CSS uppercase; `.kva-project-title` stays sentence
+case. Below 768px display uses `clamp(26px, 8.5vw, 32px)` with weight 400 when
+under 28px. Named icons are menu, close, arrow-left, arrow-right, copy, check,
+phone, mail, chat, chevron-down and error: local 24px SVG, no fill, 1.5px stroke,
+square caps. Glyphs are decorative; controls own names. Unknown names fail.
+Retain font/icon licenses, exact source evidence and measured fallback calculation.
+Development and Pages paths must reuse the preload, preserve CSP/SSG/hydration,
+remain readable with delayed/blocked fonts, and measure CLS <= 0.1. No later UI,
+behavior model or runtime Markdown is introduced.
+
+US2 verification (2026-10-28): 57 tests pass; token parity, Pages build and static
+verification pass. Initial bundle 224.27kB (+40.52kB from US1). Development/Pages
+font and temporary named-icon fixtures pass; delayed-font CLS 0, readable blocked
+fallbacks, 320px/no-JS reflow, unchanged CSP, hydration and SSG/state verified.
+Fixture UI was removed. Source licenses, font checksums and measured fallback
+derivation are retained under public/media. All three BMAD review layers and final
+US2-scoped spec-kit analysis completed without blocking findings. Fontkit is dev-only;
+unit/static checks decode font metadata, and reusable browser helpers cover eight
+widths plus twelve delayed/blocked/no-local checks. Generic fallback metrics remain
+platform-dependent when local faces are absent. One pre-existing prose-width issue
+is deferred; no Story 1.2 runtime defect remains open. US2 tasks are complete and
+sprint tracking is review; later stories remain drafted.
 
 ### User Story 1 - Brand design tokens and component theme (Priority: P1) — BMAD 1.1
 
@@ -287,7 +313,7 @@ choose a link, and check focus and history each time.
    the links and the contact CTA, the rest of the page is inert, focus is trapped, scrolling
    is locked, and one history entry is added (AD-5; BMAD `1.9-AC-03`).
 3. **Given** the menu is open, **When** the Visitor presses Esc, uses Back or activates the
-   toggle,    **Then** it closes, the history entry is consumed, and focus returns to the toggle
+   toggle, **Then** it closes, the history entry is consumed, and focus returns to the toggle
    (BMAD `1.9-AC-04`).
 4. **Given** the menu is open, **When** a section link is chosen, **Then** the menu closes
    and focus lands on the target section heading (FR1; BMAD `1.9-AC-05`).
@@ -361,10 +387,12 @@ choose a link, and check focus and history each time.
 - **FR-012**: Global styles MUST consume the token custom properties for page color,
   background and type. No hard-coded color or spacing may be added in this story.
 
-**US2–US9 (drafted; refine in their clarify pass)**
+**US2 (clarified) and US3-US9 (drafted; refine in their clarify pass)**
 
 - **FR-013** (US2): Fonts and icons MUST be served from the site origin only, with no
-  third-party request (UX-DR3, UX-DR4, AD-10).
+  third-party request (UX-DR3, UX-DR4, AD-10). The US2 clarification above and
+  [fonts-and-icons contract](contracts/fonts-and-icons.md) define the asset,
+  typography, failure, accessibility and deployment verification requirements.
 - **FR-014** (US3): Every visible string MUST come from typed content through a single
   content facade. A test MUST reject literal template text and literal accessible-name
   attributes (FR15, AD-3).

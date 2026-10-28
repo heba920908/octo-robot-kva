@@ -1,8 +1,8 @@
-# Tasks: Epic 1, US1 / BMAD Story 1.1
+# Tasks: Epic 1, US1-US2 / BMAD Stories 1.1-1.2
 
-Scope: US1 only, as allowed by constitution v2.0.0. US2-US9 remain drafted and are
-not authorized for implementation by this task list. Source: the approved Story 1.1
-implementation spec and this feature's plan, research, data model and export contract.
+Scope: US1 and US2, as allowed by constitution v2.0.0. US3-US9 remain drafted and are
+not authorized for implementation by this task list. Sources: the approved Stories 1.1
+and 1.2 implementation specs and this feature's plan, research, data model and contracts.
 
 ## Phase 1: Setup
 
@@ -77,3 +77,18 @@ is authorized.
 SC-006 and SC-007 belong to later epic stories, not US1.
 
 Behavior models and runtime transition logs are not applicable: US1 adds no portfolio user action.
+
+## US2 - Self-Hosted Fonts and Icon Set
+
+Execute sequentially, test first. FR-013 and US2 AC1-3 map to every task below;
+the complete matrix is in [contracts/fonts-and-icons.md](contracts/fonts-and-icons.md).
+
+- [x] T011 [US2] Clarify/plan US2 in spec.md, plan.md, research.md, data-model.md and contracts/fonts-and-icons.md before Act.
+- [x] T012 [US2] Write failing src/styles/styles.spec.ts font, preload, typography and real asset guards (AC1-3).
+- [x] T013 [US2] Source fonts/icons and provenance under public/media; implement src/styles/_fonts.scss, styles.scss and index.html, then pass style guards (AC1-3).
+- [x] T014 [US2] Write failing src/app/core/icons/icons.spec.ts for actual SVG retrieval, unknown names, caching, base paths and decorative glyphs (AC2).
+- [x] T015 [US2] Implement icons.ts and app.config.ts initialization/HTTP with fixed sanitized local URLs; pass icon tests (AC2).
+- [x] T016 [US2] Run full tests, token/format checks, Pages/static build and development/Pages browser matrix; record sizes and CLS in Story 1.2 (AC1-3).
+- [x] T017 [US2] Run BMAD review and US2-scoped speckit-analyze; resolve findings, update Story 1.2 and sprint status only when gates pass (AC1-3).
+
+US2 behavior models and transition logs are inapplicable. US3-US9 remain unplanned.

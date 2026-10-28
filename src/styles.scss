@@ -1,19 +1,80 @@
 @use 'styles/tokens';
 @use 'styles/theme';
+@use 'styles/fonts';
 
 body {
   color: var(--kva-color-ink);
   background-color: var(--kva-color-paper);
-  font-family: var(--kva-typography-body-font-family), sans-serif;
+  font-family: var(--kva-typography-body-font-family), 'Outfit Fallback', sans-serif;
   font-size: var(--kva-typography-body-font-size);
   font-weight: var(--kva-typography-body-font-weight);
   line-height: var(--kva-typography-body-line-height);
 }
 
 h1 {
-  font-family: var(--kva-typography-display-font-family), sans-serif;
+  font-family: var(--kva-typography-display-font-family), 'Quicksand Fallback', sans-serif;
   font-size: var(--kva-typography-display-font-size);
   font-weight: var(--kva-typography-display-font-weight);
   line-height: var(--kva-typography-display-line-height);
   letter-spacing: var(--kva-typography-display-letter-spacing);
+}
+
+@each $role in display, h1, h2, h3, stat, overline {
+  .kva-type-#{$role} {
+    font-family: var(--kva-typography-#{$role}-font-family), 'Quicksand Fallback', sans-serif;
+    font-size: var(--kva-typography-#{$role}-font-size);
+    font-weight: var(--kva-typography-#{$role}-font-weight);
+    line-height: var(--kva-typography-#{$role}-line-height);
+    letter-spacing: var(--kva-typography-#{$role}-letter-spacing);
+  }
+}
+
+@each $role in lead, body, small, label, field-label {
+  .kva-type-#{$role} {
+    font-family: var(--kva-typography-#{$role}-font-family), 'Outfit Fallback', sans-serif;
+    font-size: var(--kva-typography-#{$role}-font-size);
+    font-weight: var(--kva-typography-#{$role}-font-weight);
+    line-height: var(--kva-typography-#{$role}-line-height);
+    letter-spacing: var(--kva-typography-#{$role}-letter-spacing, normal);
+  }
+}
+
+@each $heading in h2, h3 {
+  #{$heading} {
+    @extend .kva-type-#{$heading};
+  }
+}
+
+h1,
+.kva-type-display,
+.kva-type-h1,
+.kva-type-h2,
+.kva-type-h3,
+.kva-type-stat,
+.kva-type-overline {
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.kva-type-label {
+  text-transform: uppercase;
+}
+
+.kva-project-title {
+  text-transform: none;
+}
+
+@media (width < 768px) {
+  h1,
+  .kva-type-display {
+    font-size: clamp(26px, 8.5vw, 32px);
+  }
+}
+
+@media (width < 330px) {
+  h1,
+  .kva-type-display {
+    font-weight: 400;
+  }
 }

@@ -4,8 +4,16 @@ html {
   @include mat.theme(
     (
       typography: (
-        plain-family: var(--kva-typography-body-font-family),
-        brand-family: var(--kva-typography-h1-font-family),
+        plain-family: (
+          var(--kva-typography-body-font-family),
+          'Outfit Fallback',
+          sans-serif,
+        ),
+        brand-family: (
+          var(--kva-typography-h1-font-family),
+          'Quicksand Fallback',
+          sans-serif,
+        ),
         bold-weight: var(--kva-typography-label-font-weight),
         medium-weight: var(--kva-typography-field-label-font-weight),
         regular-weight: var(--kva-typography-body-font-weight),
@@ -111,7 +119,11 @@ html {
     label-small: label,
   );
   @each $system, $role in $roles {
-    $font: var(--kva-typography-#{$role}-font-family);
+    $fallback: 'Outfit Fallback';
+    @if $role == display or $role == h1 or $role == h2 or $role == h3 {
+      $fallback: 'Quicksand Fallback';
+    }
+    $font: (var(--kva-typography-#{$role}-font-family), $fallback, sans-serif);
     $size: var(--kva-typography-#{$role}-font-size);
     $weight: var(--kva-typography-#{$role}-font-weight);
     $line: var(--kva-typography-#{$role}-line-height);

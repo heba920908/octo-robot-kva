@@ -26,6 +26,10 @@
             "outputMode": "static",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "externalDependencies": [
+              "media/fonts/quicksand-latin-wght.woff2",
+              "media/fonts/outfit-latin-wght.woff2"
+            ],
             "assets": [
               {
                 "glob": "**/*",

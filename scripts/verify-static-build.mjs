@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { create } from 'fontkit';
 
 const outputDir = 'dist/agency-portfolio';
 const indexPath = join(outputDir, 'browser', 'index.html');
@@ -13,6 +14,23 @@ function check(condition, message) {
 
 check(existsSync(indexPath), `Missing prerendered page: ${indexPath}`);
 check(!existsSync(join(outputDir, 'server')), 'Static output must not include a server bundle');
+
+for (const name of ['quicksand', 'outfit']) {
+  const fontPath = join(outputDir, 'browser', 'media', 'fonts', `${name}-latin-wght.woff2`);
+  try {
+    const font = create(readFileSync(fontPath));
+    check(
+      font.glyphForCodePoint(0x00f1).path.commands.length > 0,
+      `${name}: missing Spanish glyph`,
+    );
+    check(
+      font.variationAxes.wght?.min === 300 && font.variationAxes.wght?.max === 600,
+      `${name}: expected variable weights 300-600`,
+    );
+  } catch (error) {
+    check(false, `Missing or invalid font ${fontPath}: ${error.message}`);
+  }
+}
 
 if (existsSync(indexPath)) {
   const html = readFileSync(indexPath, 'utf8');

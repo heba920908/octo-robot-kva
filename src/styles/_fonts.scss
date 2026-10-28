@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'Quicksand';
+  src: url('media/fonts/quicksand-latin-wght.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('media/fonts/outfit-latin-wght.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand Fallback';
+  src: local('Arial'), local('Liberation Sans');
+  font-weight: 400;
+  size-adjust: 94.68235%;
+  ascent-override: 105.6163%;
+  descent-override: 26.40408%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Outfit Fallback';
+  src: local('Arial'), local('Liberation Sans');
+  font-weight: 400;
+  size-adjust: 88.47059%;
+  ascent-override: 113.03191%;
+  descent-override: 29.3883%;
+  line-gap-override: 0%;
+}

@@ -1,7 +1,7 @@
 # Research: Epic 1 — Branded Page Shell, Hero and Navigation
 
 Phase 0 research for [plan.md](./plan.md). Sections are added story by story. Only US1
-(BMAD 1.1) is researched so far.
+(BMAD 1.1) was researched initially; US2 findings follow below.
 
 ## US1 — Brand design tokens and component theme
 
@@ -49,6 +49,7 @@ Phase 0 research for [plan.md](./plan.md). Sections are added story by story. On
   A `<role>-lg` typography token is not a separate property. It overrides `<role>`'s
   properties inside `@media (min-width: 1024px)`, using the literal `breakpoints.desktop`
   value, because media queries cannot read custom properties.
+
 - **Rationale**: This is the map DESIGN.md records, and the UX-DR1 AC requires the same
   property to switch.
 - **Alternatives considered**: Separate `-lg` properties (break the single-property AC);
@@ -107,3 +108,26 @@ Phase 0 research for [plan.md](./plan.md). Sections are added story by story. On
   styles add global CSS. JS should not change until a story imports a Material component.
 - **Alternatives considered**: Lighthouse at this stage (no visible UI yet; SM-2 runs in
   Story 6.5).
+
+## US2 - Fonts and Icons
+
+- Decision: Google Fonts upstream OFL variable sources, reduced to latin and 300-600
+  using fontTools; Lucide ISC source SVGs normalized to square caps and 1.5px strokes.
+  Retain notices, revisions, checksums and calculation in public/media provenance.
+  Alternatives: remote font services and icon fonts violate privacy and the approved spec.
+- Decision: measure x-height ratio for size-adjust; divide target ascender, descender
+  and line gap by that ratio for local fallback overrides. Use a named installed fallback
+  so delayed/blocked-font checks can exercise the exact face.
+- Review refinement: static Arial with metric-compatible Liberation Sans as a Linux
+  alternative; generic sans-serif remains readable when both are unavailable. The
+  committed browser helpers verify normal, delayed, blocked and no-local scenarios.
+- Verification: pinned dev-only fontkit 2.0.4 decodes assets in unit/static checks;
+  test axes, Spanish glyphs, renamed derivative family and recorded hashes. It is
+  never imported by application code or bundled into production JavaScript.
+- Decision: relative media/fonts URLs in index and relative CSS URLs resolve to the
+  same asset at root and Pages. MatIconRegistry registers a fixed name/path allowlist
+  through provideAppInitializer; HttpClient fetches only on consumption and caches SVGs.
+  Never accept caller-supplied URLs or preload the icon set.
+- Decision: expose `.kva-type-<role>` for every token typography role, semantic h1-h3
+  defaults and `.kva-project-title` sentence-case exception. Mobile display's explicit
+  UX-DR3 clamp is not a token edit; enforce weight 400 below the 28px boundary.

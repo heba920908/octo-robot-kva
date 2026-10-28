@@ -4,7 +4,7 @@
 
 **Input**: Feature specification from `/specs/002-epic-1-page-shell/spec.md`
 
-**Scope of this plan revision**: US1 (BMAD Story 1.1) only. Constitution v2.0.0 allows an epic
+**Scope of this plan revision**: US1 and US2 (BMAD Stories 1.1 and 1.2). Constitution v2.0.0 allows an epic
 plan to grow story by story. Each later story is added here, through its own
 `speckit-clarify` / `speckit-plan` pass, before it enters Act.
 
@@ -49,19 +49,19 @@ no `.mat-*` / `.mdc-*` selectors in project styles; no hard-coded colors or spac
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-checked after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-checked after Phase 1 design._
 
-| Principle | US1 status | Notes |
-|---|---|---|
-| I. BMAD-driven delivery | PASS | Delivered by `bmad-build` on Story 1.1; planning and implementation artifacts in `_bmad-output/` |
-| II. Behaviour models before code | N/A | US1 adds no user action, so it needs no behaviour model. Stories introducing a model merge its shared `BehaviorModel` implementation and transition/adapter tests during Plan, before Act. |
-| III. Test-first, colocated | PASS (planned) | Drift spec written before the generator; style-guard spec before the theme; both colocated. No behaviour transitions, so behaviour-flow JSONL logs are N/A |
-| IV. Schema- and token-governed | PASS | This story creates the token set at the constitution's paths (`src/styles/_tokens.scss`, `src/app/core/schemas/design-tokens.json`), which resolves readiness finding 4 |
-| V. Modern Angular | PASS | No components or NgModules added. Material is used for theming only in US1 |
-| VI. Accessible, budgeted UI | PASS (planned) | Bundle measured before and after (research R7); focus tokens mapped into the theme |
-| Tooling: Material first | PASS | AD-4 versions; supported theme and override APIs only; no `ng add` (research R6) |
-| Tooling: no Markdown at runtime | PASS | DESIGN.md is read only by Node scripts and tests; nothing in `src/` imports it |
-| Tooling: static, host-neutral | PASS | No build-pipeline change; generated files committed, so the build never runs the generator |
+| Principle                        | US1 status     | Notes                                                                                                                                                                                      |
+| -------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| I. BMAD-driven delivery          | PASS           | Delivered by `bmad-build` on Story 1.1; planning and implementation artifacts in `_bmad-output/`                                                                                           |
+| II. Behaviour models before code | N/A            | US1 adds no user action, so it needs no behaviour model. Stories introducing a model merge its shared `BehaviorModel` implementation and transition/adapter tests during Plan, before Act. |
+| III. Test-first, colocated       | PASS (planned) | Drift spec written before the generator; style-guard spec before the theme; both colocated. No behaviour transitions, so behaviour-flow JSONL logs are N/A                                 |
+| IV. Schema- and token-governed   | PASS           | This story creates the token set at the constitution's paths (`src/styles/_tokens.scss`, `src/app/core/schemas/design-tokens.json`), which resolves readiness finding 4                    |
+| V. Modern Angular                | PASS           | No components or NgModules added. Material is used for theming only in US1                                                                                                                 |
+| VI. Accessible, budgeted UI      | PASS (planned) | Bundle measured before and after (research R7); focus tokens mapped into the theme                                                                                                         |
+| Tooling: Material first          | PASS           | AD-4 versions; supported theme and override APIs only; no `ng add` (research R6)                                                                                                           |
+| Tooling: no Markdown at runtime  | PASS           | DESIGN.md is read only by Node scripts and tests; nothing in `src/` imports it                                                                                                             |
+| Tooling: static, host-neutral    | PASS           | No build-pipeline change; generated files committed, so the build never runs the generator                                                                                                 |
 
 **Post-design re-check (after Phase 1)**: PASS. No violations, so Complexity Tracking is
 empty.
@@ -131,3 +131,30 @@ in `scripts/` (like `verify-static-build.mjs`) and is reached from specs only th
 ## Complexity Tracking
 
 No constitution violations.
+
+## US2 Plan (2026-10-28)
+
+Use the approved Story 1.2 spec and [fonts-and-icons contract](contracts/fonts-and-icons.md).
+No new runtime dependencies: Material registry and Angular HttpClient already exist.
+fontkit 2.0.4 is test/tool-only. `scripts/verify-static-build.mjs` also decodes emitted
+fonts, and `scripts/verify-typography.mjs` retains browser assertions outside shipped UI.
+Source licensed fonts and Lucide SVGs at build time only; retain source revisions,
+checksums and licenses under public/media. Subset fonts to latin and weights 300-600.
+Measure fallback size-adjust and vertical overrides from font tables.
+
+1. T011: Clarify US2 and extend this plan, research, data model, contract and tasks.
+2. T012: Extend src/styles/styles.spec.ts first; observe missing font/preload/role/asset failures.
+3. T013: Ship assets; add src/styles/_fonts.scss and token-fed role styles, then the
+   relative crossorigin preload in src/index.html. Preserve generated tokens/theme APIs.
+4. T014: Write src/app/core/icons/icons.spec.ts first; cover every real SVG, both base
+   paths, unknown names, caching and decorative MatIcon rendering.
+5. T015: Add icons.ts fixed allowlist with sanitized relative URLs through MatIconRegistry,
+   provideHttpClient and provideAppInitializer in app.config.ts; no eager SVG requests.
+6. T016: Run focused/full tests, formatting, tokens, Pages/static and both browser previews,
+   including temporary typography/icon fixtures, delayed fonts, CLS, 320px and no-JS.
+7. T017: BMAD review and US2-scoped spec-kit analysis; record evidence and only advance US2.
+
+Constitution pre/post-design: PASS. No behavior models or flow logs apply because US2
+adds assets and shared styling, not a portfolio user action. No tokens are changed.
+Runtime URLs are fixed, same-origin and base-relative. Initial bundle <1MB; record
+delta against 183.75kB. US3-US9 remain outside this plan revision.
