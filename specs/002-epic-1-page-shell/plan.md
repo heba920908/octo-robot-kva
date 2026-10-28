@@ -4,7 +4,7 @@
 
 **Input**: Feature specification from `/specs/002-epic-1-page-shell/spec.md`
 
-**Scope of this plan revision**: US1 and US2 (BMAD Stories 1.1 and 1.2). Constitution v2.0.0 allows an epic
+**Scope of this plan revision**: US1-US3 (BMAD Stories 1.1-1.3). Constitution v2.0.0 allows an epic
 plan to grow story by story. Each later story is added here, through its own
 `speckit-clarify` / `speckit-plan` pass, before it enters Act.
 
@@ -158,3 +158,41 @@ Constitution pre/post-design: PASS. No behavior models or flow logs apply becaus
 adds assets and shared styling, not a portfolio user action. No tokens are changed.
 Runtime URLs are fixed, same-origin and base-relative. Initial bundle <1MB; record
 delta against 183.75kB. US3-US9 remain outside this plan revision.
+
+## US3 Plan (2026-10-28)
+
+Approved, implemented, verified and independently reviewed on 2026-10-28. All
+191 tests and the build/static/browser gates pass. Follow
+[contracts/content-facade.md](contracts/content-facade.md). No new dependencies:
+Ajv2020/ajv-formats already exist as devDependencies and Angular supplies a template
+parser. Keep validation, schema loading and filesystem access test/tool-only.
+
+1. T018: Clarify US3 and extend this feature's research, data model, contract,
+   quickstart and tasks without changing completed US1/US2 records.
+2. T019: Write `src/app/core/content/ui-strings.content.spec.ts` first. Validate
+   positive content and mutations with item/field diagnostics; implement
+   `src/app/core/schemas/ui-strings.schema.json`, `content/ui-strings.md` and
+   `src/app/core/content/ui-strings.content.ts` from EXPERIENCE defaults.
+3. T020: Write `src/app/core/content/content-facade.spec.ts` first, then implement
+   `content-facade.ts`: readonly site/UI access, exact placeholder formatting,
+   content-driven ordered visible sections. Migrate `app.ts` and `app.spec.ts`
+   without changing the existing shell's rendered copy or metadata.
+4. T021: Add `scripts/content-checks.mjs` and `scripts/content-checks.d.mts` for
+   test-only source enumeration and structured TypeScript/Angular parsing. Exercise
+   them from `src/app/core/content/template-content.spec.ts` and facade tests:
+   external/inline templates, nested blocks, interpolation, literal attributes,
+   parser errors and raw-content import bypasses. No regex-only HTML/import scan.
+5. T022: Test then strengthen `scripts/verify-static-build.mjs` to reject bundled
+   validation dependencies/content schemas. Confirm production import closure and
+   built output, with a negative fixture proving the check rejects leakage.
+6. T023: Full tests, formatting, tokens, Pages/static and development/Pages browser
+   checks. Record initial bundle delta against US2's 224.27kB. Archive accepted
+   schema and validation cases at the paths in US3's spec.
+7. T024: Complete BMAD review and US3-scoped speckit-analyze; resolve findings and
+   record evidence before advancing sprint status or marking implementation done.
+
+Constitution pre/post-design and final US3-scoped analysis: PASS. No behavior model or transition log:
+US3 adds no portfolio user action. The content schema governs strings; the existing
+token set continues to govern the unchanged shell. Markdown remains editorial only;
+no schema/Ajv import reaches browser code. No new sections, links or network origins.
+US4-US9 remain unplanned. No commit, branch creation or publication is authorized.

@@ -1,0 +1,564 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kvainstalaciones.mx/schemas/ui-strings.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "skipLink",
+    "logoLink",
+    "navServices",
+    "navProjects",
+    "navAbout",
+    "navTrust",
+    "navContact",
+    "menu",
+    "headerContact",
+    "headerContactShort",
+    "servicesTitle",
+    "projectsTitle",
+    "aboutTitle",
+    "trustTitle",
+    "contactTitle",
+    "clientsHeading",
+    "serviceQuote",
+    "serviceVisit",
+    "servicesExpand",
+    "servicesCollapse",
+    "projectFilter",
+    "filterAll",
+    "filterCount",
+    "filterTotal",
+    "filterEmpty",
+    "filterReset",
+    "placeholder",
+    "projectQuote",
+    "projectScope",
+    "projectOutcome",
+    "projectClient",
+    "projectLocation",
+    "projectYear",
+    "projectStandards",
+    "carouselName",
+    "carouselPrevious",
+    "carouselNext",
+    "carouselPosition",
+    "carouselGoTo",
+    "carouselAnnouncement",
+    "carouselRole",
+    "carouselSlideRole",
+    "overlayClose",
+    "composerTitle",
+    "composerIntro",
+    "requiredNote",
+    "emailLabel",
+    "emailHint",
+    "serviceLabel",
+    "serviceEmpty",
+    "consentLabel",
+    "consentLink",
+    "submit",
+    "emailRequired",
+    "emailInvalid",
+    "serviceRequired",
+    "consentRequired",
+    "errorSummarySingle",
+    "errorSummaryPlural",
+    "postSubmitHeading",
+    "postSubmitFallback",
+    "postSubmitDone",
+    "postSubmitEdit",
+    "postSubmitCopy",
+    "copyName",
+    "copySuccess",
+    "copyFailure",
+    "phoneName",
+    "whatsappCta",
+    "noJsContact",
+    "footerPrivacy",
+    "footerCopyright",
+    "mailSubjectComposer",
+    "mailSubjectDirect",
+    "mailBody",
+    "whatsappPrefill"
+  ],
+  "$defs": {
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "parameters"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "plain": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": []
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^[^{}]*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "n": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["n"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{n\\})(?:[^{}]|\\{(?:n)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "properties": {
+    "skipLink": {
+      "$ref": "#/$defs/plain"
+    },
+    "logoLink": {
+      "$ref": "#/$defs/plain"
+    },
+    "navServices": {
+      "$ref": "#/$defs/plain"
+    },
+    "navProjects": {
+      "$ref": "#/$defs/plain"
+    },
+    "navAbout": {
+      "$ref": "#/$defs/plain"
+    },
+    "navTrust": {
+      "$ref": "#/$defs/plain"
+    },
+    "navContact": {
+      "$ref": "#/$defs/plain"
+    },
+    "menu": {
+      "$ref": "#/$defs/plain"
+    },
+    "headerContact": {
+      "$ref": "#/$defs/plain"
+    },
+    "headerContactShort": {
+      "$ref": "#/$defs/plain"
+    },
+    "servicesTitle": {
+      "$ref": "#/$defs/plain"
+    },
+    "projectsTitle": {
+      "$ref": "#/$defs/plain"
+    },
+    "aboutTitle": {
+      "$ref": "#/$defs/plain"
+    },
+    "trustTitle": {
+      "$ref": "#/$defs/plain"
+    },
+    "contactTitle": {
+      "$ref": "#/$defs/plain"
+    },
+    "clientsHeading": {
+      "$ref": "#/$defs/plain"
+    },
+    "serviceQuote": {
+      "$ref": "#/$defs/plain"
+    },
+    "serviceVisit": {
+      "$ref": "#/$defs/plain"
+    },
+    "servicesExpand": {
+      "$ref": "#/$defs/n"
+    },
+    "servicesCollapse": {
+      "$ref": "#/$defs/plain"
+    },
+    "projectFilter": {
+      "$ref": "#/$defs/plain"
+    },
+    "filterAll": {
+      "$ref": "#/$defs/plain"
+    },
+    "filterCount": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["n", "servicio"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{n\\})(?=[\\s\\S]*\\{servicio\\})(?:[^{}]|\\{(?:n|servicio)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "filterTotal": {
+      "$ref": "#/$defs/n"
+    },
+    "filterEmpty": {
+      "$ref": "#/$defs/plain"
+    },
+    "filterReset": {
+      "$ref": "#/$defs/plain"
+    },
+    "placeholder": {
+      "$ref": "#/$defs/plain"
+    },
+    "projectQuote": {
+      "$ref": "#/$defs/plain"
+    },
+    "projectScope": {
+      "$ref": "#/$defs/plain"
+    },
+    "projectOutcome": {
+      "$ref": "#/$defs/plain"
+    },
+    "projectClient": {
+      "$ref": "#/$defs/plain"
+    },
+    "projectLocation": {
+      "$ref": "#/$defs/plain"
+    },
+    "projectYear": {
+      "$ref": "#/$defs/plain"
+    },
+    "projectStandards": {
+      "$ref": "#/$defs/plain"
+    },
+    "carouselName": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["title"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{title\\})(?:[^{}]|\\{(?:title)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "carouselPrevious": {
+      "$ref": "#/$defs/plain"
+    },
+    "carouselNext": {
+      "$ref": "#/$defs/plain"
+    },
+    "carouselPosition": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["i", "n"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{i\\})(?=[\\s\\S]*\\{n\\})(?:[^{}]|\\{(?:i|n)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "carouselGoTo": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["i"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{i\\})(?:[^{}]|\\{(?:i)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "carouselAnnouncement": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["i", "n", "alt"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{i\\})(?=[\\s\\S]*\\{n\\})(?=[\\s\\S]*\\{alt\\})(?:[^{}]|\\{(?:i|n|alt)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "carouselRole": {
+      "$ref": "#/$defs/plain"
+    },
+    "carouselSlideRole": {
+      "$ref": "#/$defs/plain"
+    },
+    "overlayClose": {
+      "$ref": "#/$defs/plain"
+    },
+    "composerTitle": {
+      "$ref": "#/$defs/plain"
+    },
+    "composerIntro": {
+      "$ref": "#/$defs/plain"
+    },
+    "requiredNote": {
+      "$ref": "#/$defs/plain"
+    },
+    "emailLabel": {
+      "$ref": "#/$defs/plain"
+    },
+    "emailHint": {
+      "$ref": "#/$defs/plain"
+    },
+    "serviceLabel": {
+      "$ref": "#/$defs/plain"
+    },
+    "serviceEmpty": {
+      "$ref": "#/$defs/plain"
+    },
+    "consentLabel": {
+      "$ref": "#/$defs/plain"
+    },
+    "consentLink": {
+      "$ref": "#/$defs/plain"
+    },
+    "submit": {
+      "$ref": "#/$defs/plain"
+    },
+    "emailRequired": {
+      "$ref": "#/$defs/plain"
+    },
+    "emailInvalid": {
+      "$ref": "#/$defs/plain"
+    },
+    "serviceRequired": {
+      "$ref": "#/$defs/plain"
+    },
+    "consentRequired": {
+      "$ref": "#/$defs/plain"
+    },
+    "errorSummarySingle": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["lista"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{lista\\})(?:[^{}]|\\{(?:lista)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "errorSummaryPlural": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["n", "lista"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{n\\})(?=[\\s\\S]*\\{lista\\})(?:[^{}]|\\{(?:n|lista)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "postSubmitHeading": {
+      "$ref": "#/$defs/plain"
+    },
+    "postSubmitFallback": {
+      "$ref": "#/$defs/plain"
+    },
+    "postSubmitDone": {
+      "$ref": "#/$defs/plain"
+    },
+    "postSubmitEdit": {
+      "$ref": "#/$defs/plain"
+    },
+    "postSubmitCopy": {
+      "$ref": "#/$defs/plain"
+    },
+    "copyName": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["address"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{address\\})(?:[^{}]|\\{(?:address)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "copySuccess": {
+      "$ref": "#/$defs/plain"
+    },
+    "copyFailure": {
+      "$ref": "#/$defs/plain"
+    },
+    "phoneName": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["phone"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{phone\\})(?:[^{}]|\\{(?:phone)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "whatsappCta": {
+      "$ref": "#/$defs/plain"
+    },
+    "noJsContact": {
+      "$ref": "#/$defs/plain"
+    },
+    "footerPrivacy": {
+      "$ref": "#/$defs/plain"
+    },
+    "footerCopyright": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["year"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{year\\})(?:[^{}]|\\{(?:year)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "mailSubjectComposer": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["servicio"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{servicio\\})(?:[^{}]|\\{(?:servicio)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "mailSubjectDirect": {
+      "$ref": "#/$defs/plain"
+    },
+    "mailBody": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/item"
+        },
+        {
+          "properties": {
+            "parameters": {
+              "const": ["servicio", "email"]
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\{servicio\\})(?=[\\s\\S]*\\{email\\})(?:[^{}]|\\{(?:servicio|email)\\})*$"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "whatsappPrefill": {
+      "$ref": "#/$defs/plain"
+    }
+  }
+}

@@ -131,3 +131,39 @@ Phase 0 research for [plan.md](./plan.md). Sections are added story by story. On
 - Decision: expose `.kva-type-<role>` for every token typography role, semantic h1-h3
   defaults and `.kva-project-title` sentence-case exception. Mobile display's explicit
   UX-DR3 clamp is not a token edit; enforce weight 400 below the 28px boundary.
+
+## US3 - Content Facade and UI Strings
+
+- **Decision**: Use one inject-based content facade as the sole production importer
+  of raw executable content. Preserve existing site text and metadata; expose
+  readonly content and derive navigation visibility only from populated sections.
+  **Rationale**: AD-3 centralizes formatting/order/visibility and prevents links to
+  absent sections. The current App imports siteContent directly and needs migration.
+  **Alternatives**: Component imports bypass ownership; fabricated section content
+  exceeds Story 1.3. Neither is acceptable.
+- **Decision**: Seed EXPERIENCE defaults with stable keys and separate textual
+  variants. Hero rows stay Hero-owned, as EXPERIENCE explicitly requires. Format
+  exact named parameter maps as plain text; reject missing/extra values and unknown
+  keys. Zero is valid and repeated tokens are substituted consistently.
+  **Rationale**: Deterministic output avoids unresolved braces and preserves Spanish
+  copy without adding an internationalization library or HTML rendering.
+  **Alternatives**: Silent fallback hides editorial errors; runtime Markdown violates
+  the constitution. Singular/plural choice belongs to the caller's explicit key.
+- **Decision**: Reuse dev-only Ajv 8.20.0/Ajv2020 and ajv-formats 3.0.1. Validate
+  closed required string fields, whitespace-only values and parameter contracts;
+  mutation tests assert item/field diagnostics. Archive only accepted schemas.
+  **Rationale**: Dependencies are already installed; no runtime validation is needed
+  for committed static content. TypeScript alone cannot validate editorial drift.
+- **Decision**: Use Angular's template AST and TypeScript's source AST for external
+  and inline templates and production import ownership. Keep filesystem helpers in
+  scripts/content-checks.mjs with a typed .d.mts surface (reuse US1 R2 pattern).
+  **Rationale**: AST traversal distinguishes interpolation/control flow from literal
+  text and avoids regex false positives. Tests must cover nested nodes and fail on
+  parse errors. No new parser dependency or Node globals are needed in Angular specs.
+- **Decision**: Verify runtime import closure and emitted artifacts, not just package
+  dependency classification, to exclude Ajv, formats and schemas. Prove rejection
+  with a negative fixture; retain CSP/font/static checks.
+  **Rationale**: A devDependency can still leak into a production import graph.
+
+No unresolved research questions or user-visible choices remain. These decisions
+are planned, not claims that runtime checks have passed.

@@ -1,8 +1,9 @@
-# Tasks: Epic 1, US1-US2 / BMAD Stories 1.1-1.2
+# Tasks: Epic 1, US1-US3 / BMAD Stories 1.1-1.3
 
-Scope: US1 and US2, as allowed by constitution v2.0.0. US3-US9 remain drafted and are
-not authorized for implementation by this task list. Sources: the approved Stories 1.1
-and 1.2 implementation specs and this feature's plan, research, data model and contracts.
+Scope: US1-US3, as allowed by constitution v2.0.0. US3 is approved and implemented;
+US4-US9 remain drafted and are not authorized for implementation by this task list.
+Sources: Stories 1.1-1.3 implementation specs and this feature's plan, research,
+data model and contracts. A drafted BMAD spec is not implementation authorization.
 
 ## Phase 1: Setup
 
@@ -91,4 +92,30 @@ the complete matrix is in [contracts/fonts-and-icons.md](contracts/fonts-and-ico
 - [x] T016 [US2] Run full tests, token/format checks, Pages/static build and development/Pages browser matrix; record sizes and CLS in Story 1.2 (AC1-3).
 - [x] T017 [US2] Run BMAD review and US2-scoped speckit-analyze; resolve findings, update Story 1.2 and sprint status only when gates pass (AC1-3).
 
-US2 behavior models and transition logs are inapplicable. US3-US9 remain unplanned.
+US2 behavior models and transition logs are inapplicable. At the US2 handoff,
+US3-US9 remained unplanned; the US3 plan and completed tasks follow below.
+
+## US3 - Content Facade and UI Strings
+
+Execute sequentially after BMAD approval, test first. FR-014 and US3 AC1-5 govern
+this slice; shared static/privacy criteria remain applicable. Earlier scope notes
+describe the historical US1/US2 revisions, not US3's current readiness.
+
+- [x] T018 [US3] Clarify/plan spec.md, plan.md, research.md, data-model.md, quickstart.md and contracts/content-facade.md; extend tasks before Act (AC1-5).
+- [x] T019 [US3] First write src/app/core/content/ui-strings.content.spec.ts validation/mutation tests; implement src/app/core/schemas/ui-strings.schema.json, content/ui-strings.md and src/app/core/content/ui-strings.content.ts from EXPERIENCE defaults except Hero-owned rows (AC1).
+- [x] T020 [US3] First write src/app/core/content/content-facade.spec.ts; implement content-facade.ts and migrate src/app/app.ts/app.spec.ts for readonly content, exact formatting, import ownership and ordered populated sections (AC2-3).
+- [x] T021 [US3] Implement test-only scripts/content-checks.mjs/.d.mts with structured parsers and src/app/core/content/template-content.spec.ts positive/negative fixtures; scan external/inline templates and production raw imports in npm test (AC3-4).
+- [x] T022 [US3] First add a negative validation-leak fixture, then strengthen scripts/verify-static-build.mjs runtime graph/output exclusions without weakening existing checks (AC5).
+- [x] T023 [US3] Run full tests, touched-file formatting, tokens, Pages/static and development/Pages/no-JS browser checks; archive schema/cases at spec.md's paths and record bundle delta in Story 1.3 (AC1-5).
+- [x] T024 [US3] Complete BMAD review and US3-scoped speckit-analyze; resolve findings, record evidence and update _bmad-output/implementation-artifacts/sprint-status.yaml only when gates pass (AC1-5).
+
+| Requirement / Scenario       | Tasks                |
+| ---------------------------- | -------------------- |
+| FR-014 / AC1                 | T018-T019, T023-T024 |
+| FR-014 / AC2                 | T020, T023-T024      |
+| FR-014 / AC3                 | T020-T021, T023-T024 |
+| FR-014 / AC4                 | T021, T023-T024      |
+| FR-014 / AC5                 | T022-T024            |
+| Shared static/security gates | T022-T024            |
+
+US3 behavior models and flow logs are inapplicable. US4-US9 remain unplanned.

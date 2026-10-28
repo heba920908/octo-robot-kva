@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: US1 and US2 clarified and planned; US3-US9 drafted
+**Status**: US1-US3 implemented; US3 verified and reviewed; US4-US9 drafted
 
 **Input**: BMAD Epic 1 in
 [epics.md](../../_bmad-output/planning-artifacts/epics.md) (Stories 1.1–1.9). Constitution
@@ -25,7 +25,7 @@ pattern.
 | ---------- | ---------- | ----------------------------------------------------------- | ---------------------------------- |
 | US1        | 1.1        | Brand design tokens and component theme                     | Clarified, planned: ready for Act  |
 | US2        | 1.2        | Self-hosted fonts and icon set                              | Implemented, verified and reviewed |
-| US3        | 1.3        | Content facade and UI strings                               | Drafted                            |
+| US3        | 1.3        | Content facade and UI strings                               | Implemented, verified and reviewed |
 | US4        | 1.4        | Image derivative pipeline and shared responsive image       | Drafted                            |
 | US5        | 1.5        | Footer with direct contact links and in-page privacy notice | Drafted                            |
 | US6        | 1.6        | Contact section with direct links and copy-address fallback | Drafted                            |
@@ -149,6 +149,33 @@ carries hard-coded text.
 
 **Independent Test**: Validate the UI-strings content, ask the facade for formatted strings,
 and run the template literal-text check.
+
+**Clarification (2026-10-28)**: No critical intent ambiguities require a question.
+Seed the complete EXPERIENCE Default UI strings table except Hero-owned copy, which
+remains in its future Hero content doc. Store full/short and singular/plural variants
+as separate stable keys; parameter values are text or numbers, including zero.
+Missing/extra parameters and unknown keys fail explicitly, rather than producing
+unresolved tokens. Missing/blank/wrong-type strings and unexpected fields fail
+validation with item/field diagnostics. Templates include external and inline
+component templates: whitespace and bindings pass; literal text and literal
+aria-label/alt/title/placeholder values fail. Only the facade may import raw content
+in production; test fixtures may import it. Visible sections require actual content
+and follow the page order; the current foundation shell does not fabricate later
+sections. Existing page copy and metadata remain unchanged. No interaction model,
+new dependency or runtime Markdown is introduced.
+
+**Planning contract**: [contracts/content-facade.md](contracts/content-facade.md).
+Governing schema: `src/app/core/schemas/ui-strings.schema.json`. Archive the accepted
+schema at `.agents/workspace/spec-kit/baselines/ui-strings@2026-10-28.json`, validation
+samples under `.agents/workspace/spec-kit/data/ui-strings/`, and template cases under
+`.agents/workspace/spec-kit/layout-cases/content-templates/` during implementation.
+These outputs were archived during implementation on 2026-10-28. Story 1.3 records
+the passing content/App/parser/static checks and development/Pages browser matrix.
+All three independent BMAD review layers and final US3-scoped spec-kit analysis
+are complete. Final verification: 191 tests, token parity, Pages/static gates and
+both browser paths pass; initial bundle 230.25kB (+5.98kB from US2). Review fixes
+strengthen test/tool guards without changing rendered copy. No blocking finding
+or new deferred runtime defect remains. Later-story copy/UI remains out of scope.
 
 **Acceptance Scenarios**:
 
@@ -387,7 +414,7 @@ choose a link, and check focus and history each time.
 - **FR-012**: Global styles MUST consume the token custom properties for page color,
   background and type. No hard-coded color or spacing may be added in this story.
 
-**US2 (clarified) and US3-US9 (drafted; refine in their clarify pass)**
+**US2-US3 (clarified) and US4-US9 (drafted; refine in their clarify pass)**
 
 - **FR-013** (US2): Fonts and icons MUST be served from the site origin only, with no
   third-party request (UX-DR3, UX-DR4, AD-10). The US2 clarification above and

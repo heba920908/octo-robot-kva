@@ -1,10 +1,28 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { create } from 'fontkit';
+import { sourceFiles, readText, validationLeaks } from './content-checks.mjs';
 
 const outputDir = 'dist/agency-portfolio';
 const indexPath = join(outputDir, 'browser', 'index.html');
 const failures = [];
+
+failures.push(
+  ...validationLeaks({
+    sources: Object.fromEntries(
+      sourceFiles('src')
+        .filter((file) => file.endsWith('.ts') && !file.endsWith('.spec.ts'))
+        .map((file) => [file, readText(file)]),
+    ),
+    artifacts: existsSync(outputDir)
+      ? Object.fromEntries(
+          sourceFiles(outputDir)
+            .filter((file) => /\.(?:js|json|map|html)$/.test(file))
+            .map((file) => [file, readText(file)]),
+        )
+      : {},
+  }),
+);
 
 function check(condition, message) {
   if (!condition) {

@@ -49,3 +49,32 @@ roles, font decoding and preload reuse. Fallback checks cover delayed, blocked
 and absent local fonts at 320/1440px with CLS <=0.1. No fixture UI is shipped.
 Keep the AGENTS.md metadata, console/network, CSP and hydration checks as well.
 Stop development and Pages servers afterward.
+
+## US3 - Content Facade and UI Strings (BMAD 1.3)
+
+These checks are executable; Story 1.3 records passing final verification and
+all three completed independent review layers. Follow [the contract](contracts/content-facade.md).
+
+1. Run `npx ng test --watch=false --include=src/app/core/content/*.spec.ts` and
+   `npx ng test --watch=false --include=src/app/app.spec.ts`. Require positive content
+   validation, missing/blank/type/extra-field mutations, exact parameter maps,
+   repeated tokens, zero, visible-section ordering and no direct production imports.
+2. Guard fixtures must reject literal text and aria-label/alt/title/placeholder in
+   external and inline templates, including nested control flow. Binding-only and
+   whitespace-only fixtures pass; malformed templates fail with source diagnostics.
+   Compare the editorial/executable defaults with EXPERIENCE, excluding Hero rows.
+3. Run all `npx ng test --watch=false`, `npm run tokens:check`, touched-file Prettier,
+   `npm run build:pages` and `npm run verify:static`. Confirm no Ajv/ajv-formats/schema
+   runtime import or emitted payload; prove the exclusion check with a negative
+   fixture. Record initial bundle delta from 224.27kB and stay below 1MB.
+4. Start `npx ng serve` and `npm run preview:pages`; use a free alternate port if an
+   existing server owns the defaults. Inspect development root and Pages at 320px,
+   mobile and desktop. Existing heading, brand, description and metadata must remain
+   unchanged, including no-JS Pages output. Check es-MX, one h1, console/network/CSP,
+   development hydration log, production SSG root and ng-state. Stop owned servers.
+5. Archive the accepted schema at
+   `.agents/workspace/spec-kit/baselines/ui-strings@2026-10-28.json`, mutation data
+   under `.agents/workspace/spec-kit/data/ui-strings/` and template cases under
+   `.agents/workspace/spec-kit/layout-cases/content-templates/`.
+6. Complete BMAD review and US3-scoped speckit-analyze. Record evidence in Story 1.3
+   and only then advance sprint tracking. Behavior-flow JSONL logs are inapplicable.

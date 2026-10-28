@@ -36,5 +36,8 @@
   DESIGN.md name map. AD-4 fixes the component library (Angular Material 22.2.4), and FR-007
   names it so the bundle-impact requirement is testable. User stories and success criteria
   stay technology-agnostic.
-- Validation is complete for US1 (BMAD 1.1). US2–US9 are drafted from the BMAD acceptance
-  criteria and MUST pass this checklist again in their own `speckit-clarify` pass before Act.
+- Validation is complete for US1-US3 (BMAD 1.1-1.3); US3 is implemented, verified
+  and independently reviewed. US3 revalidation on 2026-10-28 retains
+  all 16 checked items; its governing schema path is the constitution-required
+  implementation-detail exception. US4-US9 remain drafted and MUST pass this
+  checklist again in their own `speckit-clarify` pass before Act.

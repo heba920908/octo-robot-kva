@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { siteContent } from './core/content/site.content';
+import { ContentFacade } from './core/content/content-facade';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -10,7 +10,7 @@ import { siteContent } from './core/content/site.content';
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly site = siteContent;
+  protected readonly site = inject(ContentFacade).site;
 
   constructor() {
     inject(Title).setTitle(this.site.pageTitle);

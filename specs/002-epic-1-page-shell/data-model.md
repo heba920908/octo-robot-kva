@@ -68,3 +68,44 @@ Unknown names fail through the registry. Glyphs have no user-facing labels.
 
 TypographyRole: existing token role; CSS consumes tokens without changing them.
 Project titles override casing only. No state transitions or behavior model apply.
+
+## US3 - Executable Content Boundary
+
+### UiStringsContent
+
+Editorial source: `content/ui-strings.md`. Executable source:
+`src/app/core/content/ui-strings.content.ts`. Governing draft-2020-12 schema:
+`src/app/core/schemas/ui-strings.schema.json` (test-only).
+
+- Stable keys identify each non-Hero default from EXPERIENCE, including distinct
+  full/short CTA, singular/plural and filtered/unfiltered variants.
+- Values are readonly, non-blank Spanish text; parameterized strings declare an
+  exact named parameter contract. Missing keys, wrong types, blank values, unexpected
+  fields and incompatible parameter contracts fail item/field-specific tests.
+- Hero copy stays in its future Hero content object. No feature content dataset is
+  invented by this story. Editorial and executable changes are reviewed together.
+
+### FormattingRequest
+
+Known string key plus exactly the required named values (`string | number`). Zero
+and repeated occurrences are supported. Output is deterministic plain text, never
+HTML. Missing/unknown parameter names or keys fail explicitly; no silent unresolved
+tokens. Content is not mutated. A parameterless key requires no values.
+
+### ContentFacade
+
+Single Angular-injectable content boundary: readonly site metadata, UI strings,
+formatting and ordered visible sections. Only this module imports raw executable
+content in production; tests may import fixtures for independent assertions.
+The App migrates from direct siteContent access to the facade with unchanged output.
+
+### VisibleSection
+
+Finite section identifier in page order: Hero, Servicios, Proyectos, Nosotros,
+Confianza, Contacto. Inclusion requires actual renderable content, not a label,
+truthy empty object or future section name. Unit fixtures cover missing/empty and
+populated candidates and stable ordering. With no section datasets implemented yet,
+the foundation shell exposes no invented navigation sections. Footer is not a
+section-navigation destination. Later stories extend this boundary with real data.
+
+No lifecycle, behavior model, storage or runtime content fetch is introduced.

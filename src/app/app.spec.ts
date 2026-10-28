@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Meta, Title } from '@angular/platform-browser';
 import { App } from './app';
+import { ContentFacade } from './core/content/content-facade';
 import { siteContent } from './core/content/site.content';
 
 describe('App', () => {
@@ -34,5 +35,22 @@ describe('App', () => {
     expect(TestBed.inject(Meta).getTag('name="description"')?.content).toBe(
       siteContent.description,
     );
+  });
+
+  it('reads rendered copy and metadata through the injected facade', async () => {
+    const site = {
+      ...siteContent,
+      heading: 'Encabezado de prueba',
+      pageTitle: 'Título de prueba',
+      description: 'Descripción de prueba',
+    };
+    TestBed.overrideProvider(ContentFacade, { useValue: { site } });
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    expect((fixture.nativeElement as HTMLElement).querySelector('h1')?.textContent?.trim()).toBe(
+      site.heading,
+    );
+    expect(TestBed.inject(Title).getTitle()).toBe(site.pageTitle);
+    expect(TestBed.inject(Meta).getTag('name="description"')?.content).toBe(site.description);
   });
 });
