@@ -1,1 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'styles/tokens';
+@use 'styles/theme';
+
+body {
+  color: var(--kva-color-ink);
+  background-color: var(--kva-color-paper);
+  font-family: var(--kva-typography-body-font-family), sans-serif;
+  font-size: var(--kva-typography-body-font-size);
+  font-weight: var(--kva-typography-body-font-weight);
+  line-height: var(--kva-typography-body-line-height);
+}
+
+h1 {
+  font-family: var(--kva-typography-display-font-family), sans-serif;
+  font-size: var(--kva-typography-display-font-size);
+  font-weight: var(--kva-typography-display-font-weight);
+  line-height: var(--kva-typography-display-line-height);
+  letter-spacing: var(--kva-typography-display-letter-spacing);
+}

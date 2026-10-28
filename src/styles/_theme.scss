@@ -1,0 +1,147 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme(
+    (
+      typography: (
+        plain-family: var(--kva-typography-body-font-family),
+        brand-family: var(--kva-typography-h1-font-family),
+        bold-weight: var(--kva-typography-label-font-weight),
+        medium-weight: var(--kva-typography-field-label-font-weight),
+        regular-weight: var(--kva-typography-body-font-weight),
+      ),
+      density: 0,
+    )
+  );
+
+  @include mat.theme-overrides(
+    (
+      primary: var(--kva-color-accent),
+      on-primary: var(--kva-color-on-accent),
+      primary-container: var(--kva-color-accent-strong),
+      on-primary-container: var(--kva-color-on-accent-strong),
+      primary-fixed: var(--kva-color-accent),
+      primary-fixed-dim: var(--kva-color-accent-hover),
+      on-primary-fixed: var(--kva-color-on-accent),
+      on-primary-fixed-variant: var(--kva-color-on-accent),
+      inverse-primary: var(--kva-color-accent),
+      secondary: var(--kva-color-ink),
+      on-secondary: var(--kva-color-paper),
+      secondary-container: var(--kva-color-paper-2),
+      on-secondary-container: var(--kva-color-ink),
+      secondary-fixed: var(--kva-color-paper-2),
+      secondary-fixed-dim: var(--kva-color-line),
+      on-secondary-fixed: var(--kva-color-ink),
+      on-secondary-fixed-variant: var(--kva-color-muted),
+      tertiary: var(--kva-color-ink),
+      on-tertiary: var(--kva-color-paper),
+      tertiary-container: var(--kva-color-paper-2),
+      on-tertiary-container: var(--kva-color-ink),
+      tertiary-fixed: var(--kva-color-paper-2),
+      tertiary-fixed-dim: var(--kva-color-line),
+      on-tertiary-fixed: var(--kva-color-ink),
+      on-tertiary-fixed-variant: var(--kva-color-muted),
+      background: var(--kva-color-paper),
+      on-background: var(--kva-color-ink),
+      surface: var(--kva-color-paper),
+      on-surface: var(--kva-color-ink),
+      surface-variant: var(--kva-color-paper-2),
+      on-surface-variant: var(--kva-color-muted),
+      surface-bright: var(--kva-color-paper),
+      surface-dim: var(--kva-color-paper-2),
+      surface-container: var(--kva-color-paper),
+      surface-container-low: var(--kva-color-paper),
+      surface-container-lowest: var(--kva-color-paper),
+      surface-container-high: var(--kva-color-paper-2),
+      surface-container-highest: var(--kva-color-paper-2),
+      surface-tint: var(--kva-color-clear),
+      inverse-surface: var(--kva-color-ink),
+      inverse-on-surface: var(--kva-color-paper),
+      outline: var(--kva-color-border),
+      outline-variant: var(--kva-color-line),
+      error: var(--kva-color-danger),
+      on-error: var(--kva-color-paper),
+      error-container: var(--kva-color-paper),
+      on-error-container: var(--kva-color-danger),
+      scrim: var(--kva-color-scrim),
+      shadow: var(--kva-color-clear),
+      corner-none: var(--kva-rounded-none),
+      corner-extra-small: var(--kva-rounded-none),
+      corner-extra-small-top: var(--kva-rounded-none),
+      corner-small: var(--kva-rounded-none),
+      corner-medium: var(--kva-rounded-none),
+      corner-large: var(--kva-rounded-none),
+      corner-large-start: var(--kva-rounded-none),
+      corner-large-end: var(--kva-rounded-none),
+      corner-large-top: var(--kva-rounded-none),
+      corner-extra-large: var(--kva-rounded-none),
+      corner-extra-large-top: var(--kva-rounded-none),
+      corner-full: var(--kva-rounded-none),
+      level0: var(--kva-elevation-flat),
+      level1: var(--kva-elevation-flat),
+      level2: var(--kva-elevation-flat),
+      level3: var(--kva-elevation-flat),
+      level4: var(--kva-elevation-flat),
+      level5: var(--kva-elevation-flat),
+    )
+  );
+
+  @include mat.button-overrides(
+    (
+      text-label-text-color: var(--kva-color-accent-strong),
+      outlined-label-text-color: var(--kva-color-accent-strong),
+    )
+  );
+
+  $roles: (
+    display-large: display,
+    display-medium: display,
+    display-small: display,
+    headline-large: h1,
+    headline-medium: h2,
+    headline-small: h3,
+    title-large: h2,
+    title-medium: h3,
+    title-small: field-label,
+    body-large: body,
+    body-medium: body,
+    body-small: small,
+    label-large: label,
+    label-medium: label,
+    label-small: label,
+  );
+  @each $system, $role in $roles {
+    $font: var(--kva-typography-#{$role}-font-family);
+    $size: var(--kva-typography-#{$role}-font-size);
+    $weight: var(--kva-typography-#{$role}-font-weight);
+    $line: var(--kva-typography-#{$role}-line-height);
+    $tracking: var(--kva-spacing-0);
+    @if $role == display or $role == h1 or $role == h2 or $role == h3 or $role == label {
+      $tracking: var(--kva-typography-#{$role}-letter-spacing);
+    }
+    @include mat.theme-overrides(
+      (
+        #{$system}: #{$weight} #{$size} / #{$line} #{$font},
+        #{$system}-font: $font,
+        #{$system}-size: $size,
+        #{$system}-weight: $weight,
+        #{$system}-line-height: $line,
+        #{$system}-tracking: $tracking
+      )
+    );
+  }
+}
+
+:focus-visible {
+  outline: var(--kva-component-focus-ring-on-light-width) solid
+    var(--kva-surface-focus-color, var(--kva-color-focus-on-light));
+  outline-offset: var(--kva-spacing-rule-medium);
+}
+
+[data-kva-surface='dark'] {
+  --kva-surface-focus-color: var(--kva-color-focus);
+}
+
+[data-kva-surface='light'] {
+  --kva-surface-focus-color: var(--kva-color-focus-on-light);
+}

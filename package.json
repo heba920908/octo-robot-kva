@@ -10,6 +10,8 @@
     "verify:static": "node scripts/verify-static-build.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "tokens:build": "node scripts/design-tokens.mjs",
+    "tokens:check": "node scripts/design-tokens.mjs --check",
     "agents:install": "npm run agents:bmad && npm run agents:speckit",
     "agents:bmad": "bmad install --directory . --modules bmm --tools github-copilot --set core.project_name=agency-portfolio --yes",
     "agents:speckit": "uv venv --allow-existing .venv && uv pip install --python .venv --upgrade \"specify-cli @ git+https://github.com/github/spec-kit.git\" && .venv/bin/specify init --here --integration copilot --script sh --non-interactive --force --ignore-agent-tools",
@@ -18,10 +20,12 @@
   "private": true,
   "packageManager": "npm@10.9.8",
   "dependencies": {
+    "@angular/cdk": "22.2.4",
     "@angular/common": "^22.2.0",
     "@angular/compiler": "^22.2.0",
     "@angular/core": "^22.2.0",
     "@angular/forms": "^22.2.0",
+    "@angular/material": "22.2.4",
     "@angular/platform-browser": "^22.2.0",
     "@angular/platform-server": "22.2.3",
     "@angular/router": "^22.2.0",
@@ -39,6 +43,7 @@
     "jsdom": "^30.0.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.0",
+    "yaml": "2.9.1"
   }
 }
