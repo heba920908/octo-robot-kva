@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.privacy {
+  box-sizing: border-box;
+  max-width: var(--kva-component-privacy-notice-width);
+  padding-block: var(--kva-spacing-section-y);
+  padding-inline: var(--kva-spacing-margin-mobile);
+  color: var(--kva-component-privacy-notice-text-color);
+  background-color: var(--kva-component-privacy-notice-background-color);
+}
+
+h2:focus-visible {
+  outline: var(--kva-spacing-rule-medium) solid var(--kva-color-focus-on-light);
+  outline-offset: var(--kva-spacing-rule-medium);
+}

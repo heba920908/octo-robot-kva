@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ContentFacade, formatUiString, populatedSections } from './content-facade';
 import { siteContent } from './site.content';
+import { privacyNotice } from './privacy-notice.content';
 import { uiStrings } from './ui-strings.content';
 
 describe('ContentFacade (AC2-3)', () => {
@@ -8,6 +9,9 @@ describe('ContentFacade (AC2-3)', () => {
     const facade = TestBed.inject(ContentFacade);
     expect(facade.site).toEqual(siteContent);
     expect(facade.ui).toEqual(uiStrings);
+    expect(facade.privacy).toEqual(privacyNotice);
+    expect(Object.isFrozen(facade.privacy.sections[0].paragraphs)).toBe(true);
+    expect(Object.isFrozen(facade.site.contact.phone)).toBe(true);
     expect(facade.visibleSections).toEqual([]);
     expect(Object.isFrozen(facade.site)).toBe(true);
     expect(Object.isFrozen(facade.ui.menu)).toBe(true);

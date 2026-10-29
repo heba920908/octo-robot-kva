@@ -237,3 +237,25 @@ model applies. Schema/metadata/layout cases are archived and owned servers stopp
 Final US4-scoped spec-kit analysis passes with all applicable requirements and
 tasks covered, no inconsistencies and no constitution conflicts. T025-T032 are
 complete; only Story 1.4 advances to review. All work remains uncommitted.
+
+## US5 Plan (2026-10-28)
+
+The approved Story 1.5 spec is the sole implementation intent. Follow
+[contracts/footer-contact-privacy.md](contracts/footer-contact-privacy.md). No new
+dependencies; schema validation stays test-only.
+
+1. T033: Clarify/plan US5 in spec.md, plan.md, tasks.md, data-model.md and the contract.
+2. T034: Test then add `core/effects` types, `BehaviorModel` and `direct-contact-links`.
+3. T035: Test then add the `core/contact` builder, including `mailSubjectDirect` parity.
+4. T036: Test then extend site schema/content/Content doc and forbidden-channel scan.
+5. T037: Test then add privacy-notice schema/content/Content doc and facade exposure.
+6. T038: Test then add `features/footer` using facade, builder and existing tokens.
+7. T039: Test then add `features/privacy`, wire both in the app shell, keep one `h1`.
+8. T040: Full tests, formatting, tokens, Pages/static, bundle delta, browser/no-JS checks,
+   archives, independent BMAD review and US5-scoped analysis; advance only Story 1.5.
+
+Constitution pre/post-design: PASS. II is satisfied by the shared model, its table tests
+and the documented no-adapter rationale; IV by the extended schemas and existing tokens;
+VI by native links, >= 24px targets and no new bundle dependency. Only types-only
+`core/effects` precedes Story 1.6. No commit, branch or publication is authorized. US6-US9
+remain unplanned.

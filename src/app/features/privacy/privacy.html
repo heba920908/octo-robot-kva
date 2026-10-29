@@ -1,0 +1,9 @@
+<section id="aviso" class="privacy" aria-labelledby="aviso-title">
+  <h2 id="aviso-title" tabindex="-1">{{ notice.title }}</h2>
+  @for (section of notice.sections; track section.id) {
+    <h3>{{ section.heading }}</h3>
+    @for (paragraph of section.paragraphs; track $index) {
+      <p>{{ paragraph }}</p>
+    }
+  }
+</section>

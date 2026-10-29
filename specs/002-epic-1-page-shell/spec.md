@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: US1-US4 implemented; US4 verified and reviewed; US5-US9 drafted
+**Status**: US1-US4 implemented; US4 verified and reviewed; US5 implemented, verified and reviewed; US6-US9 drafted
 
 **Input**: BMAD Epic 1 in
 [epics.md](../../_bmad-output/planning-artifacts/epics.md) (Stories 1.1–1.9). Constitution
@@ -27,7 +27,7 @@ pattern.
 | US2        | 1.2        | Self-hosted fonts and icon set                              | Implemented, verified and reviewed |
 | US3        | 1.3        | Content facade and UI strings                               | Implemented, verified and reviewed |
 | US4        | 1.4        | Image derivative pipeline and shared responsive image       | Implemented, verified and reviewed |
-| US5        | 1.5        | Footer with direct contact links and in-page privacy notice | Drafted                            |
+| US5        | 1.5        | Footer with direct contact links and in-page privacy notice | Implemented, verified and reviewed |
 | US6        | 1.6        | Contact section with direct links and copy-address fallback | Drafted                            |
 | US7        | 1.7        | Hero section                                                | Drafted                            |
 | US8        | 1.8        | Sticky header and section navigation                        | Drafted                            |
@@ -253,6 +253,34 @@ from anywhere on the page, even without JavaScript.
 
 **Independent Test**: With scripts disabled, check the footer links' targets and the jump to
 the in-page privacy notice.
+
+**Clarification (2026-10-28)**: The approved Story 1.5 spec resolves all critical
+ambiguities; no questions remain. Extend site content with a contact block (optional
+name and phone, required email, optional WhatsApp), facts (`3+ años`, `Cobertura en todo
+México`), optional legal identity and retention period, footer year 2026 and white-logo
+footer metadata. A Mexican phone stores E.164 plus its display form; digits must agree.
+Publish only proyectos1@ and (56) 4000 3344. The contact name is stored but shown only
+in the later Contact section. The builder is the only owner of the Lead tag, encoding and
+`tel:` form. This story introduces the shared `BehaviorModel` type, a types-only effect
+union and the `direct-contact-links` model; native anchors need no adapter, so it emits
+no effects. The privacy notice is generic, in-flow at the end of `<main>` for everyone,
+uses the stand-in responsible party and is legally incomplete until kVA supplies its
+registered identity, address and retention period. No WhatsApp UI, copy control, dialog,
+layer or history code is introduced.
+
+**Planning contract**: [contracts/footer-contact-privacy.md](contracts/footer-contact-privacy.md).
+Governing schemas: `site.schema.json` and `privacy-notice.schema.json`; footer styling uses
+existing `footer`, `footer-link` and `divider-on-dark` tokens. Archive accepted schemas,
+content samples and layout cases under `.agents/workspace/spec-kit/{baselines,data,layout-cases}/`.
+
+**Verification (2026-10-28)**: All 319 tests across 16 files, token parity, Pages build
+and static checks pass; the static verifier now also checks the prerendered footer,
+`#aviso` and direct links. Initial bundle is 251.50kB (+16.36kB). Development and Pages
+browser checks pass at 1440/390/320px and with JavaScript disabled. Three independent
+BMAD review layers completed; accepted corrections cover display-number validation, the
+second-channel scan, prerender verification and test hygiene. US5-scoped analysis finds
+full AC/task coverage. US6-US9 remain unplanned; no commit, branch or publication is
+authorized.
 
 **Acceptance Scenarios**:
 

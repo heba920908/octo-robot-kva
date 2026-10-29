@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { siteContent } from './site.content';
 import { images } from './images.content';
+import { privacyNotice } from './privacy-notice.content';
 import { uiStrings, type UiStringKey, type UiStringParameters } from './ui-strings.content';
 
 interface UiString {
@@ -73,6 +74,7 @@ export class ContentFacade {
   readonly site = freezeContent(siteContent);
   readonly ui = freezeContent(uiStrings);
   readonly images = freezeContent(images);
+  readonly privacy = freezeContent(privacyNotice);
   readonly visibleSections = populatedSections([]);
 
   format<Key extends UiStringKey>(

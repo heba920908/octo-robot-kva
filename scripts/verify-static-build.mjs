@@ -91,6 +91,17 @@ if (existsSync(indexPath)) {
   check(/<title>kVA Instalaciones \|[^<]+<\/title>/i.test(html), 'Prerendered title is missing');
   check((html.match(/<h1\b/gi) ?? []).length === 1, 'Page must contain exactly one h1');
   check(html.includes('kVA Instalaciones'), 'Brand name must be prerendered');
+  check(/<footer\b/i.test(html), 'Footer must be prerendered');
+  check(/<section[^>]+id="aviso"/i.test(html), 'Privacy notice section #aviso must be prerendered');
+  check(/<a[^>]+href="#aviso"/i.test(html), 'Footer must link to #aviso');
+  check(
+    /<a[^>]+href="mailto:proyectos1@kvainstalaciones\.mx\?subject=%5Bkvainstalaciones\.mx%5D%20Contacto"/i.test(
+      html,
+    ),
+    'Tagged direct mailto link must be prerendered',
+  );
+  check(/<a[^>]+href="tel:\+525640003344"/i.test(html), 'Phone link must be prerendered');
+  check(!/proyectos2@|4029/i.test(html), 'Second contact channel must not be published');
   check(/<link[^>]+rel="icon"[^>]+href="media\/kva-icon\.png"/i.test(html), 'kVA icon is missing');
   check(existsSync(join(outputDir, 'browser', 'media', 'kva-icon.png')), 'Icon file is missing');
   check(

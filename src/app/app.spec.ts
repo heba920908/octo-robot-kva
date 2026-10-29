@@ -44,7 +44,9 @@ describe('App', () => {
       pageTitle: 'Título de prueba',
       description: 'Descripción de prueba',
     };
-    TestBed.overrideProvider(ContentFacade, { useValue: { site } });
+    TestBed.overrideProvider(ContentFacade, {
+      useFactory: () => Object.assign(new ContentFacade(), { site }),
+    });
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     expect((fixture.nativeElement as HTMLElement).querySelector('h1')?.textContent?.trim()).toBe(
@@ -52,5 +54,18 @@ describe('App', () => {
     );
     expect(TestBed.inject(Title).getTitle()).toBe(site.pageTitle);
     expect(TestBed.inject(Meta).getTag('name="description"')?.content).toBe(site.description);
+  });
+
+  it('places the privacy notice last in main and the footer after main (1.5-AC-03, AC-04)', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const main = root.querySelector('main') as HTMLElement;
+
+    expect(main.lastElementChild?.tagName).toBe('APP-PRIVACY');
+    expect(main.querySelector('section#aviso')).not.toBeNull();
+    expect(main.nextElementSibling?.tagName).toBe('APP-FOOTER');
+    expect(root.querySelector('footer a[href="#aviso"]')).not.toBeNull();
+    expect(root.querySelectorAll('h1')).toHaveLength(1);
   });
 });

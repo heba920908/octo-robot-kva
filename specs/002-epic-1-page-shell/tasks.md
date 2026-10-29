@@ -140,3 +140,24 @@ FR-015 and Story 1.4 AC1-4 govern these tasks; US5-US9 remain unplanned.
 | AC2        | T026-T028, T032 |
 | AC3        | T029-T030, T032 |
 | AC4        | T031-T032       |
+
+## US5 - Footer, Direct Contact Links and Privacy Notice
+
+The approved Story 1.5 spec authorizes US5 only. Execute sequentially, test first.
+FR-003, FR-014, FR-020 and Story 1.5 AC1-4 govern; US6-US9 remain unplanned.
+
+- [x] T033 [US5] Clarify/plan spec.md, plan.md, data-model.md and contracts/footer-contact-privacy.md before Act (AC1-4).
+- [x] T034 [US5] Test then implement core/effects types, behaviors/behavior-model.ts and direct-contact-links model (AC3).
+- [x] T035 [US5] Test then implement core/contact builder with encoding and parity (AC2).
+- [x] T036 [US5] Test then extend site schema/content/content doc and forbidden-channel scan (AC1).
+- [x] T037 [US5] Test then add privacy-notice schema/content/doc and facade exposure (AC4).
+- [x] T038 [US5] Test then implement features/footer (AC3).
+- [x] T039 [US5] Test then implement features/privacy and app-shell wiring (AC4).
+- [x] T040 [US5] Full gates, browser/no-JS checks, archives, independent BMAD review and US5-scoped spec-kit analysis; advance only Story 1.5 (AC1-4).
+
+| Acceptance | Tasks            |
+| ---------- | ---------------- |
+| AC1        | T036, T040       |
+| AC2        | T035, T040       |
+| AC3        | T034, T038, T040 |
+| AC4        | T037, T039, T040 |

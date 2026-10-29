@@ -140,3 +140,40 @@ The schema is src/app/core/schemas/image.schema.json. Accepted snapshots live in
 .agents/workspace/spec-kit/baselines/image@2026-10-28.json; metadata samples in
 .agents/workspace/spec-kit/data/images; layout cases in
 .agents/workspace/spec-kit/layout-cases/responsive-image. No runtime validation.
+
+## US5 - Contact, Footer and Privacy Content
+
+### SiteContent (extended)
+
+Existing fields remain. Added, all governed by `site.schema.json` (`additionalProperties: false`):
+`contact` `{ name?, email, phone? { e164, display }, whatsapp? }`, `facts`
+`{ yearsInBusiness, coverage }`, optional `legalIdentity` and `retentionPeriod`,
+integer `footerYear`, and `footerLogo` `{ src, src2x, width, height }` for the
+24/48px white-logo derivatives. Email is required. `phone.e164` matches
+`^\+52[1-9][0-9]{9}$`; `display` is `(AA|AAA) BBBB|BBB CCCC` and its digits must equal
+the E.164 national digits (test-enforced). A second channel is never representable.
+
+### PrivacyNoticeContent
+
+`{ id: 'privacy-notice', title, sections[1..] { id, heading, paragraphs[1..] } }`, governed by
+`privacy-notice.schema.json`. Non-blank Spanish text; section ids unique. The text names the
+responsible party (legal identity or stand-in) and the site contact email.
+
+### ContactLinks (pure builder, `core/contact`)
+
+`buildMailtoLink({ email, topic })` -> `mailto:<email>?subject=<encode("[kvainstalaciones.mx] " + topic)>`;
+`buildTelLink(e164)` -> `tel:<e164>`. Blank email, blank topic or non-E.164 input throws.
+
+### DirectContactLinks (behavior model)
+
+State `{ kind: 'idle' }`; events `activate-email | activate-phone`; both return the same state
+with `effects: []`. Any other event returns `null`. Acceptance `1.5-AC-03`.
+
+### Effect (types only)
+
+Closed union `focus | layer | navigate | copy | announce | scroll` with typed payloads in
+`core/effects`; executors arrive with Story 1.6.
+
+Archives: `.agents/workspace/spec-kit/baselines/{site,privacy-notice}@2026-10-28.json`,
+`.agents/workspace/spec-kit/data/{site,privacy-notice}/`,
+`.agents/workspace/spec-kit/layout-cases/footer/`.

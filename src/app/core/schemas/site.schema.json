@@ -12,7 +12,11 @@
     "heading",
     "description",
     "canonicalUrl",
-    "iconPath"
+    "iconPath",
+    "contact",
+    "facts",
+    "footerYear",
+    "footerLogo"
   ],
   "properties": {
     "id": { "const": "site" },
@@ -22,6 +26,51 @@
     "heading": { "type": "string", "minLength": 1, "maxLength": 60 },
     "description": { "type": "string", "minLength": 1, "maxLength": 160 },
     "canonicalUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
-    "iconPath": { "type": "string", "pattern": "^media/[a-z0-9-]+\\.png$" }
+    "iconPath": { "type": "string", "pattern": "^media/[a-z0-9-]+\\.png$" },
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["email"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "email": { "type": "string", "pattern": "^[^\\s@]+@[^\\s@]+$" },
+        "phone": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["e164", "display"],
+          "properties": {
+            "e164": { "type": "string", "pattern": "^\\+52[1-9][0-9]{9}$" },
+            "display": {
+              "type": "string",
+              "pattern": "^(\\([0-9]{2}\\) [0-9]{4}|\\([0-9]{3}\\) [0-9]{3}) [0-9]{4}$"
+            }
+          }
+        },
+        "whatsapp": { "type": "string", "pattern": "^\\+52[1-9][0-9]{9}$" }
+      }
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["yearsInBusiness", "coverage"],
+      "properties": {
+        "yearsInBusiness": { "type": "string", "minLength": 1 },
+        "coverage": { "type": "string", "minLength": 1 }
+      }
+    },
+    "legalIdentity": { "type": "string", "minLength": 1 },
+    "retentionPeriod": { "type": "string", "minLength": 1 },
+    "footerYear": { "type": "integer", "minimum": 2000 },
+    "footerLogo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["src", "src2x", "width", "height"],
+      "properties": {
+        "src": { "type": "string", "pattern": "^media/logo/[a-z0-9-]+\\.png$" },
+        "src2x": { "type": "string", "pattern": "^media/logo/[a-z0-9-]+\\.png$" },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      }
+    }
   }
 }

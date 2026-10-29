@@ -284,7 +284,10 @@ export function runStaticVerificationFixture(contamination = '') {
       `<html lang="es-MX"><head><base href="/octo-robot-kva/">
       <title>kVA Instalaciones | Fixture</title><link rel="icon" href="media/kva-icon.png">
       <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'">
-      </head><body><app-root ng-server-context="ssg"><h1>kVA Instalaciones</h1></app-root>
+      </head><body><app-root ng-server-context="ssg"><h1>kVA Instalaciones</h1>
+      <section id="aviso"></section><footer>
+      <a href="mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto">e</a>
+      <a href="tel:+525640003344">t</a><a href="#aviso">a</a></footer></app-root>
       <script id="ng-state" type="application/json">{}</script></body></html>`,
     );
     writeFileSync(join(browser, 'main.js'), contamination || 'console.log("fixture");');
