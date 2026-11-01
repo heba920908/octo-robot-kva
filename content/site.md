@@ -22,6 +22,11 @@ footerLogo:
   src2x: media/logo/kva-logo-white-48.png
   width: 46
   height: 24
+contactLogo:
+  src: media/logo/kva-logo-white-40.png
+  src2x: media/logo/kva-logo-white-80.png
+  width: 76
+  height: 40
 ---
 
 Site-wide identity, metadata and published contact channels. Typed Executable content:
@@ -36,3 +41,4 @@ Site-wide identity, metadata and published contact channels. Typed Executable co
   responsible party until kVA provides them.
 - `footerYear` is the footer copyright year; update it with the content, not at render time.
 - `footerLogo` names the 24 px white-logo derivative and its 2x file with intrinsic size.
+- `contactLogo` names the 40 px white-logo derivative and its 2x file with intrinsic size for the Contact section (`#contacto`).

@@ -92,6 +92,35 @@ if (existsSync(indexPath)) {
   check((html.match(/<h1\b/gi) ?? []).length === 1, 'Page must contain exactly one h1');
   check(html.includes('kVA Instalaciones'), 'Brand name must be prerendered');
   check(/<footer\b/i.test(html), 'Footer must be prerendered');
+  const contactSection =
+    html.match(/<section[^>]+id="contacto"[^>]*>[\s\S]*?<\/section>/i)?.[0] ?? '';
+  check(contactSection.length > 0, 'Contact section #contacto must be prerendered');
+  check(
+    /<h2[^>]*id="contacto-title"[^>]*>Contacto<\/h2>/i.test(contactSection),
+    'Contact section h2 title must be prerendered in #contacto',
+  );
+  check(
+    /<img[^>]+class="[^"]*contact-logo[^"]*"/i.test(contactSection),
+    'Contact logo must be prerendered in #contacto',
+  );
+  check(
+    /<h3[^>]*>Ing\. Alfredo Hernández<\/h3>/i.test(contactSection),
+    'Contact name h3 must be prerendered in #contacto',
+  );
+  check(
+    /<button[^>]+class="[^"]*copy-button[^"]*"[^>]+hidden/i.test(contactSection) ||
+      /<button[^>]+hidden[^>]+class="[^"]*copy-button[^"]*"/i.test(contactSection),
+    'Copy button in #contacto must be hidden in prerendered static HTML',
+  );
+  check(
+    /<a[^>]+class="[^"]*contact-cta[^"]*"[^>]+href="mailto:proyectos1@kvainstalaciones\.mx\?subject=%5Bkvainstalaciones\.mx%5D%20Contacto"/i.test(
+      contactSection,
+    ) ||
+      /<a[^>]+href="mailto:proyectos1@kvainstalaciones\.mx\?subject=%5Bkvainstalaciones\.mx%5D%20Contacto"[^>]+class="[^"]*contact-cta[^"]*"/i.test(
+        contactSection,
+      ),
+    'Contact CTA link must be prerendered in #contacto',
+  );
   check(/<section[^>]+id="aviso"/i.test(html), 'Privacy notice section #aviso must be prerendered');
   check(/<a[^>]+href="#aviso"/i.test(html), 'Footer must link to #aviso');
   check(

@@ -115,13 +115,16 @@ describe('site contact, facts and footer content (1.5-AC-01)', () => {
     expect(validate(withContact(change))).toBe(false);
   });
 
-  it.each(['facts', 'footerYear', 'footerLogo', 'contact'])('requires %s', (field) => {
-    const validate = createValidator();
-    const site = clone();
-    delete site[field];
+  it.each(['facts', 'footerYear', 'footerLogo', 'contactLogo', 'contact'])(
+    'requires %s',
+    (field) => {
+      const validate = createValidator();
+      const site = clone();
+      delete site[field];
 
-    expect(validate(site)).toBe(false);
-  });
+      expect(validate(site)).toBe(false);
+    },
+  );
 
   it.each([2025.5, 1999, '2026'])('rejects footer year %j', (year) => {
     const validate = createValidator();
@@ -143,6 +146,22 @@ describe('site contact, facts and footer content (1.5-AC-01)', () => {
     expect([header.readUInt32BE(0), header.readUInt32BE(4)]).toEqual([logo.width, logo.height]);
     const header2x = readFileSync(`public/${logo.src2x}`).subarray(16, 24);
     expect([header2x.readUInt32BE(0), header2x.readUInt32BE(4)]).toEqual([91, 48]);
+  });
+
+  it('points the contact logo at existing 40px/80px white derivatives with intrinsic size (1.6-AC-02)', () => {
+    const logo = siteContent.contactLogo;
+    expect(logo).toEqual({
+      src: 'media/logo/kva-logo-white-40.png',
+      src2x: 'media/logo/kva-logo-white-80.png',
+      width: 76,
+      height: 40,
+    });
+    expect(existsSync(`public/${logo.src}`)).toBe(true);
+    expect(existsSync(`public/${logo.src2x}`)).toBe(true);
+    const header = readFileSync(`public/${logo.src}`).subarray(16, 24);
+    expect([header.readUInt32BE(0), header.readUInt32BE(4)]).toEqual([logo.width, logo.height]);
+    const header2x = readFileSync(`public/${logo.src2x}`).subarray(16, 24);
+    expect([header2x.readUInt32BE(0), header2x.readUInt32BE(4)]).toEqual([152, 80]);
   });
 
   it('publishes no second channel in content, source or the entry page', () => {

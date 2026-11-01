@@ -75,7 +75,9 @@ export class ContentFacade {
   readonly ui = freezeContent(uiStrings);
   readonly images = freezeContent(images);
   readonly privacy = freezeContent(privacyNotice);
-  readonly visibleSections = populatedSections([]);
+  readonly visibleSections = populatedSections([
+    { id: 'contacto', content: this.site.contact.email },
+  ]);
 
   format<Key extends UiStringKey>(
     key: Key,

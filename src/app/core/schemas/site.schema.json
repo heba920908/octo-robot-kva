@@ -16,7 +16,8 @@
     "contact",
     "facts",
     "footerYear",
-    "footerLogo"
+    "footerLogo",
+    "contactLogo"
   ],
   "properties": {
     "id": { "const": "site" },
@@ -62,6 +63,17 @@
     "retentionPeriod": { "type": "string", "minLength": 1 },
     "footerYear": { "type": "integer", "minimum": 2000 },
     "footerLogo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["src", "src2x", "width", "height"],
+      "properties": {
+        "src": { "type": "string", "pattern": "^media/logo/[a-z0-9-]+\\.png$" },
+        "src2x": { "type": "string", "pattern": "^media/logo/[a-z0-9-]+\\.png$" },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "contactLogo": {
       "type": "object",
       "additionalProperties": false,
       "required": ["src", "src2x", "width", "height"],

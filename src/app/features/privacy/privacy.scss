@@ -4,11 +4,18 @@
 
 .privacy {
   box-sizing: border-box;
-  max-width: var(--kva-component-privacy-notice-width);
-  padding-block: var(--kva-spacing-section-y);
-  padding-inline: var(--kva-spacing-margin-mobile);
+  overflow-x: clip;
+  max-width: calc(var(--kva-spacing-content-max) + 2 * var(--kva-shell-margin));
+  margin-inline: auto;
+  padding-block: var(--kva-shell-section-y);
+  padding-inline: var(--kva-shell-margin);
   color: var(--kva-component-privacy-notice-text-color);
   background-color: var(--kva-component-privacy-notice-background-color);
+}
+
+h3,
+p {
+  max-width: var(--kva-component-privacy-notice-width);
 }
 
 h2:focus-visible {

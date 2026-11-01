@@ -258,4 +258,40 @@ Constitution pre/post-design: PASS. II is satisfied by the shared model, its tab
 and the documented no-adapter rationale; IV by the extended schemas and existing tokens;
 VI by native links, >= 24px targets and no new bundle dependency. Only types-only
 `core/effects` precedes Story 1.6. No commit, branch or publication is authorized. US6-US9
-remain unplanned.
+remained unplanned at the US5 handoff.
+
+## US6 Plan (2026-10-29)
+
+The approved Story 1.6 spec is the sole implementation intent. Follow
+[contracts/contact-section.md](contracts/contact-section.md). No new dependencies;
+schema validation stays test-only.
+
+1. T041: Clarify/plan US6 in spec.md, plan.md, tasks.md, data-model.md and
+   contracts/contact-section.md before Act.
+2. T042: Test then implement `src/app/behaviors/copy-address.behavior.ts` and
+   `copy-address.behavior.spec.ts` (`1.6-AC-03`), logging flow transitions to
+   `.agents/workspace/bmad/2026-10-29/1-6/copy-address.jsonl`.
+3. T043: Test then implement `EffectRunner` in `src/app/core/effects/effects.ts` and
+   `effects.spec.ts` for `copy` (Clipboard API + DOM Selection fallback) and `announce`
+   (clear, ~100 ms set, 2500 ms hold) (`1.6-AC-03..05`).
+4. T044: Test then extend `site.schema.json`, `site.content.ts`, `content/site.md` and
+   `ContentFacade.visibleSections` with `contactLogo` and `'contacto'` (`1.6-AC-02`).
+5. T045: Test then implement shared page-shell rhythm custom properties and
+   `.kva-section-heading` / `.kva-corner-rule` / `.kva-corner-rule--mirrored` across
+   `src/styles.scss`, `src/styles/styles.spec.ts`, `src/app/app.scss`, `footer.scss`,
+   and `privacy` (`1.6-AC-01`).
+6. T046: Test then implement `src/app/features/contact/{contact.ts,contact.html,contact.scss,contact.spec.ts}`
+   and wire `<app-contact />` into `src/app/app.{ts,html,spec.ts}` before `<app-privacy />`
+   (`1.6-AC-02..06`).
+7. T047: Extend `scripts/verify-static-build.mjs` and `scripts/content-checks.mjs` fixture
+   for prerendered `#contacto`, `<h3>Ing. Alfredo Hernández</h3>`, and hidden copy button.
+8. T048: Full tests, formatting, tokens, Pages/static, bundle delta from 251.50 kB,
+   browser/no-JS checks, spec-kit archives, independent BMAD review and US6-scoped
+   analysis; advance only Story 1.6.
+
+Constitution pre/post-design: PASS. II is satisfied by the `copy-address` `BehaviorModel`
+and table-driven/adapter tests; III by test-first colocated specs and JSONL flow log;
+IV by `site.schema.json` and token-fed custom properties; V by standalone `OnPush` and
+signals; VI by persistent polite `role="status"`, 44 px copy button target, and no-JS
+progressive enhancement. US7-US9 remain unplanned. No commit, branch or publication is
+authorized.

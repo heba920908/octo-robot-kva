@@ -5,14 +5,15 @@ import { privacyNotice } from './privacy-notice.content';
 import { uiStrings } from './ui-strings.content';
 
 describe('ContentFacade (AC2-3)', () => {
-  it('exposes readonly site/UI data and no fabricated shell destinations', () => {
+  it('exposes readonly site/UI data and populated visible sections (1.6-AC-02)', () => {
     const facade = TestBed.inject(ContentFacade);
     expect(facade.site).toEqual(siteContent);
     expect(facade.ui).toEqual(uiStrings);
     expect(facade.privacy).toEqual(privacyNotice);
     expect(Object.isFrozen(facade.privacy.sections[0].paragraphs)).toBe(true);
     expect(Object.isFrozen(facade.site.contact.phone)).toBe(true);
-    expect(facade.visibleSections).toEqual([]);
+    expect(facade.visibleSections).toEqual(['contacto']);
+    expect(Object.isFrozen(facade.visibleSections)).toBe(true);
     expect(Object.isFrozen(facade.site)).toBe(true);
     expect(Object.isFrozen(facade.ui.menu)).toBe(true);
     expect(Object.isFrozen(facade.ui.servicesExpand.parameters)).toBe(true);

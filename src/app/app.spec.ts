@@ -56,12 +56,17 @@ describe('App', () => {
     expect(TestBed.inject(Meta).getTag('name="description"')?.content).toBe(site.description);
   });
 
-  it('places the privacy notice last in main and the footer after main (1.5-AC-03, AC-04)', async () => {
+  it('places the contact section before the privacy notice in main and the footer after main (1.5-AC-03, AC-04, 1.6-AC-02)', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const root = fixture.nativeElement as HTMLElement;
     const main = root.querySelector('main') as HTMLElement;
+    const contact = main.querySelector('app-contact') as HTMLElement;
+    const privacy = main.querySelector('app-privacy') as HTMLElement;
 
+    expect(contact).not.toBeNull();
+    expect(contact.querySelector('section#contacto')).not.toBeNull();
+    expect(contact.nextElementSibling).toBe(privacy);
     expect(main.lastElementChild?.tagName).toBe('APP-PRIVACY');
     expect(main.querySelector('section#aviso')).not.toBeNull();
     expect(main.nextElementSibling?.tagName).toBe('APP-FOOTER');

@@ -37,6 +37,7 @@ describe('global token and Material styles', () => {
         path === 'src/styles.scss'
           ? content
               .replace(/@media \(width < (?:768|330)px\)/g, '')
+              .replace(/@media \(width >= (?:768|1024)px\)/g, '')
               .replace('clamp(26px, 8.5vw, 32px)', '')
           : content;
       expect(violations(guarded), path).toEqual([]);
@@ -238,5 +239,21 @@ describe('US2 self-hosted fonts and typography', () => {
     expect(global).toContain('@media (width < 768px)');
     expect(global).toContain('@media (width < 330px)');
     expect(global).toContain('font-weight: 400');
+  });
+
+  it('defines shared page-shell rhythm variables and corner-rule motifs at 768px and 1024px (1.6-AC-01)', async () => {
+    const global = await readAsset('src/styles.scss');
+    expect(global).toContain('--kva-shell-margin: var(--kva-spacing-margin-mobile)');
+    expect(global).toContain('--kva-shell-margin: var(--kva-spacing-margin-tablet)');
+    expect(global).toContain('--kva-shell-margin: var(--kva-spacing-margin-desktop)');
+    expect(global).toContain('--kva-shell-section-y: var(--kva-spacing-section-y)');
+    expect(global).toContain('--kva-shell-section-y: var(--kva-spacing-section-y-lg)');
+    expect(global).toContain('--kva-shell-columns: 4');
+    expect(global).toContain('--kva-shell-columns: 12');
+    expect(global).toContain('@media (width >= 768px)');
+    expect(global).toContain('@media (width >= 1024px)');
+    expect(global).toContain('.kva-section-heading');
+    expect(global).toContain('.kva-corner-rule');
+    expect(global).toContain('.kva-corner-rule--mirrored');
   });
 });

@@ -161,3 +161,26 @@ FR-003, FR-014, FR-020 and Story 1.5 AC1-4 govern; US6-US9 remain unplanned.
 | AC2        | T035, T040       |
 | AC3        | T034, T038, T040 |
 | AC4        | T037, T039, T040 |
+
+## US6 - Contact Section with Direct Links and Copy-Address Fallback
+
+The approved Story 1.6 spec authorizes US6 only. Execute sequentially, test first.
+FR-017 (PRD FR12, FR17, FR20) and Story 1.6 AC1-6 govern; US7-US9 remain unplanned.
+
+- [x] T041 [US6] Clarify/plan spec.md, plan.md, data-model.md and contracts/contact-section.md before Act (AC1-6).
+- [x] T042 [US6] Write table-driven tests first in src/app/behaviors/copy-address.behavior.spec.ts; implement copy-address.behavior.ts and write JSONL flow log (AC3).
+- [x] T043 [US6] Write unit tests first in src/app/core/effects/effects.spec.ts; implement EffectRunner for copy and announce in src/app/core/effects/effects.ts (AC3-5).
+- [x] T044 [US6] Test first then extend site.schema.json, site.content.ts, content/site.md and ContentFacade.visibleSections with contactLogo and 'contacto' (AC2).
+- [x] T045 [US6] Test then implement shared shell rhythm and section heading corner-rule styles in src/styles.scss, src/styles/styles.spec.ts, src/app/app.scss, footer.scss and privacy (AC1).
+- [x] T046 [US6] Test first then implement src/app/features/contact/{contact.ts,contact.html,contact.scss,contact.spec.ts} and wire into src/app/app.{ts,html,spec.ts} (AC2-6).
+- [x] T047 [US6] Extend scripts/verify-static-build.mjs and scripts/content-checks.mjs fixture for prerendered #contacto and hidden copy button (AC2, AC6).
+- [x] T048 [US6] Full gates, browser/no-JS checks, archives, independent BMAD review and US6-scoped spec-kit analysis; advance only Story 1.6 (AC1-6).
+
+| Acceptance | Tasks                  |
+| ---------- | ---------------------- |
+| AC1        | T041, T045, T048       |
+| AC2        | T041, T044, T046-T048  |
+| AC3        | T041-T043, T046, T048  |
+| AC4        | T041, T043, T046, T048 |
+| AC5        | T041, T043, T046, T048 |
+| AC6        | T041, T046-T048        |

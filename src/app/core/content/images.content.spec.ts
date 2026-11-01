@@ -20,7 +20,7 @@ describe('image content (Story 1.4 AC1-3)', () => {
     expect(facade.images).toEqual(images);
     expect(Object.isFrozen(facade.images)).toBe(true);
     expect(Object.isFrozen(facade.images['cover-blueprint-tools'].widths)).toBe(true);
-    expect(facade.visibleSections).toEqual([]);
+    expect(facade.visibleSections).toEqual(['contacto']);
   });
 
   it.each([

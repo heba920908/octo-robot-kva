@@ -19,9 +19,9 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--kva-spacing-2) var(--kva-spacing-8);
-  max-width: var(--kva-spacing-content-max);
+  max-width: calc(var(--kva-spacing-content-max) + 2 * var(--kva-shell-margin));
   margin-inline: auto;
-  padding: var(--kva-spacing-8) var(--kva-spacing-margin-mobile);
+  padding: var(--kva-spacing-8) var(--kva-shell-margin);
 }
 
 .logo {

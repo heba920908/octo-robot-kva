@@ -25,6 +25,12 @@ export interface SiteContent {
     readonly width: number;
     readonly height: number;
   };
+  readonly contactLogo: {
+    readonly src: string;
+    readonly src2x: string;
+    readonly width: number;
+    readonly height: number;
+  };
 }
 
 // Editorial source: content/site.md
@@ -50,5 +56,11 @@ export const siteContent: SiteContent = {
     src2x: 'media/logo/kva-logo-white-48.png',
     width: 46,
     height: 24,
+  },
+  contactLogo: {
+    src: 'media/logo/kva-logo-white-40.png',
+    src2x: 'media/logo/kva-logo-white-80.png',
+    width: 76,
+    height: 40,
   },
 };

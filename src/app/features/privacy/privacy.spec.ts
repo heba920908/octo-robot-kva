@@ -12,14 +12,18 @@ describe('Privacy notice section (1.5-AC-04)', () => {
     element = fixture.nativeElement as HTMLElement;
   });
 
-  it('renders an in-flow section with the id the footer link targets', () => {
+  it('renders an in-flow section with the id the footer link targets and section corner rule (1.5-AC-04, 1.6-AC-01)', () => {
     const section = element.querySelector('section') as HTMLElement;
     const heading = section.querySelector('h2') as HTMLElement;
+    const rule = section.querySelector('.kva-corner-rule') as HTMLElement;
 
     expect(section.id).toBe('aviso');
     expect(section.getAttribute('aria-labelledby')).toBe(heading.id);
     expect(heading.textContent?.trim()).toBe(privacyNotice.title);
     expect(heading.getAttribute('tabindex')).toBe('-1');
+    expect(heading.classList.contains('kva-type-h1')).toBe(true);
+    expect(rule).not.toBeNull();
+    expect(rule.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('shows every section as an h3 with its paragraphs and no h1', () => {

@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: US1-US4 implemented; US4 verified and reviewed; US5 implemented, verified and reviewed; US6-US9 drafted
+**Status**: US1-US6 implemented, verified and reviewed; US7-US9 drafted
 
 **Input**: BMAD Epic 1 in
 [epics.md](../../_bmad-output/planning-artifacts/epics.md) (Stories 1.1–1.9). Constitution
@@ -28,7 +28,7 @@ pattern.
 | US3        | 1.3        | Content facade and UI strings                               | Implemented, verified and reviewed |
 | US4        | 1.4        | Image derivative pipeline and shared responsive image       | Implemented, verified and reviewed |
 | US5        | 1.5        | Footer with direct contact links and in-page privacy notice | Implemented, verified and reviewed |
-| US6        | 1.6        | Contact section with direct links and copy-address fallback | Drafted                            |
+| US6        | 1.6        | Contact section with direct links and copy-address fallback | Implemented, verified and reviewed |
 | US7        | 1.7        | Hero section                                                | Drafted                            |
 | US8        | 1.8        | Sticky header and section navigation                        | Drafted                            |
 | US9        | 1.9        | Mobile menu                                                 | Drafted                            |
@@ -307,6 +307,38 @@ action, so they can reach kVA from any tool, including webmail.
 
 **Independent Test**: Copy the address with the clipboard allowed and with it denied, and
 view the section with scripts disabled.
+
+**Clarification (2026-10-29)**: The approved Story 1.6 spec resolves all critical
+ambiguities; no questions remain. Establish the shared page-shell section rhythm
+(1200 px max column, 20/32/48 px margins, 4/12-column grid, 64/112 px vertical
+padding) and `<h2 class="kva-type-h1" tabindex="-1">` section headings with decorative
+`aria-hidden="true"` corner rules (`┘` default, mirrored `└` in `#contacto`). Extend
+`site.schema.json` and `siteContent` with `contactLogo` (`media/logo/kva-logo-white-40.png`
+76×40, 2x `kva-logo-white-80.png` 152×80) and register `contacto` in
+`ContentFacade.visibleSections`. Add the `copy-address` behavior model (`idle | copying | copied | failed`)
+and `EffectRunner` executors in `core/effects` for `copy` (Async Clipboard API with DOM
+Selection API fallback) and `announce` (clear persistent `role="status"`, set message ~100 ms
+later, hold 2500 ms on success). Prerender `#contacto` over `cable-tray-technician` +
+`overlay` with decorative 40 px white logo (`alt=""`), `<h3>` contact name, tagged `mailto:`
+and `tel:` links, plain tagged `mailto:` CTA button (`Cotiza tu proyecto`), and an
+`afterNextRender`-gated copy button (`[hidden]="!enhanced()"`). Missing `name` or `phone`
+is omitted without leaving a gap. No Contact composer, Privacy dialog, WhatsApp UI, Hero,
+header, or mobile menu is introduced.
+
+**Planning contract**: [contracts/contact-section.md](contracts/contact-section.md).
+Governing schema: `src/app/core/schemas/site.schema.json` and `design-tokens.json`.
+Archive accepted schema, content samples and layout cases under
+`.agents/workspace/spec-kit/{baselines,data,layout-cases}/` and behavior-flow logs under
+`.agents/workspace/bmad/2026-10-29/1-6/copy-address.jsonl`.
+
+**Verification (2026-11-01)**: All 360 tests across 19 files, token parity, Pages build
+and static checks pass; the static verifier also asserts prerendered `#contacto`,
+`<h3>Ing. Alfredo Hernández</h3>` and the hidden copy button without inline jsaction scripts.
+Initial bundle is 294.12 kB (+42.62 kB from US5: 245.06 kB JS + 49.05 kB CSS, 75.86 kB
+estimated transfer). Development and Pages browser checks pass at 1440/1024/768/390/320 px
+and with JavaScript disabled. US6-scoped spec-kit analysis finds full AC/task coverage
+(`T041`–`T048`) and no constitution conflicts. US7-US9 remain unplanned; no commit, branch
+or publication is authorized.
 
 **Acceptance Scenarios**:
 

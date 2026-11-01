@@ -177,3 +177,54 @@ Closed union `focus | layer | navigate | copy | announce | scroll` with typed pa
 Archives: `.agents/workspace/spec-kit/baselines/{site,privacy-notice}@2026-10-28.json`,
 `.agents/workspace/spec-kit/data/{site,privacy-notice}/`,
 `.agents/workspace/spec-kit/layout-cases/footer/`.
+
+## US6 - Contact Section, Copy-Address Behavior and Effect Executors
+
+### SiteContent (extended for US6)
+
+Adds required `contactLogo: { src, src2x, width, height }` governed by `site.schema.json`
+(`additionalProperties: false`) pointing to `media/logo/kva-logo-white-40.png` (76×40) and
+2x `media/logo/kva-logo-white-80.png` (152×80). PNG IHDR dimensions are verified in unit
+tests. `ContentFacade.visibleSections` registers `{ id: 'contacto', content: this.site.contact.email }`.
+
+### CopyAddress (behavior model, `src/app/behaviors/copy-address.behavior.ts`)
+
+Conforms to `BehaviorModel<CopyAddressState, CopyAddressEvent>` with `id: 'copy-address'`
+and `acceptance: ['1.6-AC-03', '1.6-AC-04', '1.6-AC-05']`.
+
+- States: `{ kind: 'idle' } | { kind: 'copying' } | { kind: 'copied'; message: string } | { kind: 'failed'; message: string }`.
+- Events:
+  - `{ type: 'request-copy'; address: string }` (non-blank address from `idle`, `copied`, or `failed`) -> `{ state: { kind: 'copying' }, effects: [{ kind: 'copy', text: event.address }] }`.
+  - `{ type: 'copy-succeeded'; message: string }` (non-blank message from `copying`) -> `{ state: { kind: 'copied', message: event.message }, effects: [{ kind: 'announce', message: event.message }] }`.
+  - `{ type: 'copy-failed'; message: string }` (non-blank message from `copying`) -> `{ state: { kind: 'failed', message: event.message }, effects: [{ kind: 'announce', message: event.message }] }`.
+  - `{ type: 'status-timeout' }` (from `copied`) -> `{ state: { kind: 'idle' }, effects: [] }`.
+- Any other state/event pair or blank payload returns `null`.
+
+### EffectRunner (`src/app/core/effects/effects.ts`)
+
+Injectable service executing effects from the closed `Effect` union:
+
+- `copy`: writes `effect.text` via `navigator.clipboard.writeText(effect.text)` when available;
+  returns `Promise<boolean>` (`true` on resolve, `false` when clipboard is unavailable or rejects).
+  Exposes DOM text-selection fallback `selectElementText(element)` using `document.createRange()`
+  and `window.getSelection()`.
+- `announce`: clears persistent live-region state immediately, sets the announced message after
+  ~100 ms (`ANNOUNCEMENT_DELAY_MS = 100`), and schedules optional hold-duration callback after
+  2500 ms (`COPY_STATUS_HOLD_MS = 2500`), clearing pending timers on re-invocation or destroy.
+
+### Shell Rhythm & Section Headings (`src/styles.scss`)
+
+Responsive custom properties defined at `:root`, `@media (width >= 768px)` and
+`@media (width >= 1024px)`:
+
+- `--kva-shell-margin`: `20px` -> `32px` (`>= 768px`) -> `48px` (`>= 1024px`)
+- `--kva-shell-section-y`: `64px` -> `112px` (`>= 1024px`)
+- `--kva-shell-columns`: `4` -> `12` (`>= 1024px`)
+- `--kva-contact-column`: `1 / -1` -> `7 / 13` (`>= 1024px`)
+- `--kva-contact-align`: `flex-start` -> `flex-end` (`>= 1024px`)
+- `--kva-contact-text-align`: `left` -> `right` (`>= 1024px`)
+- `.kva-section-heading`, `.kva-corner-rule` (`┘` default), and `.kva-corner-rule--mirrored` (`└` for `#contacto`).
+
+Archives: `.agents/workspace/spec-kit/baselines/site@2026-10-29.json`,
+`.agents/workspace/spec-kit/data/site/`,
+`.agents/workspace/spec-kit/layout-cases/contact/`.
