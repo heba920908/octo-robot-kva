@@ -2,9 +2,7 @@
   display: block;
 }
 
-.site-header,
-.site-main > h1,
-.site-main > p {
+.site-header {
   box-sizing: border-box;
   max-width: calc(var(--kva-spacing-content-max) + 2 * var(--kva-shell-margin));
   margin-inline: auto;

@@ -295,3 +295,23 @@ IV by `site.schema.json` and token-fed custom properties; V by standalone `OnPus
 signals; VI by persistent polite `role="status"`, 44 px copy button target, and no-JS
 progressive enhancement. US7-US9 remain unplanned. No commit, branch or publication is
 authorized.
+
+## US7 Plan (2026-11-03)
+
+The approved Story 1.7 spec is the sole implementation intent. Follow
+[contracts/hero-section.md](contracts/hero-section.md). No new dependencies; schema
+validation stays test-only. Hero copy comes from EXPERIENCE defaults (headline, lead,
+proof point); the mobile first-screen logo check is deferred to Story 1.8 by human decision.
+
+1. T049: Clarify/plan US7 in spec.md, plan.md, data-model.md, tasks.md and the contract.
+2. T050: Test then add `content/hero.md`, `hero.schema.json`, `hero.content.ts` and its spec.
+3. T051: Test then expose `hero` in `ContentFacade` and register `'hero'` in `visibleSections`.
+4. T052: Test then implement `features/hero/*` and `--kva-hero-*` properties in `styles.scss`.
+5. T053: Wire `<app-hero />`, remove the placeholder `<h1>`/`<p>`, add the preload link.
+6. T054: Extend the static verifier and its clean fixture.
+7. T055: Full gates, browser matrix, review and US7-scoped analysis.
+
+Constitution pre/post-design: PASS. II N/A (Hero adds no user action; anchors are native);
+III test-first colocated specs; IV hero schema plus existing tokens (no token changes);
+V standalone `OnPush`; VI eager LCP image with preload, native links, reflow at 320 px.
+US8-US9 remain unplanned. No commit, branch or publication is authorized.

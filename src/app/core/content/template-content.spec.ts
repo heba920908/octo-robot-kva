@@ -230,4 +230,31 @@ describe('production validation exclusion (AC5)', () => {
     expect(contaminated.status, contaminated.output).toBe(1);
     expect(contaminated.output).toContain('emitted validation code or content schema');
   });
+
+  it.each([
+    [
+      'the Hero image preload',
+      (html: string) => html.replace(/<link rel="preload"[^>]*>/, ''),
+      'Hero image preload link is missing',
+    ],
+    [
+      'the Hero primary CTA',
+      (html: string) => html.replace('<a href="#contacto">', '<a href="#x">'),
+      'Hero primary CTA must link to #contacto',
+    ],
+    [
+      'the Hero section',
+      (html: string) => html.replace('<section id="inicio">', '<section id="hero">'),
+      'Hero section #inicio must be prerendered',
+    ],
+    [
+      'a dangling #servicios CTA',
+      (html: string) => html.replace('<a href="#contacto">', '<a href="#servicios">'),
+      'No CTA may point at #servicios',
+    ],
+  ])('rejects static output without %s', (_name, mutate, message) => {
+    const result = runStaticVerificationFixture('', mutate);
+    expect(result.status, result.output).toBe(1);
+    expect(result.output).toContain(message);
+  });
 });

@@ -7,7 +7,10 @@ export function checkSource(
   loadTemplate?: (file: string) => string,
 ): string[];
 export function scanContentProject(root?: string): string[];
-export function runStaticVerificationFixture(contamination?: string): {
+export function runStaticVerificationFixture(
+  contamination?: string,
+  mutateHtml?: (html: string) => string,
+): {
   status: number | null;
   output: string;
 };

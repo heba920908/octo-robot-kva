@@ -184,3 +184,24 @@ FR-017 (PRD FR12, FR17, FR20) and Story 1.6 AC1-6 govern; US7-US9 remain unplann
 | AC4        | T041, T043, T046, T048 |
 | AC5        | T041, T043, T046, T048 |
 | AC6        | T041, T046-T048        |
+
+## US7 - Hero Section
+
+The approved Story 1.7 spec authorizes US7 only. Execute sequentially, test first.
+FR-018 (PRD FR4) and Story 1.7 AC1-5 govern; US8-US9 remain unplanned.
+
+- [x] T049 [US7] Clarify/plan spec.md, plan.md, data-model.md, tasks.md and contracts/hero-section.md before Act (AC1-5).
+- [x] T050 [US7] Test first then add content/hero.md, hero.schema.json, hero.content.ts/.spec.ts with copy limits, required proof point and proof-point fact check (AC1).
+- [x] T051 [US7] Test first then expose `hero` and register the `'hero'` visible section in content-facade.ts/.spec.ts (AC1, AC5).
+- [x] T052 [US7] Test first then implement features/hero/{hero.ts,hero.html,hero.scss,hero.spec.ts} and `--kva-hero-*` shell properties in src/styles.scss (AC1-5).
+- [x] T053 [US7] Wire `<app-hero />` first in `<main>`, drop the placeholder h1/p, update app tests, add the image preload to src/index.html (AC1, AC3).
+- [x] T054 [US7] Extend scripts/verify-static-build.mjs and scripts/content-checks.mjs fixture for `#inicio`, single h1, `#contacto` CTA, no `#servicios` link and preload (AC1, AC3, AC5).
+- [x] T055 [US7] Full gates, browser checks at 360x640/320/768/1440, independent BMAD review; advance only Story 1.7 (AC1-5). US7-scoped spec-kit analysis not run.
+
+| Acceptance | Tasks                      |
+| ---------- | -------------------------- |
+| AC1        | T049-T051, T053-T055       |
+| AC2        | T049, T052, T055           |
+| AC3        | T049, T052-T055            |
+| AC4        | T049, T052, T055           |
+| AC5        | T049, T051-T052, T054-T055 |

@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: US1-US6 implemented, verified and reviewed; US7-US9 drafted
+**Status**: US1-US7 implemented, verified and reviewed; US8-US9 drafted
 
 **Input**: BMAD Epic 1 in
 [epics.md](../../_bmad-output/planning-artifacts/epics.md) (Stories 1.1–1.9). Constitution
@@ -29,7 +29,7 @@ pattern.
 | US4        | 1.4        | Image derivative pipeline and shared responsive image       | Implemented, verified and reviewed |
 | US5        | 1.5        | Footer with direct contact links and in-page privacy notice | Implemented, verified and reviewed |
 | US6        | 1.6        | Contact section with direct links and copy-address fallback | Implemented, verified and reviewed |
-| US7        | 1.7        | Hero section                                                | Drafted                            |
+| US7        | 1.7        | Hero section                                                | Implemented, verified and reviewed |
 | US8        | 1.8        | Sticky header and section navigation                        | Drafted                            |
 | US9        | 1.9        | Mobile menu                                                 | Drafted                            |
 

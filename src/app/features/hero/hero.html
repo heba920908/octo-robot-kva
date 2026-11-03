@@ -1,0 +1,28 @@
+<section id="inicio" class="hero" aria-labelledby="inicio-title" data-kva-surface="dark">
+  <app-responsive-image class="hero-bg" [image]="backgroundImage" [priority]="true" />
+  <div class="hero-overlay" aria-hidden="true"></div>
+  <div class="hero-wrap">
+    <div class="hero-content">
+      <img
+        class="hero-logo"
+        [src]="logo.src"
+        [attr.srcset]="logoSrcset"
+        [attr.width]="logo.width"
+        [attr.height]="logo.height"
+        [alt]="logoAlt"
+        loading="lazy"
+        decoding="async"
+      />
+      <p class="hero-overline kva-type-overline">{{ hero.overline }}</p>
+      <h1 id="inicio-title" class="hero-headline kva-type-display">{{ hero.headline }}</h1>
+      <p class="hero-lead kva-type-lead">{{ hero.lead }}</p>
+      <div class="hero-actions">
+        <a class="hero-cta hero-cta--primary" href="#contacto">{{ hero.primaryCta }}</a>
+        @if (showServices) {
+          <a class="hero-cta hero-cta--ghost" href="#servicios">{{ hero.secondaryCta }}</a>
+        }
+      </div>
+      <p class="hero-proof kva-type-small">{{ hero.proofPoint }}</p>
+    </div>
+  </div>
+</section>

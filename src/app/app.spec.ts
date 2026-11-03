@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Meta, Title } from '@angular/platform-browser';
 import { App } from './app';
 import { ContentFacade } from './core/content/content-facade';
+import { hero } from './core/content/hero.content';
 import { siteContent } from './core/content/site.content';
 
 describe('App', () => {
@@ -11,13 +12,16 @@ describe('App', () => {
     }).compileComponents();
   });
 
-  it('renders the site heading as the only h1', async () => {
+  it('renders the Hero headline as the only h1, inside #inicio', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const headings = (fixture.nativeElement as HTMLElement).querySelectorAll('h1');
+    const root = fixture.nativeElement as HTMLElement;
+    const headings = root.querySelectorAll('h1');
 
     expect(headings).toHaveLength(1);
-    expect(headings[0].textContent?.trim()).toBe(siteContent.heading);
+    expect(headings[0].textContent?.trim()).toBe(hero.headline);
+    expect(headings[0].closest('section#inicio')).not.toBeNull();
+    expect(root.querySelector('main > p')).toBeNull();
   });
 
   it('renders the brand name', async () => {
@@ -40,23 +44,23 @@ describe('App', () => {
   it('reads rendered copy and metadata through the injected facade', async () => {
     const site = {
       ...siteContent,
-      heading: 'Encabezado de prueba',
       pageTitle: 'Título de prueba',
       description: 'Descripción de prueba',
     };
+    const heroContent = { ...hero, headline: 'Encabezado de prueba' };
     TestBed.overrideProvider(ContentFacade, {
-      useFactory: () => Object.assign(new ContentFacade(), { site }),
+      useFactory: () => Object.assign(new ContentFacade(), { site, hero: heroContent }),
     });
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     expect((fixture.nativeElement as HTMLElement).querySelector('h1')?.textContent?.trim()).toBe(
-      site.heading,
+      heroContent.headline,
     );
     expect(TestBed.inject(Title).getTitle()).toBe(site.pageTitle);
     expect(TestBed.inject(Meta).getTag('name="description"')?.content).toBe(site.description);
   });
 
-  it('places the contact section before the privacy notice in main and the footer after main (1.5-AC-03, AC-04, 1.6-AC-02)', async () => {
+  it('places the Hero first, the contact section before the privacy notice in main and the footer after main (1.5-AC-03, AC-04, 1.6-AC-02, 1.7)', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const root = fixture.nativeElement as HTMLElement;
@@ -64,6 +68,9 @@ describe('App', () => {
     const contact = main.querySelector('app-contact') as HTMLElement;
     const privacy = main.querySelector('app-privacy') as HTMLElement;
 
+    expect(main.firstElementChild?.tagName).toBe('APP-HERO');
+    expect(main.querySelector('app-hero section#inicio')).not.toBeNull();
+    expect(root.querySelector('a[href="#servicios"]')).toBeNull();
     expect(contact).not.toBeNull();
     expect(contact.querySelector('section#contacto')).not.toBeNull();
     expect(contact.nextElementSibling).toBe(privacy);

@@ -1,0 +1,163 @@
+:host {
+  display: block;
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: min(100svh, var(--kva-spacing-hero-max));
+  padding-block: var(--kva-hero-pad-y);
+  color: var(--kva-component-hero-text-color);
+  background-color: var(--kva-color-ink);
+}
+
+.hero-bg,
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-bg ::ng-deep picture,
+.hero-bg ::ng-deep img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  background-color: var(--kva-component-hero-background-color);
+}
+
+.hero-wrap {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: var(--kva-hero-align);
+  width: 100%;
+  max-width: calc(var(--kva-spacing-content-max) + 2 * var(--kva-shell-margin));
+  margin-inline: auto;
+  padding-inline: var(--kva-shell-margin);
+}
+
+.hero-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: var(--kva-hero-align);
+  gap: var(--kva-spacing-5);
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 60ch;
+  text-align: var(--kva-hero-text-align);
+}
+
+.hero-content > * {
+  margin: 0;
+}
+
+.hero-content::before,
+.hero-content::after {
+  content: '';
+  position: absolute;
+  display: var(--kva-hero-ornament-display);
+  width: var(--kva-spacing-bracket-arm);
+  height: var(--kva-spacing-bracket-arm);
+}
+
+.hero-content::before {
+  top: calc(-1 * var(--kva-spacing-frame-offset));
+  right: calc(-1 * var(--kva-spacing-frame-offset));
+  border-top: var(--kva-spacing-rule-hairline) solid var(--kva-color-paper);
+  border-right: var(--kva-spacing-rule-hairline) solid var(--kva-color-paper);
+}
+
+.hero-content::after {
+  bottom: calc(-1 * var(--kva-spacing-frame-offset));
+  left: calc(-1 * var(--kva-spacing-frame-offset));
+  border-bottom: var(--kva-spacing-rule-hairline) solid var(--kva-color-paper);
+  border-left: var(--kva-spacing-rule-hairline) solid var(--kva-color-paper);
+}
+
+.hero-logo {
+  display: var(--kva-hero-logo-display);
+  height: var(--kva-spacing-logo-hero);
+  max-width: 100%;
+  width: auto;
+}
+
+.hero-overline {
+  display: flex;
+  align-items: center;
+  justify-content: var(--kva-hero-align);
+  gap: var(--kva-spacing-4);
+}
+
+.hero-overline::before,
+.hero-overline::after {
+  content: '';
+  display: var(--kva-hero-ornament-display);
+  flex: none;
+  width: var(--kva-spacing-10);
+  height: var(--kva-spacing-rule-hairline);
+  background-color: var(--kva-color-paper);
+}
+
+.hero-actions {
+  display: flex;
+  flex-direction: var(--kva-hero-actions-direction);
+  flex-wrap: wrap;
+  align-items: var(--kva-hero-actions-align);
+  justify-content: var(--kva-hero-align);
+  gap: var(--kva-spacing-3);
+  width: var(--kva-hero-actions-width);
+}
+
+.hero-cta {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--kva-component-button-primary-min-height);
+  padding: var(--kva-spacing-3) var(--kva-component-button-primary-padding);
+  font-family: var(--kva-component-button-primary-font-family), 'Outfit Fallback', sans-serif;
+  font-size: var(--kva-component-button-primary-font-size);
+  font-weight: var(--kva-component-button-primary-font-weight);
+  line-height: var(--kva-component-button-primary-line-height);
+  letter-spacing: var(--kva-component-button-primary-letter-spacing);
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.hero-cta--primary {
+  border-radius: var(--kva-component-button-primary-rounded);
+  color: var(--kva-component-button-primary-text-color);
+  background-color: var(--kva-component-button-primary-background-color);
+}
+
+.hero-cta--primary:hover {
+  background-color: var(--kva-component-button-primary-hover-background-color);
+}
+
+.hero-cta--ghost {
+  min-height: var(--kva-component-button-ghost-on-dark-min-height);
+  border: var(--kva-component-button-ghost-on-dark-outline-width) solid
+    var(--kva-component-button-ghost-on-dark-outline-stroke-color);
+  color: var(--kva-component-button-ghost-on-dark-text-color);
+  background-color: var(--kva-component-button-ghost-on-dark-background-color);
+}
+
+.hero-cta--ghost:hover {
+  color: var(--kva-component-button-ghost-on-dark-hover-text-color);
+  background-color: var(--kva-component-button-ghost-on-dark-hover-background-color);
+}
+
+.hero-cta:focus-visible {
+  outline: var(--kva-component-focus-ring-width) solid var(--kva-component-focus-ring-stroke-color);
+  outline-offset: var(--kva-spacing-rule-medium);
+}

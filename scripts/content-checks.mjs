@@ -261,7 +261,7 @@ export function checkSource(source, file, loadTemplate = readText, options = com
   return errors;
 }
 
-export function runStaticVerificationFixture(contamination = '') {
+export function runStaticVerificationFixture(contamination = '', mutateHtml = (html) => html) {
   const project = process.cwd();
   const workspace = join(project, '.agents/workspace');
   mkdirSync(workspace, { recursive: true });
@@ -281,15 +281,18 @@ export function runStaticVerificationFixture(contamination = '') {
     writeFileSync(join(browser, 'media/kva-icon.png'), 'fixture');
     writeFileSync(
       join(browser, 'index.html'),
-      `<html lang="es-MX"><head><base href="/octo-robot-kva/">
+      mutateHtml(
+        `<html lang="es-MX"><head><base href="/octo-robot-kva/">
       <title>kVA Instalaciones | Fixture</title><link rel="icon" href="media/kva-icon.png">
+      <link rel="preload" as="image" type="image/avif" imagesrcset="media/backgrounds/cover-blueprint-tools-320.avif 320w" imagesizes="100vw" fetchpriority="high">
       <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'">
-      </head><body><app-root ng-server-context="ssg"><h1>kVA Instalaciones</h1>
+      </head><body><app-root ng-server-context="ssg"><section id="inicio"><h1>kVA Instalaciones</h1><a href="#contacto">Cotiza tu proyecto</a></section>
       <section id="contacto"><img class="contact-logo" src="media/logo/kva-logo-white-40.png" alt=""><h2 id="contacto-title" tabindex="-1">Contacto</h2><h3>Ing. Alfredo Hernández</h3><button class="copy-button" hidden></button><a class="contact-cta" href="mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto">Cotiza tu proyecto</a></section>
       <section id="aviso"></section><footer>
       <a href="mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto">e</a>
       <a href="tel:+525640003344">t</a><a href="#aviso">a</a></footer></app-root>
       <script id="ng-state" type="application/json">{}</script></body></html>`,
+      ),
     );
     writeFileSync(join(browser, 'main.js'), contamination || 'console.log("fixture");');
     const result = spawnSync(process.execPath, [join(project, 'scripts/verify-static-build.mjs')], {

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { hero } from './hero.content';
 import { siteContent } from './site.content';
 import { images } from './images.content';
 import { privacyNotice } from './privacy-notice.content';
@@ -75,7 +76,9 @@ export class ContentFacade {
   readonly ui = freezeContent(uiStrings);
   readonly images = freezeContent(images);
   readonly privacy = freezeContent(privacyNotice);
+  readonly hero = freezeContent(hero);
   readonly visibleSections = populatedSections([
+    { id: 'hero', content: this.hero.headline },
     { id: 'contacto', content: this.site.contact.email },
   ]);
 

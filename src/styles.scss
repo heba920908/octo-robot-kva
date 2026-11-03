@@ -96,11 +96,27 @@ h1,
   --kva-contact-rule-right: auto;
   --kva-contact-rule-arm-left: auto;
   --kva-contact-rule-arm-right: 0;
+  --kva-hero-align: flex-start;
+  --kva-hero-text-align: left;
+  --kva-hero-logo-display: none;
+  --kva-hero-ornament-display: none;
+  --kva-hero-actions-direction: column;
+  --kva-hero-actions-align: stretch;
+  --kva-hero-actions-width: 100%;
+  --kva-hero-pad-y: var(--kva-spacing-10);
 }
 
 @media (width >= 768px) {
   :root {
     --kva-shell-margin: var(--kva-spacing-margin-tablet);
+    --kva-hero-align: center;
+    --kva-hero-text-align: center;
+    --kva-hero-logo-display: block;
+    --kva-hero-ornament-display: block;
+    --kva-hero-actions-direction: row;
+    --kva-hero-actions-align: center;
+    --kva-hero-actions-width: auto;
+    --kva-hero-pad-y: var(--kva-spacing-section-y);
   }
 }
 

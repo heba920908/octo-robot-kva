@@ -195,9 +195,12 @@ describe('US2 self-hosted fonts and typography', () => {
     }
   });
 
-  it('preloads only Quicksand and resolves CSS and preload to the same asset at both bases', async () => {
+  it('preloads only Quicksand as a font, plus the Hero image, and resolves CSS and preload to the same asset at both bases', async () => {
     const html = await readAsset('src/index.html');
-    const links = [...html.matchAll(/<link\b[^>]*rel="preload"[^>]*>/g)].map((match) => match[0]);
+    const all = [...html.matchAll(/<link\b[^>]*rel="preload"[^>]*>/g)].map((match) => match[0]);
+    const links = all.filter((link) => link.includes('as="font"'));
+    expect(all.filter((link) => link.includes('as="image"'))).toHaveLength(1);
+    expect(all).toHaveLength(2);
     expect(links).toHaveLength(1);
     expect(links[0]).toContain('href="media/fonts/quicksand-latin-wght.woff2"');
     expect(links[0]).toContain('as="font"');

@@ -92,6 +92,23 @@ if (existsSync(indexPath)) {
   check((html.match(/<h1\b/gi) ?? []).length === 1, 'Page must contain exactly one h1');
   check(html.includes('kVA Instalaciones'), 'Brand name must be prerendered');
   check(/<footer\b/i.test(html), 'Footer must be prerendered');
+  const heroSection = html.match(/<section[^>]+id="inicio"[^>]*>[\s\S]*?<\/section>/i)?.[0] ?? '';
+  check(heroSection.length > 0, 'Hero section #inicio must be prerendered');
+  check((heroSection.match(/<h1\b/gi) ?? []).length === 1, 'Hero #inicio must contain the page h1');
+  check(
+    /<a[^>]+href="#contacto"/i.test(heroSection),
+    'Hero primary CTA must link to #contacto in #inicio',
+  );
+  check(
+    !/href="#servicios"/i.test(html),
+    'No CTA may point at #servicios while the section is not rendered',
+  );
+  check(
+    /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="image")(?=[^>]*\bimagesrcset="[^"]*cover-blueprint-tools)(?=[^>]*\bfetchpriority="high")[^>]*>/i.test(
+      html,
+    ),
+    'Hero image preload link is missing',
+  );
   const contactSection =
     html.match(/<section[^>]+id="contacto"[^>]*>[\s\S]*?<\/section>/i)?.[0] ?? '';
   check(contactSection.length > 0, 'Contact section #contacto must be prerendered');

@@ -228,3 +228,22 @@ Responsive custom properties defined at `:root`, `@media (width >= 768px)` and
 Archives: `.agents/workspace/spec-kit/baselines/site@2026-10-29.json`,
 `.agents/workspace/spec-kit/data/site/`,
 `.agents/workspace/spec-kit/layout-cases/contact/`.
+
+## US7 - Hero Section
+
+### HeroContent (`hero.content.ts`, `hero.schema.json`, `content/hero.md`)
+
+`{ id: 'hero', overline, headline (<= 60), lead (<= 120), primaryCta, secondaryCta,
+proofPoint, logo: { src, src2x, width, height } }`, all required, no extra fields. Every
+`·`-separated proof-point segment MUST equal a `siteContent.facts` value (test-only check).
+
+### VisibleSection (extended)
+
+`ContentFacade.visibleSections` registers `{ id: 'hero', content: hero.headline }`. The Hero
+secondary CTA renders only when the list includes `servicios`.
+
+### Hero shell properties (`src/styles.scss`)
+
+`--kva-hero-align`, `--kva-hero-text-align`, `--kva-hero-logo-display`,
+`--kva-hero-ornament-display`, `--kva-hero-actions-direction`, `--kva-hero-actions-align` and
+`--kva-hero-pad-y`: mobile values at `:root`, centered/row/logo/ornament values at `>= 768px`.
