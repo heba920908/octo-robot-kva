@@ -45,3 +45,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-2-collapsible-sub-service-lists-on-mobile.md`
   summary: Check scroll position after collapsing a long list on real devices, and show all Sub-services when printing.
   evidence: Collapsing a 9-item list can move the toggle off-screen; collapsed cards print only four items.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-collapsible-sub-service-lists-on-mobile.md`
+  summary: Raise or remove the 5 s timeout of "matches every real original, candidate, budget and editorial alt without fabrication" in `images.content.spec.ts`.
+  evidence: Intermittent timeout under the full parallel suite (1 of 3 runs on merged epic-2); passes alone and on the Epic 1 baseline. Pre-existing test; the suite grew by about 80 tests.
