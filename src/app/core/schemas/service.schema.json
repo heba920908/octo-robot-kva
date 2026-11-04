@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://heba920908.github.io/octo-robot-kva/schemas/service.schema.json",
+  "title": "Service content",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "description", "order", "subServices"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "name": { "type": "string", "pattern": "\\S" },
+    "description": { "type": "string", "pattern": "\\S" },
+    "order": { "type": "integer", "minimum": 1 },
+    "subServices": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "\\S" }
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "alt"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "alt": { "type": "string", "pattern": "\\S" }
+      }
+    },
+    "cta": { "type": "string", "pattern": "\\S" }
+  }
+}

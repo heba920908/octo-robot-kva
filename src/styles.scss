@@ -111,6 +111,7 @@ h1,
   --kva-contact-rule-right: auto;
   --kva-contact-rule-arm-left: auto;
   --kva-contact-rule-arm-right: 0;
+  --kva-services-columns: 1;
   --kva-hero-align: flex-start;
   --kva-hero-text-align: left;
   --kva-hero-logo-display: none;
@@ -139,6 +140,7 @@ h1,
     --kva-hero-actions-align: center;
     --kva-hero-actions-width: auto;
     --kva-hero-pad-y: var(--kva-spacing-section-y);
+    --kva-services-columns: 2;
   }
 }
 
@@ -168,6 +170,12 @@ h1,
     --kva-contact-rule-right: calc(-1 * var(--kva-shell-edge));
     --kva-contact-rule-arm-left: 0;
     --kva-contact-rule-arm-right: auto;
+  }
+}
+
+@media (width >= 1440px) {
+  :root {
+    --kva-services-columns: 4;
   }
 }
 

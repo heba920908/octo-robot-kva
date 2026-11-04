@@ -1,0 +1,36 @@
+<section id="servicios" class="services" aria-labelledby="servicios-title" data-kva-surface="light">
+  <div class="services-wrap">
+    <div class="kva-section-heading">
+      <h2 id="servicios-title" class="kva-type-h1" tabindex="-1">{{ title }}</h2>
+      <span class="kva-corner-rule" aria-hidden="true"></span>
+    </div>
+    <div class="services-grid">
+      @for (service of services; track service.id) {
+        <article
+          class="service-card"
+          [attr.data-service-id]="service.id"
+          [attr.aria-labelledby]="'service-title-' + service.id"
+        >
+          @if (service.image; as image) {
+            <div class="service-image">
+              <app-responsive-image [image]="image" [sizes]="imageSizes" />
+            </div>
+          }
+          <div class="service-body">
+            <div class="service-title">
+              <span class="service-frame" aria-hidden="true"></span>
+              <h3 class="service-name" [id]="'service-title-' + service.id">{{ service.name }}</h3>
+            </div>
+            <p class="service-description kva-type-body">{{ service.description }}</p>
+            <ul class="service-list kva-type-body">
+              @for (item of service.subServices; track $index) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+            <a class="service-cta" href="#contacto">{{ service.cta || quoteLabel }}</a>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
