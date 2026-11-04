@@ -25,3 +25,13 @@
 - source_spec: `spec-1-9-mobile-menu.md`
   summary: Verify the scroll lock on iOS Safari and avoid scrollbar-gutter layout shift while the menu is open.
   evidence: Review R11: `html { overflow: hidden }` does not stop touch scrolling on iOS and removes the desktop scrollbar; only Chromium was checked.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-services-section-with-the-four-brochure-service-cards.md`
+  summary: Confirm editorial copy for the four Service descriptions and all of Servicios de Datos, then drop the `[ASSUMPTION]` flags.
+  evidence: Descriptions are agent-written from the brochure; Services 1 and 3 contain outcome phrases ("conforme a norma", "evitar paros e inspecciones fallidas") not stated in the Sub-services.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-services-section-with-the-four-brochure-service-cards.md`
+  summary: Give each Service CTA a distinct accessible name once Epic 3 wires the composer pre-fill.
+  evidence: All four links read the same text and go to `#contacto` (WCAG 2.4.4 link purpose); real until Epic 3 replaces them.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-services-section-with-the-four-brochure-service-cards.md`
+  summary: Automated layout check for the Services grid column counts and CTA alignment.
+  evidence: Verified today by regex on SCSS plus a manual browser pass; the repo has no browser test harness and AGENTS.md forbids adding Playwright without a story.
