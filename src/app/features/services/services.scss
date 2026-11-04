@@ -97,6 +97,30 @@
   margin-top: var(--kva-spacing-2);
 }
 
+.service-toggle {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--kva-spacing-1);
+  min-height: var(--kva-component-button-text-min-height);
+  padding: 0;
+  border: 0;
+  color: var(--kva-component-button-text-text-color);
+  background-color: var(--kva-component-button-text-background-color);
+  font:
+    var(--kva-component-button-text-font-weight) var(--kva-component-button-text-font-size) /
+      var(--kva-component-button-text-line-height) var(--kva-component-button-text-font-family),
+    'Outfit Fallback',
+    sans-serif;
+  letter-spacing: var(--kva-component-button-text-letter-spacing);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.service-toggle[aria-expanded='true'] mat-icon {
+  transform: rotate(180deg);
+}
+
 .service-cta {
   box-sizing: border-box;
   display: inline-flex;
@@ -130,6 +154,7 @@
 }
 
 h2:focus-visible,
+.service-toggle:focus-visible,
 .service-cta:focus-visible {
   outline: var(--kva-component-focus-ring-on-light-width) solid
     var(--kva-component-focus-ring-on-light-stroke-color);
