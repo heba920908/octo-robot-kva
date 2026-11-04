@@ -71,6 +71,23 @@ describe('EffectRunner focus, scroll and navigate (1.8-AC-03, AC-04)', () => {
   });
 });
 
+describe('EffectRunner layer executor (1.9-AC-03, AC-04)', () => {
+  it('delegates open and close to the layer controller and reports whether they had effect', () => {
+    const runner = TestBed.inject(EffectRunner);
+    const layers = TestBed.inject(LayerController);
+    const open = vi.spyOn(layers, 'open').mockReturnValue(true);
+    const close = vi.spyOn(layers, 'close').mockReturnValue(false);
+
+    expect(runner.layer({ kind: 'layer', action: 'open', overlay: 'mobile-menu' })).toBe(true);
+    expect(open).toHaveBeenCalledExactlyOnceWith('mobile-menu');
+    expect(close).not.toHaveBeenCalled();
+
+    expect(runner.layer({ kind: 'layer', action: 'close', overlay: 'mobile-menu' })).toBe(false);
+    expect(close).toHaveBeenCalledExactlyOnceWith('mobile-menu');
+    vi.restoreAllMocks();
+  });
+});
+
 describe('EffectRunner (1.6-AC-03, AC-04, AC-05)', () => {
   let runner: EffectRunner;
   let doc: Document;

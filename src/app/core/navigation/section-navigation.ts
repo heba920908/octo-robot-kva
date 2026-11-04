@@ -16,7 +16,7 @@ export function sectionDomId(section: SectionId): string {
   return section === 'hero' ? 'inicio' : section;
 }
 
-function isPlainClick(event: MouseEvent): boolean {
+export function isPlainClick(event: MouseEvent): boolean {
   return (
     !event.defaultPrevented &&
     event.button === 0 &&

@@ -285,6 +285,21 @@ describe('production validation exclusion (AC5)', () => {
       'Header must not link to #servicios',
     ],
     [
+      'the menu navigation landmark',
+      (html: string) => html.replace('aria-label="Secciones"', 'aria-label="Otro"'),
+      'Header must prerender one nav#menu-movil named "Secciones"',
+    ],
+    [
+      'the hidden menu button',
+      (html: string) => html.replace('type="button" hidden', 'type="button"'),
+      'Header must prerender the hidden menu button controlling #menu-movil',
+    ],
+    [
+      'the menu button control reference',
+      (html: string) => html.replace('aria-controls="menu-movil"', 'aria-controls="otro"'),
+      'Header must prerender the hidden menu button controlling #menu-movil',
+    ],
+    [
       'the main focus target',
       (html: string) => html.replace('<main id="main" tabindex="-1">', '<main id="main">'),
       'main#main must be prerendered with tabindex="-1"',

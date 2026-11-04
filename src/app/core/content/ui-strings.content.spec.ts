@@ -88,6 +88,8 @@ describe('UI strings content (AC1)', () => {
   it.each(
     Object.entries({
       headerWordmark: 'Instalaciones',
+      menu: 'Menú',
+      menuNavLabel: 'Secciones',
       headerContact: 'Cotiza tu proyecto',
       headerContactShort: 'Cotiza',
       navServices: 'Servicios',

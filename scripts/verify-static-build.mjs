@@ -111,6 +111,17 @@ if (existsSync(indexPath)) {
   );
   check(!/href="#servicios"/i.test(headerRegion), 'Header must not link to #servicios');
   check(
+    (headerRegion.match(/<nav\b/gi) ?? []).length === 1 &&
+      /<nav\b(?=[^>]*\bid="menu-movil")(?=[^>]*\baria-label="Secciones")[^>]*>/i.test(headerRegion),
+    'Header must prerender one nav#menu-movil named "Secciones"',
+  );
+  check(
+    /<button\b(?=[^>]*\bid="menu-toggle")(?=[^>]*\bhidden\b)(?=[^>]*\baria-controls="menu-movil")(?=[^>]*\baria-expanded="false")(?=[^>]*\baria-label="Menú")[^>]*>/i.test(
+      headerRegion,
+    ),
+    'Header must prerender the hidden menu button controlling #menu-movil',
+  );
+  check(
     /<main\b(?=[^>]*\bid="main")(?=[^>]*\btabindex="-1")[^>]*>/i.test(html),
     'main#main must be prerendered with tabindex="-1"',
   );

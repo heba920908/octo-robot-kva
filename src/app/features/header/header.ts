@@ -1,3 +1,4 @@
+import { FocusTrapFactory } from '@angular/cdk/a11y';
 import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -5,10 +6,15 @@ import {
   DestroyRef,
   ElementRef,
   afterNextRender,
+  computed,
+  effect,
   inject,
   signal,
+  viewChild,
 } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 import { ContentFacade } from '../../core/content/content-facade';
+import { MobileMenu } from '../../core/navigation/mobile-menu';
 import {
   CONDENSED_ATTRIBUTE,
   SectionNavigation,
@@ -17,16 +23,21 @@ import {
 
 const THRESHOLD_TOKEN = '--kva-spacing-header-threshold';
 const THRESHOLD_FALLBACK = 24;
+const MENU_BUTTON_DISPLAY_TOKEN = '--kva-header-menu-button-display';
 
 @Component({
   selector: 'app-header',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatIcon],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
   private readonly content = inject(ContentFacade);
   private readonly navigation = inject(SectionNavigation);
+  private readonly menu = inject(MobileMenu);
+  private readonly focusTrapFactory = inject(FocusTrapFactory);
+  private readonly bar = viewChild.required<ElementRef<HTMLElement>>('bar');
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -50,13 +61,24 @@ export class Header {
       { id: 'contacto', label: this.content.format('navContact') },
     ] as const
   ).filter((link) => this.content.visibleSections.includes(link.id));
+  protected readonly menuLabel = this.content.format('menu');
+  protected readonly navLabel = this.content.format('menuNavLabel');
+  protected readonly menuOpen = this.menu.open;
+  protected readonly menuIcon = computed(() => (this.menu.open() ? 'close' : 'menu'));
   protected readonly current = this.navigation.current;
   protected readonly enhanced = signal(false);
   protected readonly condensed = signal(false);
 
   constructor() {
     afterNextRender(() => this.enhance());
+    // While the menu is open the whole header (bar and sheet) is the focus trap region.
+    effect((onCleanup) => {
+      if (!this.menu.open()) return;
+      const trap = this.focusTrapFactory.create(this.bar().nativeElement);
+      onCleanup(() => trap.destroy());
+    });
     this.destroyRef.onDestroy(() => {
+      this.menu.dispatch({ type: 'close' });
       this.observer?.disconnect();
       this.document.documentElement.removeAttribute(CONDENSED_ATTRIBUTE);
     });
@@ -72,6 +94,14 @@ export class Header {
       THRESHOLD_FALLBACK;
 
     const observe = () => this.observeSections(view);
+    // A viewport that no longer shows the menu button has no menu to keep open.
+    const closeWhenWide = () => {
+      if (
+        view.getComputedStyle(root).getPropertyValue(MENU_BUTTON_DISPLAY_TOKEN).trim() === 'none'
+      ) {
+        this.menu.dispatch({ type: 'close' });
+      }
+    };
     const onScroll = () => {
       const next = view.scrollY > threshold;
       if (next === this.condensed()) return;
@@ -81,15 +111,19 @@ export class Header {
       observe();
     };
 
+    // The menu listener goes first so a link choice closes the menu before navigation scrolls.
+    this.destroyRef.onDestroy(this.menu.listen(this.host.nativeElement));
     this.destroyRef.onDestroy(this.navigation.listen(this.host.nativeElement));
     this.enhanced.set(true);
     onScroll();
     observe();
     view.addEventListener('scroll', onScroll, { passive: true });
     view.addEventListener('resize', observe);
+    view.addEventListener('resize', closeWhenWide);
     this.destroyRef.onDestroy(() => {
       view.removeEventListener('scroll', onScroll);
       view.removeEventListener('resize', observe);
+      view.removeEventListener('resize', closeWhenWide);
     });
   }
 

@@ -13,6 +13,7 @@
     "navTrust",
     "navContact",
     "menu",
+    "menuNavLabel",
     "headerContact",
     "headerContactShort",
     "servicesTitle",
@@ -166,6 +167,9 @@
       "$ref": "#/$defs/plain"
     },
     "menu": {
+      "$ref": "#/$defs/plain"
+    },
+    "menuNavLabel": {
       "$ref": "#/$defs/plain"
     },
     "headerContact": {

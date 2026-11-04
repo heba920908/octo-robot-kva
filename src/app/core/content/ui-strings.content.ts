@@ -8,6 +8,7 @@ export const uiStrings = {
   navTrust: { text: 'Confianza', parameters: [] },
   navContact: { text: 'Contacto', parameters: [] },
   menu: { text: 'Menú', parameters: [] },
+  menuNavLabel: { text: 'Secciones', parameters: [] },
   headerContact: { text: 'Cotiza tu proyecto', parameters: [] },
   headerContactShort: { text: 'Cotiza', parameters: [] },
   servicesTitle: { text: 'Servicios integrales de instalaciones eléctricas', parameters: [] },

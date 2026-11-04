@@ -1,5 +1,7 @@
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { readFileSync } from 'node:fs';
+import { appConfig } from '../../app.config';
 import { ContentFacade } from '../../core/content/content-facade';
 import { LayerController } from '../../core/layers/layers';
 import { SectionNavigation } from '../../core/navigation/section-navigation';
@@ -40,7 +42,10 @@ class FakeObserver {
 
 describe('Header (1.8-AC-01, AC-02, AC-04)', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [Header, SkipLink] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [Header, SkipLink],
+      providers: [...appConfig.providers, provideHttpClientTesting()],
+    }).compileComponents();
   });
 
   it('renders the logo link to #inicio named by aria-label with a decorative image (AC-01)', () => {
@@ -61,7 +66,7 @@ describe('Header (1.8-AC-01, AC-02, AC-04)', () => {
   it('links only to visible sections, and the CTA goes to #contacto in both label forms (AC-01)', () => {
     const { element } = render(['hero', 'contacto']);
     const links = Array.from(element.querySelectorAll<HTMLAnchorElement>('a.header-link'));
-    const cta = element.querySelector('a.header-cta') as HTMLAnchorElement;
+    const cta = element.querySelector('a.header-cta:not(.header-cta-sheet)') as HTMLAnchorElement;
 
     expect(links.map((link) => link.getAttribute('href'))).toEqual(['#contacto']);
     expect(links[0].textContent?.trim()).toBe('Contacto');
@@ -93,10 +98,52 @@ describe('Header (1.8-AC-01, AC-02, AC-04)', () => {
     expect(element.querySelectorAll('a.header-link')).toHaveLength(0);
   });
 
-  it('has no menu button, inert or dialog (Story 1.9 scope)', () => {
-    const { element } = render();
+  it('renders one nav#menu-movil named Secciones holding the links and the sheet CTA (1.9-AC-01)', () => {
+    const { element } = render(['hero', 'servicios', 'contacto']);
+    const navs = element.querySelectorAll('nav');
+    const nav = element.querySelector('nav#menu-movil') as HTMLElement;
 
-    expect(element.querySelector('button, [inert], dialog')).toBeNull();
+    expect(navs).toHaveLength(1);
+    expect(nav.getAttribute('aria-label')).toBe('Secciones');
+    expect(nav.querySelectorAll('a.header-link')).toHaveLength(2);
+    const sheetCta = nav.querySelector('a.header-cta-sheet') as HTMLAnchorElement;
+    expect(sheetCta.getAttribute('href')).toBe('#contacto');
+    expect(sheetCta.dataset['sectionTarget']).toBe('contacto');
+    expect(sheetCta.textContent?.trim()).toBe('Cotiza tu proyecto');
+    expect(element.querySelectorAll('a.header-cta')).toHaveLength(2);
+    expect(element.querySelector('dialog')).toBeNull();
+    expect(element.querySelector('[inert]')).toBeNull();
+  });
+
+  it('keeps DOM (Tab) order logo, nav, bar CTA, menu button to match the desktop visual order', () => {
+    const { element } = render(['hero', 'servicios', 'contacto']);
+    const logo = element.querySelector('a.header-logo') as HTMLElement;
+    const nav = element.querySelector('nav#menu-movil') as HTMLElement;
+    const barCta = element.querySelector('a.header-cta:not(.header-cta-sheet)') as HTMLElement;
+    const toggle = element.querySelector('button#menu-toggle') as HTMLElement;
+    const follows = (a: Element, b: Element) =>
+      Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+
+    expect(follows(logo, nav)).toBe(true);
+    expect(follows(nav, barCta)).toBe(true);
+    expect(follows(barCta, toggle)).toBe(true);
+    expect(nav.contains(barCta)).toBe(false);
+  });
+
+  it('prerenders a hidden "Menú" button with a constant name and collapsed state (1.9-AC-01, AC-06)', () => {
+    const { fixture, element } = render();
+    const button = element.querySelector('button#menu-toggle') as HTMLButtonElement;
+    (fixture.componentInstance as unknown as { enhanced: { set(v: boolean): void } }).enhanced.set(
+      false,
+    );
+    fixture.detectChanges();
+
+    expect(button.hidden).toBe(true);
+    expect(button.getAttribute('aria-label')).toBe('Menú');
+    expect(button.getAttribute('aria-controls')).toBe('menu-movil');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+    expect(button.hasAttribute('data-menu-toggle')).toBe(true);
+    expect(button.type).toBe('button');
   });
 
   describe('enhancement', () => {
@@ -240,10 +287,198 @@ describe('Header (1.8-AC-01, AC-02, AC-04)', () => {
         'a.header-cta',
       ) as HTMLAnchorElement;
       const event = new MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true });
+      // Record the header's verdict, then stop jsdom from really navigating (it would fire
+      // a late popstate into whichever test runs next).
+      let preventedByHeader = true;
+      const record = (clicked: Event) => {
+        preventedByHeader = clicked.defaultPrevented;
+        clicked.preventDefault();
+      };
+      document.addEventListener('click', record, { once: true });
 
       link.dispatchEvent(event);
 
-      expect(event.defaultPrevented).toBe(false);
+      expect(preventedByHeader).toBe(false);
+    });
+
+    describe('mobile menu (1.9-AC-03..05)', () => {
+      let main: HTMLElement;
+      let footer: HTMLElement;
+      let section: HTMLElement;
+      let heading: HTMLElement;
+
+      beforeEach(() => {
+        window.history.replaceState(null, '', '/');
+        main = document.createElement('main');
+        section = document.createElement('section');
+        section.id = 'contacto';
+        heading = document.createElement('h2');
+        heading.id = 'contacto-title';
+        heading.tabIndex = -1;
+        section.append(heading);
+        section.scrollIntoView = vi.fn();
+        main.append(section);
+        footer = document.createElement('footer');
+        document.body.append(main, footer);
+      });
+
+      afterEach(() => {
+        main.remove();
+        footer.remove();
+        window.history.replaceState(null, '', '/');
+      });
+
+      const iconName = (element: HTMLElement) =>
+        element.querySelector('#menu-toggle mat-icon')?.getAttribute('data-mat-icon-name');
+
+      async function renderEnhanced() {
+        const fixture = TestBed.createComponent(Header);
+        document.body.appendChild(fixture.nativeElement);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        const element = fixture.nativeElement as HTMLElement;
+        const toggle = element.querySelector('#menu-toggle') as HTMLButtonElement;
+        const click = (target: Element, init: MouseEventInit = {}) =>
+          target.dispatchEvent(
+            new MouseEvent('click', { bubbles: true, cancelable: true, button: 0, ...init }),
+          );
+        return { fixture, element, toggle, click };
+      }
+
+      it('shows the button after hydration and opens the sheet from the toggle (AC-03)', async () => {
+        const { fixture, element, toggle, click } = await renderEnhanced();
+        const push = vi.spyOn(window.history, 'pushState');
+        expect(toggle.hidden).toBe(false);
+        expect(iconName(element)).toBe('menu');
+
+        click(toggle);
+        await fixture.whenStable();
+
+        expect(toggle.getAttribute('aria-expanded')).toBe('true');
+        expect(element.querySelector('header')?.classList.contains('is-menu-open')).toBe(true);
+        expect(main.hasAttribute('inert')).toBe(true);
+        expect(footer.hasAttribute('inert')).toBe(true);
+        expect(document.documentElement.getAttribute('data-kva-layer')).toBe('mobile-menu');
+        expect(push).toHaveBeenCalledTimes(1);
+        expect(window.history.state).toEqual({ kvaLayer: 'mobile-menu' });
+        expect(toggle.getAttribute('aria-label')).toBe('Menú');
+        expect(element.querySelectorAll('.cdk-focus-trap-anchor')).toHaveLength(2);
+        expect(iconName(element)).toBe('close');
+        fixture.destroy();
+      });
+
+      it('closes from the toggle: focus on the toggle, trap removed, page released (AC-04)', async () => {
+        const { fixture, element, toggle, click } = await renderEnhanced();
+        click(toggle);
+        await fixture.whenStable();
+
+        click(toggle);
+        await fixture.whenStable();
+
+        expect(toggle.getAttribute('aria-expanded')).toBe('false');
+        expect(iconName(element)).toBe('menu');
+        expect(document.activeElement).toBe(toggle);
+        expect(main.hasAttribute('inert')).toBe(false);
+        expect(document.documentElement.hasAttribute('data-kva-layer')).toBe(false);
+        expect(element.querySelectorAll('.cdk-focus-trap-anchor')).toHaveLength(0);
+        fixture.destroy();
+      });
+
+      it('closes on Esc and returns focus to the toggle (AC-04)', async () => {
+        const { fixture, toggle, click } = await renderEnhanced();
+        click(toggle);
+        await fixture.whenStable();
+
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        await fixture.whenStable();
+
+        expect(toggle.getAttribute('aria-expanded')).toBe('false');
+        expect(document.activeElement).toBe(toggle);
+        fixture.destroy();
+      });
+
+      it('closes on browser Back and returns focus to the toggle (AC-04)', async () => {
+        const { fixture, toggle, click } = await renderEnhanced();
+        click(toggle);
+        await fixture.whenStable();
+
+        window.history.back();
+        await new Promise((resolve) =>
+          window.addEventListener('popstate', resolve, { once: true }),
+        );
+        await fixture.whenStable();
+
+        expect(toggle.getAttribute('aria-expanded')).toBe('false');
+        expect(document.activeElement).toBe(toggle);
+        expect(main.hasAttribute('inert')).toBe(false);
+        expect(window.history.state).toBeNull();
+        fixture.destroy();
+      });
+
+      it.each([
+        ['nav link', 'a.header-link'],
+        ['sheet CTA', 'a.header-cta-sheet'],
+        ['bar CTA', 'a.header-cta:not(.header-cta-sheet)'],
+      ])(
+        'closes before section navigation focuses the heading and sets the fragment from the %s (AC-05)',
+        async (_name, selector) => {
+          const { fixture, element, toggle, click } = await renderEnhanced();
+          const push = vi.spyOn(window.history, 'pushState');
+          const back = vi.spyOn(window.history, 'back');
+          click(toggle);
+          await fixture.whenStable();
+          expect(push).toHaveBeenCalledTimes(1);
+          const link = element.querySelector(selector) as HTMLAnchorElement;
+
+          click(link);
+          await fixture.whenStable();
+          await new Promise((resolve) =>
+            window.addEventListener('popstate', resolve, { once: true }),
+          );
+          await new Promise((resolve) => setTimeout(resolve, 0));
+          await fixture.whenStable();
+
+          expect(toggle.getAttribute('aria-expanded')).toBe('false');
+          expect(main.hasAttribute('inert')).toBe(false);
+          expect(document.activeElement).toBe(heading);
+          expect(section.scrollIntoView).toHaveBeenCalledTimes(1);
+          expect(window.location.hash).toBe('#contacto');
+          expect(back).toHaveBeenCalledTimes(1);
+          expect(push).toHaveBeenCalledTimes(1);
+          fixture.destroy();
+        },
+      );
+
+      it('closes when the viewport grows past the menu breakpoint', async () => {
+        const { fixture, toggle, click } = await renderEnhanced();
+        click(toggle);
+        await fixture.whenStable();
+        const root = document.documentElement;
+
+        root.style.setProperty('--kva-header-menu-button-display', 'inline-flex');
+        window.dispatchEvent(new Event('resize'));
+        expect(toggle.getAttribute('aria-expanded')).toBe('true');
+
+        root.style.setProperty('--kva-header-menu-button-display', 'none');
+        window.dispatchEvent(new Event('resize'));
+        await fixture.whenStable();
+
+        expect(toggle.getAttribute('aria-expanded')).toBe('false');
+        expect(main.hasAttribute('inert')).toBe(false);
+        root.style.removeProperty('--kva-header-menu-button-display');
+        fixture.destroy();
+      });
+
+      it('releases the page when destroyed while open', async () => {
+        const { fixture, toggle, click } = await renderEnhanced();
+        click(toggle);
+        await fixture.whenStable();
+
+        fixture.destroy();
+
+        expect(main.hasAttribute('inert')).toBe(false);
+        expect(document.documentElement.hasAttribute('data-kva-layer')).toBe(false);
+      });
     });
 
     it('disconnects the observer and clears the root attribute on destroy', async () => {
@@ -270,14 +505,21 @@ describe('Header (1.8-AC-01, AC-02, AC-04)', () => {
     expect(scss).toContain('var(--kva-component-divider-on-dark-stroke-color)');
     expect(scss).toContain('var(--kva-component-nav-link-current-stroke-color)');
     expect(scss).not.toMatch(/@media/);
+    expect(scss).toContain('var(--kva-component-mobile-menu-background-color)');
+    expect(scss).toContain('var(--kva-component-mobile-menu-min-height)');
     expect(shell).toContain(
       '--kva-shell-header-offset: var(--kva-component-header-condensed-min-height)',
     );
     for (const property of [
       '--kva-header-wordmark-display: none',
       '--kva-header-wordmark-display: inline',
-      '--kva-header-links-display: none',
+      '--kva-header-links-display: block',
       '--kva-header-links-display: flex',
+      '--kva-header-menu-button-display: inline-flex',
+      '--kva-header-menu-button-display: none',
+      '--kva-header-nav-enhanced-display: none',
+      '--kva-header-nav-enhanced-display: flex',
+      'html[data-kva-layer]',
       '--kva-header-cta-short-display: inline',
       '--kva-header-cta-full-display: inline',
     ]) {

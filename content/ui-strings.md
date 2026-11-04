@@ -15,6 +15,7 @@ EXPERIENCE; Hero copy remains Hero-owned. Future controls are data only.
 | `navTrust`             | Confianza                                                             | -               |
 | `navContact`           | Contacto                                                              | -               |
 | `menu`                 | Menú                                                                  | -               |
+| `menuNavLabel`         | Secciones                                                             | -               |
 | `headerContact`        | Cotiza tu proyecto                                                    | -               |
 | `headerContactShort`   | Cotiza                                                                | -               |
 | `servicesTitle`        | Servicios integrales de instalaciones eléctricas                      | -               |

@@ -1,10 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject, type OnDestroy } from '@angular/core';
-import { LayerController } from '../layers/layers';
+import { LayerController, type LayerId } from '../layers/layers';
 
 /** Closed effect union; only the effect runner executes these. */
 
-export type OverlayId = 'mobile-menu' | 'contact-composer' | 'project-detail' | 'privacy-notice';
+export type OverlayId = LayerId;
 
 /** Move keyboard focus to the element whose id is `target`; `preventScroll` leaves motion to a scroll effect. */
 export interface FocusEffect {
@@ -83,6 +83,13 @@ export class EffectRunner implements OnDestroy {
   /** Only history replacement exists; a new entry is never created. */
   navigate(effect: NavigateEffect): boolean {
     return effect.replace && this.layers.replaceFragment(effect.fragment);
+  }
+
+  /** Open or close an overlay through the layer controller; false when it had no effect. */
+  layer(effect: LayerEffect): boolean {
+    return effect.action === 'open'
+      ? this.layers.open(effect.overlay)
+      : this.layers.close(effect.overlay);
   }
 
   async copy(effect: CopyEffect): Promise<boolean> {

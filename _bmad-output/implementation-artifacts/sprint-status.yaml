@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 10-27-2026 17:02
-last_updated: 2026-11-03
+last_updated: 2026-11-04
 project: agency-portfolio
 project_key: NOKEY
 tracking_system: file-system
@@ -44,7 +44,7 @@ development_status:
   1-6-contact-section-with-direct-links-and-copy-address-fallback: review
   1-7-hero-section: review
   1-8-sticky-header-and-section-navigation: review
-  1-9-mobile-menu: backlog
+  1-9-mobile-menu: review
   epic-1-retrospective: optional
 
   epic-2: backlog

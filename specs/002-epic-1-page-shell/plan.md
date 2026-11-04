@@ -336,3 +336,27 @@ Constitution pre/post-design: PASS. II by the `section-navigation` model and its
 adapter tests; III test-first colocated specs; IV token-fed SCSS with shell custom properties;
 V standalone `OnPush` and signals; VI native anchors without JavaScript, 44 px targets, reduced
 motion honored. US9 remains unplanned. No commit, branch or publication is authorized.
+
+## US9 Plan (2026-11-04)
+
+The approved Story 1.9 spec is the sole implementation intent. Follow
+[contracts/mobile-menu.md](contracts/mobile-menu.md). No new dependencies (`@angular/cdk` is
+installed).
+
+1. T064: Clarify/plan US9 in spec.md, plan.md, data-model.md, tasks.md and the contract.
+2. T065: Test then add `behaviors/mobile-menu.behavior.ts` (`1.9-AC-02`..`1.9-AC-05`).
+3. T066: Test then extend `core/layers/layers.ts` (open/close/Back, serialized history, inert,
+   scroll lock, guard) and add the `layer` executor to `EffectRunner` (`1.9-AC-03`, `1.9-AC-04`).
+4. T067: Test then add the `MobileMenu` adapter in `core/navigation/mobile-menu.ts`
+   (`1.9-AC-02`..`1.9-AC-05`).
+5. T068: Test then add the `menuNavLabel` UI string (`1.9-AC-01`).
+6. T069: Test then implement the `features/header` toggle, sheet, focus trap and wide-resize close,
+   plus the shell properties and scroll lock in `styles.scss` (`1.9-AC-01`, `1.9-AC-03`..`1.9-AC-06`).
+7. T070: Extend the static verifier, content checks and template fixtures (`1.9-AC-01`, `1.9-AC-06`).
+8. T071: Full gates, browser matrix, review; advance only Story 1.9.
+
+Constitution pre/post-design: PASS. II by the `mobile-menu` model and its table and adapter tests;
+III test-first colocated specs and JSONL flow log; IV token-fed SCSS (`mobile-menu` component
+tokens, no token changes); V standalone `OnPush` and signals; VI native anchors without JavaScript,
+44 px targets, 56 px rows, reduced motion honored. AD-5: `pushState`, `history.back` and `popstate`
+exist only in `core/layers`. No commit, branch or publication is authorized.

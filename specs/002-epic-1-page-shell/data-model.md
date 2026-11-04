@@ -269,3 +269,30 @@ secondary CTA renders only when the list includes `servicios`.
 the condensed `--kva-shell-header-offset` (`<html data-kva-header="condensed">`), `--kva-shell-z-header`,
 `--kva-shell-z-skip`, `--kva-header-transition` (`none` under reduced motion) and `--kva-hero-pt`
 (Hero top padding clearing the header).
+
+## US9 - Mobile Menu
+
+### MobileMenuState / Event (`mobile-menu.behavior.ts`)
+
+`{ open: boolean }`. Events: `open`, `close`, `toggle`, `escape`, `back`,
+`choose-link { target, visible }`. Effects come only from the closed `Effect` union: `layer`
+(`overlay: 'mobile-menu'`) and `focus` (`target: 'menu-toggle'`). Unsupported pairs return `null`.
+
+### LayerController additions (`core/layers/layers.ts`)
+
+`active: Signal<OverlayId | null>`, `open(overlay)`, `close(overlay)` and `onBack(handler)`.
+History operations are completion-aware: `history.back()` completes on `popstate` (500 ms
+fallback). `inert` is set only on `main` and `footer` elements that were not already inert;
+`<html data-kva-layer="<overlay>">` locks scrolling.
+
+### Content additions
+
+`ui-strings`: `menuNavLabel` "Secciones" (the `menu` string "Menú" already exists).
+
+### Header shell properties (`src/styles.scss`)
+
+`--kva-header-links-display` (nav without JS: `block` < 1024, `flex` >= 1024),
+`--kva-header-menu-button-display` (`inline-flex` < 1024, `none` >= 1024),
+`--kva-header-nav-enhanced-display` (`none` < 1024, `flex` >= 1024),
+`--kva-header-inner-wrap`, `--kva-header-nav-flex` and `--kva-header-nav-order` (the no-JS
+wrapped row), and `html[data-kva-layer]` (scroll lock).

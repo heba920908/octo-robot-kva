@@ -1,7 +1,7 @@
 # Tasks: Epic 1, US1-US4 / BMAD Stories 1.1-1.4
 
 Scope: US1-US4, as allowed by constitution v2.0.0. US4 is approved and implemented;
-US5-US9 remain drafted and are not authorized for implementation by this task list.
+US5-US9 were drafted here; each was authorized by its own approved story spec.
 Sources: Stories 1.1-1.4 implementation specs and this feature's plan, research,
 data model and contracts. A drafted BMAD spec is not implementation authorization.
 
@@ -227,3 +227,26 @@ FR-019 (PRD FR1-FR3) and Story 1.8 AC1-5 govern; US9 remains unplanned.
 | AC3        | T056-T059, T063              |
 | AC4        | T056, T058, T059, T061, T063 |
 | AC5        | T056, T061-T063              |
+
+## US9 - Mobile Menu
+
+The approved Story 1.9 spec authorizes US9 only. Execute sequentially, test first.
+FR-020 (PRD FR1, UX-DR10/30) and Story 1.9 AC1-6 govern.
+
+- [x] T064 [US9] Clarify/plan spec.md, plan.md, data-model.md, tasks.md and contracts/mobile-menu.md before Act (AC1-6).
+- [x] T065 [US9] Test first then add behaviors/mobile-menu.behavior.ts/.spec.ts (AC2-5).
+- [x] T066 [US9] Test first then extend core/layers/layers.ts/.spec.ts and add the EffectRunner `layer` executor (AC3, AC4).
+- [x] T067 [US9] Test first then add core/navigation/mobile-menu.ts/.spec.ts adapter and export isPlainClick (AC2-5).
+- [x] T068 [US9] Test first then add the `menuNavLabel` UI string in content/ui-strings.md, ui-strings.content.ts and the schema (AC1).
+- [x] T069 [US9] Test first then implement features/header toggle, sheet, focus trap, wide-resize close and the styles.scss shell properties (AC1, AC3-6).
+- [x] T070 [US9] Extend scripts/verify-static-build.mjs, scripts/content-checks.mjs fixture and template-content.spec.ts (AC1, AC6).
+- [x] T071 [US9] Full gates, browser checks at 360x640/320/768/1023/1024/1440 and no-JS, review; advance only Story 1.9 (AC1-6).
+
+| Acceptance | Tasks                  |
+| ---------- | ---------------------- |
+| AC1        | T064, T068-T071        |
+| AC2        | T064-T067, T071        |
+| AC3        | T064, T066, T069, T071 |
+| AC4        | T064-T067, T069, T071  |
+| AC5        | T064-T067, T069, T071  |
+| AC6        | T064, T069-T071        |

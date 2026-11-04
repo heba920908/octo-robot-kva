@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: US1-US8 implemented, verified and reviewed; US9 drafted
+**Status**: US1-US8 implemented, verified and reviewed; US9 clarified, planned and implemented (review pending)
 
 **Input**: BMAD Epic 1 in
 [epics.md](../../_bmad-output/planning-artifacts/epics.md) (Stories 1.1–1.9). Constitution
@@ -31,7 +31,7 @@ pattern.
 | US6        | 1.6        | Contact section with direct links and copy-address fallback | Implemented, verified and reviewed |
 | US7        | 1.7        | Hero section                                                | Implemented, verified and reviewed |
 | US8        | 1.8        | Sticky header and section navigation                        | Implemented, verified and reviewed |
-| US9        | 1.9        | Mobile menu                                                 | Drafted                            |
+| US9        | 1.9        | Mobile menu                                                 | Clarified, implemented (review)    |
 
 A drafted story MUST be clarified (`speckit-clarify`) and added to [plan.md](./plan.md)
 (`speckit-plan`) before it enters Act. The BMAD story's Given/When/Then criteria in
@@ -450,6 +450,19 @@ choose a link, and check focus and history each time.
 6. **Given** the `mobile-menu` model, **When** table-driven tests call its production
    transition function, **Then** every supported and unsupported result is asserted and the
    adapter applies returned state/effects once (AD-7; BMAD `1.9-AC-02`).
+
+**Clarification (2026-11-04)**: The approved Story 1.9 spec resolves all critical ambiguities;
+no questions remain. Add the `mobile-menu` model (`open`, `close`, `toggle`, `escape`, `back`,
+`choose-link`), a root `MobileMenu` adapter, and extend `core/layers` with `open`/`close`
+(`pushState`, guarded `history.back()`, `inert` on `main`/`footer`, `<html data-kva-layer>` scroll
+lock, a Back notification and completion-aware serialized history operations). `EffectRunner`
+gains a `layer` executor. The header's single `<nav id="menu-movil" aria-label="Secciones">`
+becomes the sheet below 1024 px; the toggle is hidden until hydration, and without JavaScript the
+nav stays a wrapped row. Focus stays on the toggle on open, the bar CTA stays visible while open,
+the sheet CTA is hidden outside the sheet, and only one overlay is active at a time. Add the
+`menuNavLabel` UI string ("Secciones").
+
+**Planning contract**: [contracts/mobile-menu.md](contracts/mobile-menu.md).
 
 ### Edge Cases
 

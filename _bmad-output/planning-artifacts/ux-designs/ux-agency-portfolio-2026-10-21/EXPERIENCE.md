@@ -179,6 +179,7 @@ at 320px. The lead names the buyer risks (§2.4): downtime, failed inspections, 
 | Logo link name (header) | kVA Instalaciones |
 | Nav links | Servicios · Proyectos · Nosotros · Confianza · Contacto |
 | Menu button (name, constant) | Menú |
+| Menu navigation landmark (name) | Secciones |
 | Header contact CTA | Cotiza tu proyecto (< 768 visible text: "Cotiza") |
 | Hero overline | Explorando soluciones |
 | Hero headline | Instalaciones eléctricas para empresas, conforme a norma |
