@@ -2,8 +2,9 @@
 title: 'Story 2.2: Collapsible Sub-Service Lists on Mobile'
 type: 'feature'
 created: '2026-11-04'
-status: 'ready-for-dev'
+status: 'in-progress'
 route: 'dispatch'
+baseline_commit: 'e294294caf4812a30bd843793c52685727e9a78e'
 story_key: '2-2-collapsible-sub-service-lists-on-mobile'
 review_loop_iteration: 0
 context:
@@ -53,7 +54,7 @@ context:
 
 **Execution:**
 
-- [ ] `behaviors/service-card-disclosure.behavior.ts` + spec -- tests first; table-driven expand/collapse/focus effect/`null` cases (2.2-AC-01)
+- [x] `behaviors/service-card-disclosure.behavior.ts` + spec -- tests first; table-driven expand/collapse/focus effect/`null` cases (2.2-AC-01)
 - [ ] `features/services/*` (after Story 2.1 is merged) -- tests first; per-card adapter, viewport read, toggle, chevron, styles (2.2-AC-02..04)
 - [ ] `scripts/verify-static-build.mjs`, `template-content.spec.ts` -- assert prerendered HTML has every Sub-service and no toggle (2.2-AC-04)
 - [ ] This spec, `specs/003-epic-2-services-catalogue/*` ticks for T206-T208 only -- full gates, browser matrix, review
@@ -66,6 +67,9 @@ context:
 - Given ≥ 768 px or no JS, when the card renders, then the full list shows and no toggle is rendered or visible (2.2-AC-04).
 
 ## Implementation Notes
+
+- Phase A done (task 1): `src/app/behaviors/service-card-disclosure.behavior.ts` and its table-driven spec. The model returns `null` for a blank/non-string `toggleId`, a missing or non-boolean `expanded`, a missing event, unknown event types, `expand` while expanded and `collapse` while collapsed. Effects are `[focus toggleId]` only. The spec writes a JSONL flow log to `.agents/workspace/bmad/2026-11-04/2-2/`.
+- Phase B is pending (tasks 2-4): the adapter, toggle UI, static checks and the `specs/003-epic-2-services-catalogue/tasks.md` ticks wait for Story 2.1 to merge. The "adapter applies each non-null result once" half of 2.2-AC-01 is covered there.
 
 ## Spec Change Log
 
