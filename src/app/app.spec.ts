@@ -43,7 +43,7 @@ describe('App', () => {
     expect(root.children[1].tagName).toBe('APP-HEADER');
     expect(root.querySelector('app-header a[href="#inicio"]')).not.toBeNull();
     expect(root.querySelector('app-header a[href="#contacto"]')).not.toBeNull();
-    expect(root.querySelector('a[href="#servicios"]')).toBeNull();
+    expect(root.querySelector('app-header a[href="#servicios"]')).not.toBeNull();
     expect(main.id).toBe('main');
     expect(main.getAttribute('tabindex')).toBe('-1');
     expect(root.querySelector('.site-header')).toBeNull();
@@ -88,7 +88,11 @@ describe('App', () => {
 
     expect(main.firstElementChild?.tagName).toBe('APP-HERO');
     expect(main.querySelector('app-hero section#inicio')).not.toBeNull();
-    expect(root.querySelector('a[href="#servicios"]')).toBeNull();
+    expect(root.querySelector('a[href="#servicios"]')).not.toBeNull();
+    expect(main.children[1].tagName).toBe('APP-SERVICES');
+    expect(main.querySelector('app-services section#servicios')).not.toBeNull();
+    expect(main.querySelectorAll('app-services article')).toHaveLength(4);
+    expect(main.children[2].tagName).toBe('APP-CONTACT');
     expect(contact).not.toBeNull();
     expect(contact.querySelector('section#contacto')).not.toBeNull();
     expect(contact.nextElementSibling).toBe(privacy);
@@ -97,5 +101,18 @@ describe('App', () => {
     expect(main.nextElementSibling?.tagName).toBe('APP-FOOTER');
     expect(root.querySelector('footer a[href="#aviso"]')).not.toBeNull();
     expect(root.querySelectorAll('h1')).toHaveLength(1);
+  });
+
+  it('renders no Services section while servicios is not visible (2.1-AC-02)', async () => {
+    TestBed.overrideProvider(ContentFacade, {
+      useFactory: () =>
+        Object.assign(new ContentFacade(), { visibleSections: ['hero', 'contacto'] }),
+    });
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+
+    expect(root.querySelector('app-services')).toBeNull();
+    expect(root.querySelector('#servicios')).toBeNull();
   });
 });

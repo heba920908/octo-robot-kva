@@ -1,0 +1,137 @@
+:host {
+  display: block;
+}
+
+.services {
+  box-sizing: border-box;
+  overflow-x: clip;
+  padding-block: var(--kva-shell-section-y);
+  color: var(--kva-component-service-card-text-color);
+  background-color: var(--kva-component-service-card-background-color);
+}
+
+.services-wrap {
+  box-sizing: border-box;
+  max-width: calc(var(--kva-spacing-content-max) + 2 * var(--kva-shell-margin));
+  margin-inline: auto;
+  padding-inline: var(--kva-shell-margin);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--kva-services-columns), minmax(0, 1fr));
+  gap: var(--kva-spacing-gutter);
+  margin-top: var(--kva-spacing-10);
+}
+
+.service-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--kva-component-service-card-text-color);
+  background-color: var(--kva-component-service-card-background-color);
+}
+
+.service-image {
+  position: relative;
+  aspect-ratio: 3 / 1;
+  overflow: hidden;
+}
+
+.service-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--kva-component-service-card-image-background-color);
+}
+
+.service-image ::ng-deep :is(picture, img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-body {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--kva-spacing-4);
+  padding: var(--kva-component-service-card-padding);
+}
+
+.service-title {
+  position: relative;
+  padding-top: var(--kva-spacing-2);
+}
+
+.service-frame {
+  position: absolute;
+  top: calc(-1 * var(--kva-spacing-frame-offset));
+  right: calc(-1 * var(--kva-spacing-frame-offset));
+  width: var(--kva-spacing-bracket-arm);
+  height: var(--kva-spacing-bracket-arm);
+  border-top: var(--kva-spacing-rule-hairline) solid var(--kva-color-ink);
+  border-right: var(--kva-spacing-rule-hairline) solid var(--kva-color-ink);
+  pointer-events: none;
+}
+
+.service-name,
+.service-description,
+.service-list {
+  margin: 0;
+}
+
+.service-name {
+  position: relative;
+  padding-right: var(--kva-spacing-4);
+}
+
+.service-list {
+  padding-inline-start: var(--kva-spacing-6);
+  list-style-type: '– ';
+}
+
+.service-list li + li {
+  margin-top: var(--kva-spacing-2);
+}
+
+.service-cta {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  margin-top: auto;
+  min-height: var(--kva-component-button-primary-on-light-min-height);
+  padding: var(--kva-spacing-3) var(--kva-component-button-primary-padding);
+  border-radius: var(--kva-component-button-primary-rounded);
+  color: var(--kva-component-button-primary-on-light-text-color);
+  background-color: var(--kva-component-button-primary-on-light-background-color);
+  font-family:
+    var(--kva-component-button-primary-on-light-font-family), 'Outfit Fallback', sans-serif;
+  font-size: var(--kva-component-button-primary-on-light-font-size);
+  font-weight: var(--kva-component-button-primary-on-light-font-weight);
+  line-height: var(--kva-component-button-primary-on-light-line-height);
+  letter-spacing: var(--kva-component-button-primary-on-light-letter-spacing);
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.service-cta:hover {
+  background-color: var(--kva-component-button-primary-on-light-hover-background-color);
+}
+
+.service-cta:active {
+  transform: translateY(var(--kva-motion-press-offset));
+}
+
+h2:focus-visible,
+.service-cta:focus-visible {
+  outline: var(--kva-component-focus-ring-on-light-width) solid
+    var(--kva-component-focus-ring-on-light-stroke-color);
+  outline-offset: var(--kva-spacing-rule-medium);
+}

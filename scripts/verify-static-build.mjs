@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { create } from 'fontkit';
-import { sourceFiles, readText, validationLeaks } from './content-checks.mjs';
+import { serviceDocs, sourceFiles, readText, validationLeaks } from './content-checks.mjs';
 
 const outputDir = 'dist/agency-portfolio';
 const indexPath = join(outputDir, 'browser', 'index.html');
@@ -109,7 +109,10 @@ if (existsSync(indexPath)) {
     /<a\b(?=[^>]*\bhref="#contacto")(?=[^>]*\bclass="[^"]*header-cta)[^>]*>/i.test(headerRegion),
     'Header CTA must link to #contacto',
   );
-  check(!/href="#servicios"/i.test(headerRegion), 'Header must not link to #servicios');
+  check(
+    /<a\b(?=[^>]*\bhref="#servicios")(?=[^>]*\bclass="[^"]*header-link)[^>]*>/i.test(headerRegion),
+    'Header must link to #servicios',
+  );
   check(
     (headerRegion.match(/<nav\b/gi) ?? []).length === 1 &&
       /<nav\b(?=[^>]*\bid="menu-movil")(?=[^>]*\baria-label="Secciones")[^>]*>/i.test(headerRegion),
@@ -132,9 +135,48 @@ if (existsSync(indexPath)) {
     /<a[^>]+href="#contacto"/i.test(heroSection),
     'Hero primary CTA must link to #contacto in #inicio',
   );
+  const servicesSection =
+    html.match(/<section[^>]+id="servicios"[^>]*>[\s\S]*?<\/section>/i)?.[0] ?? '';
+  check(servicesSection.length > 0, 'Services section #servicios must be prerendered');
   check(
-    !/href="#servicios"/i.test(html),
-    'No CTA may point at #servicios while the section is not rendered',
+    /<h2[^>]*id="servicios-title"[^>]*>Servicios integrales de instalaciones eléctricas<\/h2>/i.test(
+      servicesSection,
+    ),
+    'Services section h2 title must be prerendered in #servicios',
+  );
+  check(
+    (servicesSection.match(/<article\b/gi) ?? []).length >= 4,
+    'Services section must prerender at least four service cards',
+  );
+  check(
+    (servicesSection.match(/<article\b/gi) ?? []).length ===
+      (
+        servicesSection.match(
+          /<a\b(?=[^>]*\bclass="[^"]*service-cta)(?=[^>]*\bhref="#contacto")[^>]*>/gi,
+        ) ?? []
+      ).length,
+    'Every service card must prerender a CTA linking to #contacto',
+  );
+  const renderedItems = new Set(
+    [...servicesSection.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)].map((match) =>
+      match[1]
+        .replace(/<[^>]+>/g, '')
+        .replace(/\s+/g, ' ')
+        .trim(),
+    ),
+  );
+  for (const service of existsSync('content/services') ? serviceDocs() : []) {
+    for (const item of service.subServices) {
+      check(
+        renderedItems.has(item.replace(/\s+/g, ' ').trim()),
+        `Sub-service "${item}" of ${service.id} must be prerendered in #servicios`,
+      );
+    }
+  }
+  check(
+    (html.match(/<a\b(?=[^>]*\bhref="#servicios")[^>]*>/gi) ?? []).length >= 2 &&
+      /<a\b(?=[^>]*\bhref="#servicios")[^>]*>\s*Ver servicios\s*<\/a>/i.test(heroSection),
+    'Header and Hero must link to the rendered #servicios section',
   );
   check(
     /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="image")(?=[^>]*\bimagesrcset="[^"]*cover-blueprint-tools)(?=[^>]*\bfetchpriority="high")[^>]*>/i.test(

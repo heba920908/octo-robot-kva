@@ -2,8 +2,9 @@
 title: 'Story 2.1: Services Section with the Four Brochure Service Cards'
 type: 'feature'
 created: '2026-11-04'
-status: 'ready-for-dev'
+status: 'done'
 route: 'dispatch'
+baseline_commit: 'e294294caf4812a30bd843793c52685727e9a78e'
 story_key: '2-1-services-section-with-the-four-brochure-service-cards'
 review_loop_iteration: 0
 context:
@@ -75,9 +76,37 @@ context:
 
 ## Implementation Notes
 
+- Added `content/services/*.md` x4, `service.schema.json`, `services.content.ts` (+ spec), facade `services`/`resolveServices` (sorted by `order`, image ids resolved, unknown id throws), `features/services`, `--kva-services-columns` token-fed grid in `styles.scss`, static verifier services block and fixture.
+- Existing header spec "enhancement" cases now pin `visibleSections` to `['hero','contacto']` because the real facade now lists `servicios` and those cases only mount a `#contacto` section.
+- Bundle delta (production,pages) vs epic-2 baseline: main 282.65 -> 291.06 kB raw (77.91 -> 79.65 kB transfer); styles 51.17 -> 51.28 kB. `header.scss` budget warning (+1.71 kB) is pre-existing.
+- Browser (Pages preview, port 4311): 1/1/2/2/4 per row at 360/767/768/1024/1440, CTA bottom offset equal across cards, no overflow, one h1, header and Hero links present, 0 console warnings/errors; served HTML has all Sub-services.
+
 ## Spec Change Log
 
 ## Review Triage Log
+
+| ID  | Verdict | Evidence / Disposition                                                                                                                                                                                                                                                                                              |
+| --- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R1  | medium  | Descriptions for Services 1 and 3 contain outcome claims ("conforme a norma", "evitar paros e inspecciones fallidas", "de principio a fin") beyond the Sub-services. They match the Hero's approved promise but the spec said no new claims. Deferred: needs editorial confirmation; each doc flags `[ASSUMPTION]`. |
+| R2  | medium  | Service 4 wording is agent-written (EXPERIENCE marks it `[ASSUMPTION]`). Deferred: editorial confirmation.                                                                                                                                                                                                          |
+| R3  | low     | `[ASSUMPTION]` is asserted by a test and will need editing once confirmed. Reject: intentional tracker; removing it is part of the confirmation edit.                                                                                                                                                               |
+| R4  | medium  | Docs were checked only by substring; two had invalid YAML (`: ` in plain scalars). Patched: quoted; spec parses frontmatter with `yaml`, deep-equals typed content, validates against the schema.                                                                                                                   |
+| R5  | low     | Doc body text is process notes. Reject: matches the hero/ui-strings convention.                                                                                                                                                                                                                                     |
+| R6  | medium  | Duplicate Service ids were not rejected at runtime. Patched: `resolveServices` throws; test added.                                                                                                                                                                                                                  |
+| R7  | low     | Duplicate `order`, `uniqueItems`, `maxLength`, `$id` URL. Reject: matches existing schemas; order is asserted ascending in tests.                                                                                                                                                                                   |
+| R8  | low     | `freezeContent` freezes shared `subServices` arrays of the source constant. Reject: source is a module constant never mutated.                                                                                                                                                                                      |
+| R9  | low     | Identical CTA names across cards (WCAG 2.4.4). Defer: Epic 3 replaces the CTA with a Service-specific composer action; the card heading is the adjacent context.                                                                                                                                                    |
+| R10 | medium  | Grid/CTA layout verified by regex on SCSS plus manual browser check. Defer: repo has no browser test harness and AGENTS.md forbids adding Playwright without a story.                                                                                                                                               |
+| R11 | low     | `1440` exempted in `styles.spec.ts` and `--kva-services-columns` lives in `styles.scss`. Reject: same pattern as the existing `--kva-hero-*` and the 1024 breakpoint.                                                                                                                                               |
+| R12 | medium  | Static verifier checked only the maintenance item. Patched: every Sub-service of every Service must be a `<li>` in the prerendered section; rejecting mutations added.                                                                                                                                              |
+| R13 | low     | Verifier h2 text hardcoded; two-anchor count not header-specific. Reject: header link is checked separately; copy change should fail loudly.                                                                                                                                                                        |
+| R14 | low     | T205 ticked before review. Reject: ticked on gates and review completion at merge; spec status reflects the flow.                                                                                                                                                                                                   |
+| R15 | low     | `::ng-deep`, overlay `pointer-events`, no decorative-image flag. Reject: `::ng-deep` mirrors the hero pattern; overlay sits on a non-interactive band; no launch Service has an image.                                                                                                                              |
+| R16 | medium  | `<app-services />` rendered an empty section when no Services. Patched: rendered only when `servicios` is visible; test added.                                                                                                                                                                                      |
+| R17 | low     | Empty-string `cta` rendered a blank link. Patched: `\|\|`.                                                                                                                                                                                                                                                          |
+| R18 | low     | Regex `<section ...>[\s\S]*?</section>` could truncate on a nested section. Reject: the card markup uses `<article>`; no nested section.                                                                                                                                                                            |
+| R19 | low     | Image-id existence only checked for one id; unknown id throws at facade construction. Patched: spec asserts every set `image.id` is an `images` key; throwing at build/prerender is the intended failure.                                                                                                           |
+| R20 | low     | Redundant 9-item assertion. Reject: harmless duplicate.                                                                                                                                                                                                                                                             |
 
 ## Design Notes
 
