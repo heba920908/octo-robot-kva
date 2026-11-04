@@ -35,3 +35,13 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-services-section-with-the-four-brochure-service-cards.md`
   summary: Automated layout check for the Services grid column counts and CTA alignment.
   evidence: Verified today by regex on SCSS plus a manual browser pass; the repo has no browser test harness and AGENTS.md forbids adding Playwright without a story.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-collapsible-sub-service-lists-on-mobile.md`
+  summary: Decide where focus lands when the viewport widens past 768 px while the Sub-service toggle is focused.
+  evidence: The toggle is removed from the DOM, so focus falls back to body; not covered by the spec's matrix.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-collapsible-sub-service-lists-on-mobile.md`
+  summary: Measure CLS from hydration collapsing the Service lists on narrow viewports (launch checks, Story 6.5).
+  evidence: Prerendered HTML is full by spec, and the JS collapse after hydration shrinks the cards; unmeasured.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-collapsible-sub-service-lists-on-mobile.md`
+  summary: Check scroll position after collapsing a long list on real devices, and show all Sub-services when printing.
+  evidence: Collapsing a 9-item list can move the toggle off-screen; collapsed cards print only four items.
