@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Key screen · Landing (desktop long-scroll + Reference viewport) · kVA Instalaciones</title>
+<style>
+/*
+  KEY SCREEN: key-landing — canonical entry surface (revised spines, 2026-10-21 Finalize).
+  Governing spine sections (the spines are the contract; this mock only illustrates):
+  - DESIGN.md › Colors (incl. focus #D9A07A, clear), Typography (token → element table; one h1,
+    h2 per section, h3 sub-blocks; display < 768 clamp; Project titles sentence case), Layout &
+    Spacing (section table #1-7 and rhythm; Split; Content panels 45ch / top offset 64; Alignment;
+    Edge bleed; Heights are minimums), Shapes (monochrome corner rule ┘ / mirrored └, sub-head
+    ┘ Misión / ┐ Visión, bracket-frame placement table), Components (Header + wordmark,
+    nav-link-current, Menu button, Hero, Section heading, Proyectos title band, Service card,
+    Project filter + filter-count, Project card, Nosotros, Trust section, Contact section,
+    Buttons incl. ghost-on-dark clear + paper outline, Links, Footer), Imagery & assets
+    (band = wiring-technician, Contacto = cable-tray; logo only in header/Hero/band/Contacto/footer).
+  - EXPERIENCE.md › IA (order; Services/Projects/Nosotros/Clientes launch seed), Voice and Tone
+    (Default UI strings: Hero headline/lead, Servicios title, Clientes heading, filter count,
+    tagged direct mailto subject), Component Patterns (Header, Hero, Service card, Project filter,
+    Project card <article> + h3 button, Contact section, Direct contact links, Footer), State
+    Patterns (Header top; WhatsApp no number = not rendered; Project summary only when present),
+    Accessibility Floor (headings, alt rules), Responsive & Platform (≥ 1440: Servicios 4 across;
+    < 768 Hero left-aligned, CTAs stacked, logo in header only), Key Flows › Flow 1 step 1.
+  Optional Service card image band: not rendered — the launch seed gives no Service image.
+  Fonts: local stacks only — 'Quicksand','Outfit',system-ui,sans-serif. The OFL fonts are not installed
+  yet, so this renders in the system-ui fallback; metrics will tighten once WOFF2 is self-hosted.
+  No JS, no network. States are rendered statically via classes.
+*/
+/* ---- DESIGN.md tokens (verbatim) ---- */
+:root{
+  --ink:#1C1714;--ink-2:#2A2522;--paper:#FFFFFF;--paper-2:#F4F2F0;
+  --muted:#6B635D;--muted-on-dark:#A39B94;--border:#6B635D;--line:#D9D4CF;--line-on-dark:#4A433E;
+  --accent:#C8875A;--accent-hover:#D9A07A;--on-accent:#1C1714;
+  --accent-strong:#8A5430;--accent-strong-hover:#6F4326;--on-accent-strong:#FFFFFF;
+  --focus:#D9A07A;--focus-on-light:#8A5430;--danger:#B42318;--success:#1E7A46;
+  --overlay:#1C1714C7;--scrim:#1C171499;--clear:#1C171400;
+  --elev-overlay:0 24px 48px rgba(28,23,20,0.32);
+  /* Local stacks only (fonts not installed yet; system-ui fallback is expected). */
+  --ff-title:'Quicksand','Outfit',system-ui,sans-serif;
+  --ff-body:'Outfit','Quicksand',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+img{display:block;max-width:100%}
+ul,ol,dl{list-style:none}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+svg.i{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:miter}
+
+/* ---- Presentation board (not product UI; device chrome only) ---- */
+html{background:#BDB6AF}
+body{font-family:var(--ff-body);color:var(--ink);padding:48px}
+.board{display:flex;gap:64px;align-items:flex-start;width:max-content}
+.col{display:flex;flex-direction:column;gap:48px}
+.col-row{display:flex;gap:32px;align-items:flex-start}
+.cap{font:600 13px/1.45 system-ui,sans-serif;color:#1C1714;margin-bottom:12px;max-width:720px}
+.cap span{display:block;font-weight:400}
+.browser{width:1440px;background:var(--paper)}
+.chrome{height:40px;background:#E4E0DC;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #CFC9C3}
+.chrome i{width:10px;height:10px;border-radius:50%;background:#B9B2AC}
+.chrome .url{margin-left:16px;width:480px;height:24px;background:#fff;font:12px/24px system-ui,sans-serif;padding:0 12px;color:#6B635D}
+.phone{width:380px;padding:10px;background:#111}
+.phone-screen{width:360px;height:640px;overflow:hidden;position:relative;background:var(--paper)}
+.phone-screen.tall{height:auto;overflow:visible}
+.fold{position:absolute;left:-10px;right:-10px;border-top:2px dashed #C8875A;z-index:50}
+.fold b{position:absolute;right:0;top:-20px;font:600 11px/16px system-ui,sans-serif;background:#C8875A;color:#1C1714;padding:0 6px}
+.note{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B635D;border:1px dashed #A39B94;padding:2px 6px;display:inline-block;background:#fff}
+.note.dark{background:transparent;color:#A39B94;border-color:#6B635D}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---- Viewport scopes: base tokens < 1024, -lg tokens >= 1024.
+   --edge = distance from the content column to the viewport edge (rules bleed to it). ---- */
+.vp{position:relative;overflow:hidden;background:var(--paper)}
+.vp-d{--fs-display:60px;--lh-display:1.05;--fs-h1:44px;--w-h1:300;--lh-h1:1.1;--fs-h2:24px;--fs-h3:20px;--fs-stat:48px;--fs-lead:22px;--fs-body:18px;--m:48px;--sy:112px;--hh:80px;--logo-h:40px;--edge:120px}
+/* display < 768 = clamp(26px, 8.5vw, 32px) → 30.6px at the 360px Reference viewport */
+.vp-m{--fs-display:30.6px;--lh-display:1.1;--fs-h1:28px;--w-h1:400;--lh-h1:1.15;--fs-h2:20px;--fs-h3:18px;--fs-stat:36px;--fs-lead:20px;--fs-body:16px;--m:20px;--sy:64px;--hh:64px;--logo-h:32px;--edge:20px}
+
+/* ---- Typography tokens ---- */
+.t-display,.t-h1,.t-h2,.t-h3,.t-stat,.t-overline{font-family:var(--ff-title);text-transform:uppercase;overflow-wrap:break-word;hyphens:auto}
+.t-display{font-weight:300;font-size:var(--fs-display);line-height:var(--lh-display);letter-spacing:.04em}
+.t-h1{font-weight:var(--w-h1);font-size:var(--fs-h1);line-height:var(--lh-h1);letter-spacing:.06em}
+.t-h2{font-weight:400;font-size:var(--fs-h2);line-height:1.25;letter-spacing:.06em}
+.t-h3{font-weight:400;font-size:var(--fs-h3);line-height:1.3;letter-spacing:.04em}
+.t-stat{font-weight:300;font-size:var(--fs-stat);line-height:1.1;letter-spacing:.02em}
+.t-overline{font-weight:500;font-size:14px;line-height:1.3;letter-spacing:.18em}
+.t-ptitle{text-transform:none}
+.t-lead{font-family:var(--ff-body);font-weight:400;font-size:var(--fs-lead);line-height:1.5}
+.t-body{font-family:var(--ff-body);font-weight:400;font-size:var(--fs-body);line-height:1.6;max-width:72ch}
+.t-small{font-family:var(--ff-body);font-weight:400;font-size:14px;line-height:1.5}
+.t-label{font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.t-field-label{font-family:var(--ff-body);font-weight:500;font-size:15px;line-height:1.4}
+.c-muted{color:var(--muted)}
+.c-paper{color:var(--paper)}
+
+/* ---- Layout ---- */
+.wrap{max-width:calc(1200px + 2 * var(--m));margin:0 auto;padding:0 var(--m)}
+.sec{padding:var(--sy) 0;position:relative}
+.s-paper{background:var(--paper)}
+.s-paper2{background:var(--paper-2)}
+.photo-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ovl{position:absolute;inset:0;background:var(--overlay)}
+.lift{position:relative;z-index:1}
+
+/* ---- Shapes (monochrome linework: ink on light, paper on dark) ---- */
+.hd{display:inline-block;position:relative;max-width:100%}
+.crule{display:block;position:relative;height:1px;background:var(--ink);margin-top:16px;margin-left:calc(-1 * var(--edge));width:calc(100% + 32px + var(--edge))}
+.crule::after{content:"";position:absolute;right:0;bottom:0;width:1px;height:24px;background:inherit}
+.crule.mirror{margin-left:-32px;margin-right:calc(-1 * var(--edge))}
+.crule.mirror::after{right:auto;left:0}
+.on-dark .crule{background:var(--paper)}
+.subhd{display:flex;align-items:center;gap:16px}
+.srule{flex:1 1 auto;min-width:96px;height:1px;background:var(--ink);position:relative}
+.srule::after{content:"";position:absolute;right:0;width:1px;height:24px;background:inherit}
+.srule.up::after{bottom:0}
+.srule.down::after{top:0}
+.bk{position:absolute;pointer-events:none;border:0 solid var(--ink)}
+.bk.tr{border-top-width:1px;border-right-width:1px}
+.bk.bl{border-bottom-width:1px;border-left-width:1px}
+.on-dark .bk{border-color:var(--paper)}
+.bar{display:block;height:4px;background:var(--ink);margin-top:16px}
+
+/* ---- Buttons (min-heights; labels wrap) ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 24px;border:1px solid transparent;border-radius:0;text-decoration:none;white-space:normal;text-wrap:balance;text-align:center;font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary-light{background:var(--accent-strong);color:var(--on-accent-strong)}
+.btn-secondary{background:var(--paper);color:var(--ink);border-color:var(--ink)}
+.btn-ghost-dark{background:var(--clear);color:var(--paper);border-color:var(--paper)}
+.btn-text{background:var(--paper);color:var(--accent-strong);min-height:44px;padding:12px 0}
+.btn-block{width:100%}
+.btn-icon{width:44px;height:44px;flex:none;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:0;background:var(--paper);color:var(--ink)}
+.btn-icon.on-dark-i{background:var(--clear);color:var(--paper)}
+.ring-dark{outline:2px solid var(--focus);outline-offset:2px}
+.ring-light{outline:2px solid var(--focus-on-light);outline-offset:2px}
+.ring-inset{outline:2px solid var(--focus-on-light);outline-offset:-5px}
+
+/* ---- Links ---- */
+.lnk-light{color:var(--accent-strong);text-decoration:underline;text-underline-offset:3px}
+.lnk-dark{color:var(--paper);text-decoration:underline;text-underline-offset:3px}
+
+/* ---- Header ---- */
+.hdr{position:absolute;top:0;left:0;right:0;min-height:var(--hh);display:flex;align-items:center;z-index:5;color:var(--paper);background:var(--clear)}
+.hdr.condensed{min-height:56px;background:var(--ink);border-bottom:1px solid var(--line-on-dark)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;width:100%;gap:24px}
+.hdr-logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--paper)}
+.hdr-logo img{height:var(--logo-h);width:auto}
+.hdr-right{display:flex;align-items:center;gap:40px}
+.nav{display:flex;gap:32px}
+.nav a{text-decoration:none;padding:8px 0;border-bottom:2px solid transparent}
+.nav a[aria-current]{border-bottom-color:var(--focus)}
+.hdr-m-actions{display:flex;align-items:center;gap:8px}
+
+/* ---- Footer ---- */
+.ftr{background:var(--ink);color:var(--muted-on-dark);border-top:1px solid var(--line-on-dark);padding:48px 0}
+.ftr-grid{display:grid;grid-template-columns:auto 1fr auto;gap:48px;align-items:start}
+.ftr img{height:24px;width:auto}
+.ftr a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;min-height:24px}
+.ftr-ch{display:grid;grid-template-columns:auto auto;gap:8px 32px;justify-content:start;margin-top:8px}
+
+/* ---- Project filter + card + badge ---- */
+.chips{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 16px;background:var(--paper-2);color:var(--ink);border:1px solid var(--border);white-space:normal;font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.chip[aria-pressed="true"]{background:var(--accent-strong);color:var(--on-accent-strong);border-color:var(--accent-strong)}
+.count{margin-top:16px}
+.p-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
+.pcard{position:relative;background:var(--paper);display:flex;flex-direction:column}
+.pcard-ph{position:relative;aspect-ratio:4/3;background:var(--paper-2);overflow:hidden}
+.pcard-ph img{width:100%;height:100%;object-fit:cover}
+.pcard-b{padding:20px 24px 24px;display:flex;flex-direction:column;gap:8px}
+.pcard-b{order:2}
+.pcard h3 button{display:block;width:100%}
+.pcard h3 button::after{content:"";position:absolute;inset:0}
+.badge{position:absolute;top:16px;left:16px;background:var(--ink);color:var(--paper);padding:8px;font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+
+/* ---- Overlays ---- */
+.scrim{position:absolute;inset:0;background:var(--scrim);z-index:10}
+
+/* ---- Contact channels + copy status ---- */
+.ch-row{display:flex;align-items:center;gap:8px 24px;flex-wrap:wrap}
+.ch-email{display:inline-flex;align-items:center;gap:8px}
+.ch-link{display:inline-flex;align-items:center;gap:12px;color:var(--paper);text-decoration:underline;text-underline-offset:3px;font-size:var(--fs-body);line-height:1.6}
+.copy-status{display:inline-flex;align-items:center;gap:6px;font-size:14px;line-height:1.5}
+.copy-status.on-light{color:var(--success);background:var(--paper)}
+
+/* ---- Form field ---- */
+.fld{display:flex;flex-direction:column;gap:8px}
+.inp{min-height:48px;padding:12px;border:1px solid var(--border);background:var(--paper);color:var(--ink);width:100%;font-family:var(--ff-body);font-size:var(--fs-body);line-height:1.6;border-radius:0;appearance:none;-webkit-appearance:none}
+.inp.err{border-color:var(--danger)}
+.sel-wrap{position:relative}
+.sel-wrap svg{position:absolute;right:12px;top:12px;pointer-events:none;color:var(--ink)}
+.hint{font-size:14px;line-height:1.5;color:var(--muted)}
+.msg-err{display:flex;gap:8px;align-items:flex-start;color:var(--danger);font-size:14px;line-height:1.5}
+.consent{display:flex;flex-direction:column;gap:8px}
+.consent label{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5}
+.cb{width:24px;height:24px;flex:none;border:1px solid var(--border);background:var(--paper);display:inline-flex;align-items:center;justify-content:center}
+.cb.on{background:var(--accent-strong);border-color:var(--accent-strong);color:var(--on-accent-strong)}
+.cb svg{width:20px;height:20px}
+
+/* page-specific */
+.hero{position:relative;min-height:880px;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:calc(var(--hh) + 48px) var(--m) 64px}
+.hero-block{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px;max-width:960px;color:var(--paper)}
+.hero-block>.bk.tr{top:-24px;right:-24px;width:60%;height:60%}
+.hero-block>.bk.bl{bottom:-24px;left:-24px;width:60%;height:60%}
+.hero-logo{width:200px;height:auto}
+.ov-rules{display:flex;align-items:center;gap:16px}
+.ov-rules::before,.ov-rules::after{content:"";width:48px;height:1px;background:var(--paper)}
+.hero-ctas{display:flex;gap:16px;margin-top:8px}
+.vp-m .hero{min-height:640px;align-items:flex-start;justify-content:flex-start;padding:88px 20px 24px}
+.vp-m .hero-block{align-items:flex-start;text-align:left;gap:16px}
+.vp-m .hero-ctas{flex-direction:column;width:100%;gap:12px}
+.vp-m .hero-ctas .btn{width:100%}
+.svc-title{max-width:900px}
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:64px}
+.svc-card{background:var(--paper);padding:32px;display:flex;flex-direction:column;gap:24px}
+.svc-t{position:relative;align-self:flex-start;margin-top:24px}
+.svc-t>.bk.tr{top:-24px;right:-24px;width:max(48px,60%);height:calc(100% + 48px)}
+.dash li{position:relative;padding-left:16px}
+.dash li+li{margin-top:4px}
+.dash li::before{content:"–";position:absolute;left:0}
+.svc-cta{margin-top:auto;align-self:flex-start}
+.band{position:relative;min-height:240px;display:grid;align-content:end;padding:96px 0 48px;background:var(--ink)}
+.band-logo{position:absolute;top:32px;right:var(--edge);height:40px;width:auto;z-index:1}
+.band .wrap{width:100%}
+.prj-body{padding:64px 0 var(--sy)}
+.split{display:grid;grid-template-columns:5fr 7fr}
+.nos-photo{position:relative;display:grid;align-content:end;padding:var(--sy) 48px 72px var(--edge);background:var(--ink)}
+.nos-title{position:relative;z-index:1;justify-self:start}
+.nos-title>.bk.bl{left:-24px;bottom:-24px;width:calc(100% + 48px);height:calc(100% + 48px)}
+.nos-c{padding:64px var(--edge) var(--sy) 64px}
+.nos-block{position:relative}
+.nos-block>.bk.tr{top:-24px;right:-24px;width:50%;height:calc(100% + 24px + var(--sy))}
+.nos-band+.nos-band{border-top:1px solid var(--line);margin-top:40px;padding-top:40px}
+.nos-band .t-body{max-width:45ch;margin-top:16px}
+.nos-band .subhd{margin-top:24px}
+.vals{display:grid;grid-template-columns:1fr 1fr;gap:24px 40px;margin-top:24px}
+.vals dt{display:inline}
+.vals dt::after{content:":"}
+.vals dd{display:inline;max-width:none}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
+.trust li{display:flex;flex-direction:column;gap:8px}
+.clientes{margin-top:96px}
+.cl-cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:40px}
+.cl-col.r{text-align:right}
+.cl-g+.cl-g{margin-top:40px}
+.cl-name{padding-bottom:8px;border-bottom:1px solid var(--line)}
+.cl-scope{margin-top:12px}
+.cl-items{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;margin-top:12px}
+.ct{position:relative;min-height:760px;background:var(--ink);padding:64px 0 var(--sy)}
+.ct .wrap{position:relative;z-index:1;display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+.ct-block{grid-column:7 / 13;display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:24px;color:var(--paper)}
+.ct-logo{height:40px;width:auto}
+.ct-rows{display:flex;flex-direction:column;gap:16px;max-width:45ch}
+.ct-rows .ch-row{justify-content:flex-end}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M20 12H4M10 6l-6 6 6 6"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11"/><path d="M5 15H4V4h11v1"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a1 1 0 0 1-1 1A17 17 0 0 1 4 4a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16v1.5"/></symbol>
+</svg>
+
+<div class="board">
+
+<!-- ===================== Column 1: desktop 1440, full long-scroll ===================== -->
+<div class="col">
+<div>
+<p class="cap">key-landing · Desktop 1440 — full page in IA order at scroll 0
+<span>Rhythm: Hero (dark photo) → Servicios (paper) → Proyectos title band (dark photo) + grid (paper-2) → Nosotros (photo | paper split) → Confianza (paper) → Contacto (dark photo, right-aligned, p18) → Footer (ink + top rule). WhatsApp CTA not rendered (no number set). Optional Service image band not shown (no launch image).</span></p>
+<div class="browser">
+<div class="chrome"><i></i><i></i><i></i><div class="url">https://kvainstalaciones.mx/</div></div>
+<div class="vp vp-d">
+
+  <a class="sr" href="#main">Saltar al contenido</a>
+  <header class="hdr">
+    <div class="wrap">
+      <a class="hdr-logo" href="#inicio"><img src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="kVA"><span class="t-label">Instalaciones</span></a>
+      <div class="hdr-right">
+        <nav class="nav t-label" aria-label="Secciones">
+          <a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#nosotros">Nosotros</a><a href="#confianza">Confianza</a><a href="#contacto">Contacto</a>
+        </nav>
+        <a class="btn btn-primary" href="#contacto">Cotiza tu proyecto</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <!-- 1 Hero -->
+    <section id="inicio" class="hero on-dark" aria-labelledby="hero-t">
+      <img class="photo-bg" src="../../../../../assets/media/brochure/backgrounds/cover-blueprint-tools.jpg" alt="">
+      <div class="ovl"></div>
+      <div class="hero-block">
+        <span class="bk tr" aria-hidden="true"></span><span class="bk bl" aria-hidden="true"></span>
+        <img class="hero-logo" src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="">
+        <p class="t-overline ov-rules">Explorando soluciones</p>
+        <h1 id="hero-t" class="t-display">Instalaciones eléctricas para empresas, conforme a norma</h1>
+        <p class="t-lead">Ingeniería e instalación sin paros, multas de CFE ni inspecciones fallidas.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#contacto">Cotiza tu proyecto</a>
+          <a class="btn btn-ghost-dark" href="#servicios">Ver servicios</a>
+        </div>
+        <p class="t-small">3+ años · Cobertura en todo México</p>
+      </div>
+    </section>
+
+    <!-- 2 Servicios -->
+    <section id="servicios" class="sec s-paper" aria-labelledby="svc-t">
+      <div class="wrap">
+        <div class="hd svc-title"><h2 id="svc-t" class="t-h1" tabindex="-1">Servicios integrales de instalaciones eléctricas</h2><span class="crule" aria-hidden="true"></span></div>
+        <div class="svc-grid">
+          <article class="svc-card">
+            <div class="svc-t"><h3 class="t-h2">Desarrollo e Ingeniería de Proyecto</h3><span class="bk tr" aria-hidden="true"></span></div>
+            <p class="t-body">Análisis de calidad de energía y factor de potencia para evitar penalizaciones en tu tarifa GDMTH de CFE.</p>
+            <ul class="dash t-body">
+              <li>Análisis de calidad de energía</li>
+              <li>Diseño ejecutivo (CAD/BIM)</li>
+              <li>Levantamiento de instalaciones existentes</li>
+              <li>Dimensionamiento de sistemas y equipos</li>
+              <li>Cálculo de iluminación y eficiencia energética</li>
+              <li>Ingeniería de valor</li>
+              <li>Elaboración de precios unitarios y programas de obra</li>
+              <li>Gestoría técnica</li>
+              <li>Dictamen por Unidad Verificadora de Instalaciones Eléctricas (UVIE)</li>
+            </ul>
+            <a class="btn btn-primary-light svc-cta" href="#contacto">Cotiza este servicio</a>
+          </article>
+          <article class="svc-card">
+            <div class="svc-t"><h3 class="t-h2">Instalaciones</h3><span class="bk tr" aria-hidden="true"></span></div>
+            <p class="t-body">Instalaciones conforme a NOM-001-SEDE-2012, verificables por una UVIE, y cableado estructurado certificado ANSI/TIA-568.</p>
+            <ul class="dash t-body">
+              <li>Canalización y cableado en media y baja tensión</li>
+              <li>Voz/Datos, detección de humo, control de acceso, CCTV</li>
+              <li>Obra nueva y remodelaciones</li>
+              <li>Recuperación o adecuación de espacios (comerciales, oficinas, industriales)</li>
+              <li>Instalaciones eléctricas en sistemas críticos: sites, mesas de dinero, call centers</li>
+              <li>Suministro, instalación, maniobras y puesta en marcha de equipos: CCM, UPS, PDU, TVSS, plantas de emergencia</li>
+            </ul>
+            <a class="btn btn-primary-light svc-cta" href="#contacto">Cotiza este servicio</a>
+          </article>
+          <article class="svc-card">
+            <div class="svc-t"><h3 class="t-h2">Puesta en marcha y Validaciones</h3><span class="bk tr" aria-hidden="true"></span></div>
+            <p class="t-body">Pruebas y validaciones para pasar la inspección y operar sin paros.</p>
+            <ul class="dash t-body">
+              <li>Verificación de funcionamiento de sistemas eléctricos</li>
+              <li>Pruebas de carga, continuidad y puesta a tierra</li>
+              <li>Validación de calidad de energía</li>
+              <li>Mantenimiento preventivo y correctivo a: plantas de emergencia, UPS y reguladores; transformadores (media y baja tensión); sistemas de iluminación</li>
+              <li>Renta de equipos (transformadores, plantas, etc.)</li>
+            </ul>
+            <a class="btn btn-primary-light svc-cta" href="#contacto">Cotiza este servicio</a>
+          </article>
+          <article class="svc-card">
+            <div class="svc-t"><h3 class="t-h2">Servicios de Datos</h3><span class="bk tr" aria-hidden="true"></span></div>
+            <p class="t-body">Datos de tu operación convertidos en mejores decisiones.</p>
+            <ul class="dash t-body">
+              <li>Decisiones con datos</li>
+              <li>Operación visible</li>
+              <li>Datos en orden</li>
+            </ul>
+            <a class="btn btn-primary-light svc-cta" href="#contacto">Cotiza este servicio</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 Proyectos: title band + paper-2 grid -->
+    <section id="proyectos" aria-labelledby="prj-t">
+      <div class="band on-dark">
+        <img class="photo-bg" src="../../../../../assets/media/brochure/backgrounds/wiring-technician.jpg" alt="">
+        <div class="ovl"></div>
+        <img class="band-logo" src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="">
+        <div class="wrap lift"><div class="hd"><h2 id="prj-t" class="t-h1 c-paper" tabindex="-1">Proyectos</h2><span class="crule" aria-hidden="true"></span></div></div>
+      </div>
+      <div class="prj-body s-paper2">
+        <div class="wrap">
+          <div class="chips" role="group" aria-label="Filtrar proyectos por servicio">
+            <button class="chip" aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Todos</button>
+            <button class="chip" aria-pressed="false">Instalaciones</button>
+            <button class="chip" aria-pressed="false">Puesta en marcha y Validaciones</button>
+          </div>
+          <p class="t-small c-muted count" role="status">9 proyectos en total</p>
+          <div class="p-grid">
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/red-ambiental-01.jpg" alt=""></div><div class="pcard-b"><p id="s1" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s1">Red Ambiental</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/larousse-01.jpg" alt=""></div><div class="pcard-b"><p id="s2" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s2">Larousse</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-industrial-comercial-01.jpg" alt=""></div><div class="pcard-b"><p id="s3" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s3">Canalización y Cableado (Industrial y Comercial)</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/site-paralelo-redundante-farmaceutica-01.jpg" alt=""></div><div class="pcard-b"><p id="s4" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s4">Site en Sistema Paralelo Redundante, Industria Farmacéutica</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/maniobras-equipos-electricos-01.jpg" alt=""></div><div class="pcard-b"><p id="s5" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s5">Maniobras de Equipos Eléctricos</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/acometidas-media-baja-tension-01.jpg" alt=""></div><div class="pcard-b"><p id="s6" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s6">Acometidas en Media y Baja Tensión</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/canalizacion-cableado-alimentadores-01.jpg" alt=""></div><div class="pcard-b"><p id="s7" class="t-overline c-muted">Instalaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s7">Canalización y Cableado de Alimentadores</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/sistema-tierras-pararrayos-01.jpg" alt=""></div><div class="pcard-b"><p id="s8" class="t-overline c-muted">Puesta en marcha y Validaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s8">Sistema de Tierras y Pararrayos</button></h3></div></article>
+            <article class="pcard"><div class="pcard-ph"><img src="../../../../../assets/media/brochure/projects/mantenimiento-equipos-01.jpg" alt=""></div><div class="pcard-b"><p id="s9" class="t-overline c-muted">Puesta en marcha y Validaciones</p><h3 class="t-h2 t-ptitle"><button aria-haspopup="dialog" aria-describedby="s9">Mantenimiento a Equipos</button></h3></div></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 Nosotros -->
+    <section id="nosotros" class="split" aria-labelledby="nos-t">
+      <div class="nos-photo on-dark">
+        <img class="photo-bg" src="../../../../../assets/media/brochure/backgrounds/electrical-panel-technician.jpg" alt="">
+        <div class="ovl"></div>
+        <div class="nos-title"><span class="bk bl" aria-hidden="true"></span><h2 id="nos-t" class="t-h1 c-paper" tabindex="-1">Nosotros</h2></div>
+      </div>
+      <div class="nos-c s-paper">
+        <div class="nos-block">
+          <span class="bk tr" aria-hidden="true"></span>
+          <div class="nos-band">
+            <h3 class="t-h2">Nuestra filosofía</h3>
+            <p class="t-body">En kVA creemos que la calidad y la seguridad son fundamentales en cada proyecto eléctrico. Nuestro compromiso con la integridad, la innovación y la colaboración se refleja en relaciones duraderas con nuestros clientes y colaboradores.</p>
+          </div>
+          <div class="nos-band">
+            <p class="t-overline c-muted">Esencia corporativa</p>
+            <div class="subhd"><h3 class="t-h2">Misión</h3><span class="srule up" aria-hidden="true"></span></div>
+            <p class="t-body">Proporcionar soluciones eléctricas seguras, eficientes e innovadoras, con servicios de instalación respaldados por la experiencia de nuestro equipo.</p>
+            <div class="subhd"><h3 class="t-h2">Visión</h3><span class="srule down" aria-hidden="true"></span></div>
+            <p class="t-body">Ser reconocidos en el sector de instalaciones eléctricas por nuestra dedicación a la calidad, la seguridad y la sostenibilidad, con soluciones que contribuyen a comunidades más seguras, eficientes y conectadas.</p>
+          </div>
+          <div class="nos-band">
+            <h3 class="t-h2">Nuestros valores</h3>
+            <dl class="vals">
+              <div><dt class="t-label">Excelencia</dt> <dd class="t-body">Calidad y eficiencia en cada instalación.</dd></div>
+              <div><dt class="t-label">Seguridad</dt> <dd class="t-body">Es nuestra prioridad: creamos entornos de trabajo seguros.</dd></div>
+              <div><dt class="t-label">Integridad</dt> <dd class="t-body">Actuamos con honestidad, ética y transparencia en cada proyecto y relación comercial.</dd></div>
+              <div><dt class="t-label">Compromiso</dt> <dd class="t-body">Trabajamos contigo para comprender tus necesidades.</dd></div>
+              <div><dt class="t-label">Colaboración</dt> <dd class="t-body">Fomentamos un ambiente colaborativo que aporta al éxito colectivo.</dd></div>
+              <div><dt class="t-label">Adaptabilidad</dt> <dd class="t-body">Nos ajustamos a las necesidades de cada proyecto, incluidas marcas de lujo y retail.</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 Confianza (paper) -->
+    <section id="confianza" class="sec s-paper" aria-labelledby="conf-t">
+      <div class="wrap">
+        <div class="hd"><h2 id="conf-t" class="t-h1" tabindex="-1">Confianza</h2><span class="crule" aria-hidden="true"></span></div>
+        <ul class="trust">
+          <li><p class="t-stat">3+ años</p><p class="t-small c-muted">Haciendo instalaciones eléctricas para empresas.</p></li>
+          <li><p class="t-stat">Todo México</p><p class="t-small c-muted">Cobertura nacional para tus proyectos.</p></li>
+          <li><p class="t-stat">NOM-001</p><p class="t-small c-muted">Instalaciones conforme a NOM-001-SEDE-2012.</p></li>
+        </ul>
+        <div class="clientes">
+          <h3 class="t-h2">Clientes que inspiran nuestro trabajo</h3>
+          <div class="cl-cols">
+            <div class="cl-col">
+              <div class="cl-g"><p class="t-h3 cl-name">Oficinas Gubernamentales</p><p class="t-small c-muted cl-scope">Sucursales</p><ul class="t-small cl-items"><li>Guadalajara</li><li>Morelia</li><li>Culiacán</li><li>Cd. Obregón</li><li>Toluca</li></ul></div>
+              <div class="cl-g"><p class="t-h3 cl-name">Grupo Accionario Attie</p><p class="t-small c-muted cl-scope">Remodelación y mantenimiento</p><ul class="t-small cl-items"><li>Corporativo</li><li>Predio La Naranja</li><li>Predio Calle 3</li><li>Predio Naucalpan</li><li>Radiatas</li><li>Cidros</li><li>Doña Rosa</li><li>CBS</li></ul></div>
+            </div>
+            <div class="cl-col r">
+              <div class="cl-g"><p class="t-h3 cl-name">Clientes Varios</p><ul class="t-small cl-items"><li>Site farmacéutica</li><li>Call center</li><li>Tiendas comerciales</li><li>Sucursales bancarias</li></ul></div>
+              <div class="cl-g"><p class="t-h3 cl-name">Inmobiliaria Goytia</p><p class="t-small c-muted cl-scope">Remodelación y mantenimiento</p><ul class="t-small cl-items"><li>Corporativo</li><li>Torre Axis</li><li>Sucursal Satélite</li><li>Museos</li><li>Colegios</li><li>Departamentos</li></ul></div>
+              <div class="cl-g"><p class="t-h3 cl-name">CHR Construcciones</p><ul class="t-small cl-items"><li>Red Ambiental</li><li>Keyence</li><li>The Pool</li><li>Sulzer</li><li>NSC Asesores</li><li>YUME</li><li>KIA</li><li>Elanco</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 Contacto (full-bleed dark photo, right-aligned block, p18) -->
+    <section id="contacto" class="ct on-dark" aria-labelledby="ct-t">
+      <img class="photo-bg" src="../../../../../assets/media/brochure/backgrounds/cable-tray-technician.jpg" alt="">
+      <div class="ovl"></div>
+      <div class="wrap">
+        <div class="ct-block">
+          <img class="ct-logo" src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="">
+          <div class="hd"><h2 id="ct-t" class="t-h1" tabindex="-1">Contacto</h2><span class="crule mirror" aria-hidden="true"></span></div>
+          <p class="t-h3">Ing. Alfredo Hernández</p>
+          <ul class="ct-rows">
+            <li class="ch-row">
+              <span class="ch-email"><a class="ch-link" href="mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto">proyectos1@kvainstalaciones.mx</a><button class="btn-icon on-dark-i" aria-label="Copiar correo proyectos1@kvainstalaciones.mx"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg></button></span>
+              <a class="ch-link" href="tel:+525640003344" aria-label="Llamar al (56) 4000 3344">(56) 4000 3344</a>
+            </li>
+          </ul>
+          <a class="btn btn-primary" href="#contacto">Cotiza tu proyecto</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 7 Footer -->
+  <footer class="ftr">
+    <div class="wrap ftr-grid">
+      <img src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="kVA Instalaciones">
+      <div class="t-small">
+        <p><span class="note dark">Legal identity (razón social · domicilio): pendiente — PRD Q6, no bloquea el lanzamiento</span></p>
+        <div class="ftr-ch">
+          <a href="mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto">proyectos1@kvainstalaciones.mx</a><a href="tel:+525640003344" aria-label="Llamar al (56) 4000 3344">(56) 4000 3344</a>
+        </div>
+      </div>
+      <div class="t-small" style="text-align:right"><a href="#aviso">Aviso de privacidad</a><p style="margin-top:8px">© 2026 kVA Instalaciones</p></div>
+    </div>
+  </footer>
+
+</div>
+</div>
+</div>
+</div>
+
+<!-- ===================== Column 2: Reference viewport 360×640 ===================== -->
+<div class="col">
+<div>
+<p class="cap" style="max-width:380px">Reference viewport 360×640 · Header + Hero at scroll 0
+<span>FR-4 above the fold: header logo, overline, the only h1, lead, primary CTA, secondary CTA, proof point. &lt; 768: left-aligned, CTAs stacked full-width; no Hero logo, overline hairlines, or bracket frames. Menu button "Menú" (disclosure). Flow 1 step 1 (Laura).</span></p>
+<div class="phone"><div class="phone-screen vp vp-m">
+  <header class="hdr">
+    <div class="wrap">
+      <a class="hdr-logo" href="#inicio"><img src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="kVA Instalaciones"></a>
+      <div class="hdr-m-actions">
+        <a class="btn btn-primary" href="#contacto" aria-label="Cotiza tu proyecto">Cotiza</a>
+        <button class="btn-icon on-dark-i" aria-label="Menú" aria-expanded="false" aria-controls="menu-movil"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg></button>
+      </div>
+    </div>
+  </header>
+  <section class="hero on-dark" aria-labelledby="hero-tm">
+    <img class="photo-bg" src="../../../../../assets/media/brochure/backgrounds/cover-blueprint-tools.jpg" alt="">
+    <div class="ovl"></div>
+    <div class="hero-block">
+      <p class="t-overline">Explorando soluciones</p>
+      <h1 id="hero-tm" class="t-display">Instalaciones eléctricas para empresas, conforme a norma</h1>
+      <p class="t-lead">Ingeniería e instalación sin paros, multas de CFE ni inspecciones fallidas.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#contacto">Cotiza tu proyecto</a>
+        <a class="btn btn-ghost-dark" href="#servicios">Ver servicios</a>
+      </div>
+      <p class="t-small">3+ años · Cobertura en todo México</p>
+    </div>
+  </section>
+</div></div>
+</div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<footer class="footer">
+  <div class="footer-inner">
+    <img
+      class="logo"
+      [src]="logo.src"
+      [attr.srcset]="logoSrcset"
+      [attr.width]="logo.width"
+      [attr.height]="logo.height"
+      [alt]="logoAlt"
+    />
+    <p class="identity">{{ identity }}</p>
+    <ul class="contact">
+      <li>
+        <a class="link" [href]="emailHref">{{ site.contact.email }}</a>
+      </li>
+      @if (phone; as contactPhone) {
+        <li>
+          <a class="link" [href]="contactPhone.href" [attr.aria-label]="contactPhone.name">{{
+            contactPhone.display
+          }}</a>
+        </li>
+      }
+    </ul>
+    <p class="legal">{{ copyright }}</p>
+    <a class="link" href="#aviso">{{ privacyLabel }}</a>
+  </div>
+</footer>

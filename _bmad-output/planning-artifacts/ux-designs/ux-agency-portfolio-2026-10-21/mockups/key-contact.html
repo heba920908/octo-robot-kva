@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Key screen · Contact composer + Privacy notice · kVA Instalaciones</title>
+<style>
+/*
+  KEY SCREEN: key-contact — Contact composer (slide-in panel) in validation error over the dimmed
+  Contacto section; mobile sheet post-submit (focus on status heading, then "Copiado"); Privacy
+  notice stacked over the composer (revised spines, 2026-10-21 Finalize).
+  Governing spine sections (the spines are the contract; this mock only illustrates):
+  - DESIGN.md › Colors (focus #D9A07A for current nav; focus-on-light ring on paper; danger;
+    success only on paper; scrim), Typography (h2 panel/notice titles, h3 post-submit heading,
+    field-label, small hint/error/Copy status), Layout & Spacing (#6 Contacto full-bleed photo,
+    right-aligned block ≥ 1024, mirrored rule; Heights are minimums; notice body scrolls with
+    scroll-padding above the sticky bar), Elevation & Depth (one overlay shadow; notice stacks
+    above the composer with its own scrim), Shapes (mirrored └ corner rule), Components (Header
+    condensed + nav-link-current, Contact section, Contact composer — no logo, post-submit actions
+    ranked Listo / Editar datos / Copiar correo, Copy status on light, Privacy notice — no logo,
+    sticky "Cerrar", Form field incl. checkbox + "Leer el Aviso de privacidad" link outside the
+    label, Buttons incl. button-text, Links underlined, Footer + top rule).
+  - EXPERIENCE.md › Voice and Tone (Composer title/intro, Required note, field labels + hint,
+    "Elige un servicio", consent label/link, Submit, Error: email format, Error summary, Post-submit
+    heading, FR-12 verbatim, Post-submit actions (ranked), Copy button name, Copiado, tagged direct
+    mailto subject), Component Patterns (Contact section + Direct contact links, Contact composer
+    incl. post-submit focus on <h3 tabindex=-1>, Copy status role=status, Privacy notice scroll
+    region, Form field), State Patterns (Contact composer Field error / Submitted / Notice open;
+    Copy status Success; WhatsApp CTA no number), Interaction Primitives (Modal overlays: notice
+    over composer only), Responsive & Platform (composer right panel ≥ 768 / sheet < 768; notice
+    sheet < 768), Key Flows › Flow 1 steps 5-7 + Failure + Edge case, Flow 2 steps 6-7.
+  Fonts: local stacks only — 'Quicksand','Outfit',system-ui,sans-serif. The OFL fonts are not installed
+  yet, so this renders in the system-ui fallback.
+  No JS, no network. Error / focus / copied states are rendered statically.
+*/
+/* ---- DESIGN.md tokens (verbatim) ---- */
+:root{
+  --ink:#1C1714;--ink-2:#2A2522;--paper:#FFFFFF;--paper-2:#F4F2F0;
+  --muted:#6B635D;--muted-on-dark:#A39B94;--border:#6B635D;--line:#D9D4CF;--line-on-dark:#4A433E;
+  --accent:#C8875A;--accent-hover:#D9A07A;--on-accent:#1C1714;
+  --accent-strong:#8A5430;--accent-strong-hover:#6F4326;--on-accent-strong:#FFFFFF;
+  --focus:#D9A07A;--focus-on-light:#8A5430;--danger:#B42318;--success:#1E7A46;
+  --overlay:#1C1714C7;--scrim:#1C171499;--clear:#1C171400;
+  --elev-overlay:0 24px 48px rgba(28,23,20,0.32);
+  /* Local stacks only (fonts not installed yet; system-ui fallback is expected). */
+  --ff-title:'Quicksand','Outfit',system-ui,sans-serif;
+  --ff-body:'Outfit','Quicksand',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+img{display:block;max-width:100%}
+ul,ol,dl{list-style:none}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+svg.i{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:miter}
+
+/* ---- Presentation board (not product UI; device chrome only) ---- */
+html{background:#BDB6AF}
+body{font-family:var(--ff-body);color:var(--ink);padding:48px}
+.board{display:flex;gap:64px;align-items:flex-start;width:max-content}
+.col{display:flex;flex-direction:column;gap:48px}
+.col-row{display:flex;gap:32px;align-items:flex-start}
+.cap{font:600 13px/1.45 system-ui,sans-serif;color:#1C1714;margin-bottom:12px;max-width:720px}
+.cap span{display:block;font-weight:400}
+.browser{width:1440px;background:var(--paper)}
+.chrome{height:40px;background:#E4E0DC;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #CFC9C3}
+.chrome i{width:10px;height:10px;border-radius:50%;background:#B9B2AC}
+.chrome .url{margin-left:16px;width:480px;height:24px;background:#fff;font:12px/24px system-ui,sans-serif;padding:0 12px;color:#6B635D}
+.phone{width:380px;padding:10px;background:#111}
+.phone-screen{width:360px;height:640px;overflow:hidden;position:relative;background:var(--paper)}
+.phone-screen.tall{height:auto;overflow:visible}
+.fold{position:absolute;left:-10px;right:-10px;border-top:2px dashed #C8875A;z-index:50}
+.fold b{position:absolute;right:0;top:-20px;font:600 11px/16px system-ui,sans-serif;background:#C8875A;color:#1C1714;padding:0 6px}
+.note{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B635D;border:1px dashed #A39B94;padding:2px 6px;display:inline-block;background:#fff}
+.note.dark{background:transparent;color:#A39B94;border-color:#6B635D}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---- Viewport scopes: base tokens < 1024, -lg tokens >= 1024.
+   --edge = distance from the content column to the viewport edge (rules bleed to it). ---- */
+.vp{position:relative;overflow:hidden;background:var(--paper)}
+.vp-d{--fs-display:60px;--lh-display:1.05;--fs-h1:44px;--w-h1:300;--lh-h1:1.1;--fs-h2:24px;--fs-h3:20px;--fs-stat:48px;--fs-lead:22px;--fs-body:18px;--m:48px;--sy:112px;--hh:80px;--logo-h:40px;--edge:120px}
+/* display < 768 = clamp(26px, 8.5vw, 32px) → 30.6px at the 360px Reference viewport */
+.vp-m{--fs-display:30.6px;--lh-display:1.1;--fs-h1:28px;--w-h1:400;--lh-h1:1.15;--fs-h2:20px;--fs-h3:18px;--fs-stat:36px;--fs-lead:20px;--fs-body:16px;--m:20px;--sy:64px;--hh:64px;--logo-h:32px;--edge:20px}
+
+/* ---- Typography tokens ---- */
+.t-display,.t-h1,.t-h2,.t-h3,.t-stat,.t-overline{font-family:var(--ff-title);text-transform:uppercase;overflow-wrap:break-word;hyphens:auto}
+.t-display{font-weight:300;font-size:var(--fs-display);line-height:var(--lh-display);letter-spacing:.04em}
+.t-h1{font-weight:var(--w-h1);font-size:var(--fs-h1);line-height:var(--lh-h1);letter-spacing:.06em}
+.t-h2{font-weight:400;font-size:var(--fs-h2);line-height:1.25;letter-spacing:.06em}
+.t-h3{font-weight:400;font-size:var(--fs-h3);line-height:1.3;letter-spacing:.04em}
+.t-stat{font-weight:300;font-size:var(--fs-stat);line-height:1.1;letter-spacing:.02em}
+.t-overline{font-weight:500;font-size:14px;line-height:1.3;letter-spacing:.18em}
+.t-ptitle{text-transform:none}
+.t-lead{font-family:var(--ff-body);font-weight:400;font-size:var(--fs-lead);line-height:1.5}
+.t-body{font-family:var(--ff-body);font-weight:400;font-size:var(--fs-body);line-height:1.6;max-width:72ch}
+.t-small{font-family:var(--ff-body);font-weight:400;font-size:14px;line-height:1.5}
+.t-label{font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.t-field-label{font-family:var(--ff-body);font-weight:500;font-size:15px;line-height:1.4}
+.c-muted{color:var(--muted)}
+.c-paper{color:var(--paper)}
+
+/* ---- Layout ---- */
+.wrap{max-width:calc(1200px + 2 * var(--m));margin:0 auto;padding:0 var(--m)}
+.sec{padding:var(--sy) 0;position:relative}
+.s-paper{background:var(--paper)}
+.s-paper2{background:var(--paper-2)}
+.photo-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ovl{position:absolute;inset:0;background:var(--overlay)}
+.lift{position:relative;z-index:1}
+
+/* ---- Shapes (monochrome linework: ink on light, paper on dark) ---- */
+.hd{display:inline-block;position:relative;max-width:100%}
+.crule{display:block;position:relative;height:1px;background:var(--ink);margin-top:16px;margin-left:calc(-1 * var(--edge));width:calc(100% + 32px + var(--edge))}
+.crule::after{content:"";position:absolute;right:0;bottom:0;width:1px;height:24px;background:inherit}
+.crule.mirror{margin-left:-32px;margin-right:calc(-1 * var(--edge))}
+.crule.mirror::after{right:auto;left:0}
+.on-dark .crule{background:var(--paper)}
+.subhd{display:flex;align-items:center;gap:16px}
+.srule{flex:1 1 auto;min-width:96px;height:1px;background:var(--ink);position:relative}
+.srule::after{content:"";position:absolute;right:0;width:1px;height:24px;background:inherit}
+.srule.up::after{bottom:0}
+.srule.down::after{top:0}
+.bk{position:absolute;pointer-events:none;border:0 solid var(--ink)}
+.bk.tr{border-top-width:1px;border-right-width:1px}
+.bk.bl{border-bottom-width:1px;border-left-width:1px}
+.on-dark .bk{border-color:var(--paper)}
+.bar{display:block;height:4px;background:var(--ink);margin-top:16px}
+
+/* ---- Buttons (min-heights; labels wrap) ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 24px;border:1px solid transparent;border-radius:0;text-decoration:none;white-space:normal;text-wrap:balance;text-align:center;font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary-light{background:var(--accent-strong);color:var(--on-accent-strong)}
+.btn-secondary{background:var(--paper);color:var(--ink);border-color:var(--ink)}
+.btn-ghost-dark{background:var(--clear);color:var(--paper);border-color:var(--paper)}
+.btn-text{background:var(--paper);color:var(--accent-strong);min-height:44px;padding:12px 0}
+.btn-block{width:100%}
+.btn-icon{width:44px;height:44px;flex:none;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:0;background:var(--paper);color:var(--ink)}
+.btn-icon.on-dark-i{background:var(--clear);color:var(--paper)}
+.ring-dark{outline:2px solid var(--focus);outline-offset:2px}
+.ring-light{outline:2px solid var(--focus-on-light);outline-offset:2px}
+.ring-inset{outline:2px solid var(--focus-on-light);outline-offset:-5px}
+
+/* ---- Links ---- */
+.lnk-light{color:var(--accent-strong);text-decoration:underline;text-underline-offset:3px}
+.lnk-dark{color:var(--paper);text-decoration:underline;text-underline-offset:3px}
+
+/* ---- Header ---- */
+.hdr{position:absolute;top:0;left:0;right:0;min-height:var(--hh);display:flex;align-items:center;z-index:5;color:var(--paper);background:var(--clear)}
+.hdr.condensed{min-height:56px;background:var(--ink);border-bottom:1px solid var(--line-on-dark)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;width:100%;gap:24px}
+.hdr-logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--paper)}
+.hdr-logo img{height:var(--logo-h);width:auto}
+.hdr-right{display:flex;align-items:center;gap:40px}
+.nav{display:flex;gap:32px}
+.nav a{text-decoration:none;padding:8px 0;border-bottom:2px solid transparent}
+.nav a[aria-current]{border-bottom-color:var(--focus)}
+.hdr-m-actions{display:flex;align-items:center;gap:8px}
+
+/* ---- Footer ---- */
+.ftr{background:var(--ink);color:var(--muted-on-dark);border-top:1px solid var(--line-on-dark);padding:48px 0}
+.ftr-grid{display:grid;grid-template-columns:auto 1fr auto;gap:48px;align-items:start}
+.ftr img{height:24px;width:auto}
+.ftr a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;min-height:24px}
+.ftr-ch{display:grid;grid-template-columns:auto auto;gap:8px 32px;justify-content:start;margin-top:8px}
+
+/* ---- Project filter + card + badge ---- */
+.chips{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 16px;background:var(--paper-2);color:var(--ink);border:1px solid var(--border);white-space:normal;font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.chip[aria-pressed="true"]{background:var(--accent-strong);color:var(--on-accent-strong);border-color:var(--accent-strong)}
+.count{margin-top:16px}
+.p-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
+.pcard{position:relative;background:var(--paper);display:flex;flex-direction:column}
+.pcard-ph{position:relative;aspect-ratio:4/3;background:var(--paper-2);overflow:hidden}
+.pcard-ph img{width:100%;height:100%;object-fit:cover}
+.pcard-b{padding:20px 24px 24px;display:flex;flex-direction:column;gap:8px}
+.pcard-b{order:2}
+.pcard h3 button{display:block;width:100%}
+.pcard h3 button::after{content:"";position:absolute;inset:0}
+.badge{position:absolute;top:16px;left:16px;background:var(--ink);color:var(--paper);padding:8px;font-family:var(--ff-body);font-weight:600;font-size:14px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+
+/* ---- Overlays ---- */
+.scrim{position:absolute;inset:0;background:var(--scrim);z-index:10}
+
+/* ---- Contact channels + copy status ---- */
+.ch-row{display:flex;align-items:center;gap:8px 24px;flex-wrap:wrap}
+.ch-email{display:inline-flex;align-items:center;gap:8px}
+.ch-link{display:inline-flex;align-items:center;gap:12px;color:var(--paper);text-decoration:underline;text-underline-offset:3px;font-size:var(--fs-body);line-height:1.6}
+.copy-status{display:inline-flex;align-items:center;gap:6px;font-size:14px;line-height:1.5}
+.copy-status.on-light{color:var(--success);background:var(--paper)}
+
+/* ---- Form field ---- */
+.fld{display:flex;flex-direction:column;gap:8px}
+.inp{min-height:48px;padding:12px;border:1px solid var(--border);background:var(--paper);color:var(--ink);width:100%;font-family:var(--ff-body);font-size:var(--fs-body);line-height:1.6;border-radius:0;appearance:none;-webkit-appearance:none}
+.inp.err{border-color:var(--danger)}
+.sel-wrap{position:relative}
+.sel-wrap svg{position:absolute;right:12px;top:12px;pointer-events:none;color:var(--ink)}
+.hint{font-size:14px;line-height:1.5;color:var(--muted)}
+.msg-err{display:flex;gap:8px;align-items:flex-start;color:var(--danger);font-size:14px;line-height:1.5}
+.consent{display:flex;flex-direction:column;gap:8px}
+.consent label{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5}
+.cb{width:24px;height:24px;flex:none;border:1px solid var(--border);background:var(--paper);display:inline-flex;align-items:center;justify-content:center}
+.cb.on{background:var(--accent-strong);border-color:var(--accent-strong);color:var(--on-accent-strong)}
+.cb svg{width:20px;height:20px}
+
+/* page-specific */
+.screen{height:900px}
+.pg{position:absolute;inset:0;padding-top:56px;background:var(--ink)}
+.ct{position:relative;min-height:760px;background:var(--ink);padding:64px 0 var(--sy)}
+.ct .wrap{position:relative;z-index:1;display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+.ct-block{grid-column:7 / 13;display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:24px;color:var(--paper)}
+.ct-logo{height:40px;width:auto}
+.ct-rows{display:flex;flex-direction:column;gap:16px;max-width:45ch}
+.ct-rows .ch-row{justify-content:flex-end}
+.panel{position:absolute;top:0;right:0;bottom:0;width:440px;background:var(--paper);color:var(--ink);box-shadow:var(--elev-overlay);z-index:11;padding:32px;display:flex;flex-direction:column;gap:20px;overflow:auto}
+.panel-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.panel-hd .btn-icon{margin:-10px -10px 0 0}
+.frm{display:flex;flex-direction:column;gap:24px}
+.inp.ring-light.err{border-color:var(--danger)}
+.vp-m.sheet{padding:20px;display:flex;flex-direction:column;gap:24px}
+.succ{display:flex;flex-direction:column;gap:16px}
+.succ-h{display:flex;gap:8px;align-items:center;color:var(--success)}
+.acts{display:flex;flex-direction:column;gap:12px}
+.copy-line{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.stack{position:relative;width:404px;padding:56px 0 0 24px}
+.stack>.phone.ghost{position:absolute;top:0;left:0}
+.stack>.phone.front{position:relative;z-index:1}
+.notice{display:flex;flex-direction:column;height:640px}
+.notice-body{flex:1;overflow:auto;padding:20px 20px 0;display:flex;flex-direction:column;gap:12px;scroll-padding-bottom:96px}
+.notice-bar{border-top:1px solid var(--line);background:var(--paper);padding:16px 20px}
+.notice-scrim{position:absolute;inset:0;background:var(--scrim);z-index:1}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M20 12H4M10 6l-6 6 6 6"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11"/><path d="M5 15H4V4h11v1"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a1 1 0 0 1-1 1A17 17 0 0 1 4 4a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16v1.5"/></symbol>
+</svg>
+
+<div class="board">
+
+<!-- ===================== Column 1: desktop 1440×900 ===================== -->
+<div class="col">
+<div>
+<p class="cap">key-contact · Desktop 1440×900 — Contact composer open over the dimmed Contacto section, validation-error state
+<span>Flow 2 step 6 / Flow 1 failure: submit with an invalid email → danger outline + icon + message under the hint, aria-invalid, polite error summary, focus moved to the first invalid field (focus-on-light ring). Service "Instalaciones" chosen, consent checked. No logo in the panel. Submit never disabled. Esc / Cerrar / scrim / Back close; focus returns to the invoker.</span></p>
+<div class="browser">
+<div class="chrome"><i></i><i></i><i></i><div class="url">https://kvainstalaciones.mx/#contacto</div></div>
+<div class="vp vp-d screen">
+
+  <header class="hdr condensed" inert>
+    <div class="wrap">
+      <a class="hdr-logo" href="#inicio"><img src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="kVA"><span class="t-label">Instalaciones</span></a>
+      <div class="hdr-right">
+        <nav class="nav t-label" aria-label="Secciones">
+          <a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#nosotros">Nosotros</a><a href="#confianza">Confianza</a><a href="#contacto" aria-current="location">Contacto</a>
+        </nav>
+        <a class="btn btn-primary" href="#contacto">Cotiza tu proyecto</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="pg" inert>
+    <section id="contacto" class="ct on-dark" aria-labelledby="ct-t">
+      <img class="photo-bg" src="../../../../../assets/media/brochure/backgrounds/cable-tray-technician.jpg" alt="">
+      <div class="ovl"></div>
+      <div class="wrap">
+        <div class="ct-block">
+          <img class="ct-logo" src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="">
+          <div class="hd"><h2 id="ct-t" class="t-h1" tabindex="-1">Contacto</h2><span class="crule mirror" aria-hidden="true"></span></div>
+          <p class="t-h3">Ing. Alfredo Hernández</p>
+          <ul class="ct-rows">
+            <li class="ch-row">
+              <span class="ch-email"><a class="ch-link" href="mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto">proyectos1@kvainstalaciones.mx</a><button class="btn-icon on-dark-i" aria-label="Copiar correo proyectos1@kvainstalaciones.mx"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg></button></span>
+              <a class="ch-link" href="tel:+525640003344" aria-label="Llamar al (56) 4000 3344">(56) 4000 3344</a>
+            </li>
+          </ul>
+          <a class="btn btn-primary" href="#contacto" aria-haspopup="dialog">Cotiza tu proyecto</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="ftr" inert style="position:absolute;left:0;right:0;top:816px">
+    <div class="wrap ftr-grid">
+      <img src="../../../../../assets/media/brochure/logo/kva-logo-white.png" alt="kVA Instalaciones">
+      <div class="t-small"><div class="ftr-ch"><a href="mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto">proyectos1@kvainstalaciones.mx</a><a href="tel:+525640003344" aria-label="Llamar al (56) 4000 3344">(56) 4000 3344</a></div></div>
+      <div class="t-small" style="text-align:right"><a href="#aviso">Aviso de privacidad</a></div>
+    </div>
+  </footer>
+
+  <div class="scrim" aria-hidden="true"></div>
+
+  <aside class="panel" role="dialog" aria-modal="true" aria-labelledby="cmp-t" aria-describedby="cmp-i">
+    <div class="panel-hd">
+      <h2 id="cmp-t" class="t-h2">Cotiza tu proyecto</h2>
+      <button class="btn-icon" aria-label="Cerrar"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <p id="cmp-i" class="t-small c-muted">Preparamos un correo para kVA; tú lo envías desde tu app de correo.</p>
+    <p class="sr" role="status">Revisa 1 campos: Tu correo electrónico.</p>
+    <form class="frm" novalidate action="#">
+      <p class="t-small c-muted">Todos los campos son obligatorios.</p>
+      <div class="fld">
+        <label class="t-field-label" for="em">Tu correo electrónico</label>
+        <input id="em" class="inp err ring-light" type="email" autocomplete="email" inputmode="email" required value="jorge.martinez.empresa.com" aria-invalid="true" aria-describedby="em-h em-e">
+        <p id="em-h" class="hint">Ahí te responderemos.</p>
+        <p id="em-e" class="msg-err"><svg class="i" aria-hidden="true"><use href="#i-error"/></svg><span>Revisa tu correo: debe tener el formato nombre@empresa.com.</span></p>
+      </div>
+      <div class="fld">
+        <label class="t-field-label" for="sv">Servicio de interés</label>
+        <div class="sel-wrap">
+          <select id="sv" class="inp" required>
+            <option value="">Elige un servicio</option>
+            <option>Desarrollo e Ingeniería de Proyecto</option>
+            <option selected>Instalaciones</option>
+            <option>Puesta en marcha y Validaciones</option>
+            <option>Servicios de Datos</option>
+          </select>
+          <svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </div>
+      </div>
+      <div class="consent">
+        <input class="sr" id="cs" type="checkbox" required checked>
+        <label for="cs"><span class="cb on" aria-hidden="true"><svg class="i"><use href="#i-check"/></svg></span><span>He leído y acepto el Aviso de privacidad.</span></label>
+        <a class="lnk-light t-small" href="#aviso" aria-haspopup="dialog" style="padding-left:36px">Leer el Aviso de privacidad</a>
+      </div>
+      <button class="btn btn-primary-light btn-block" type="submit">Abrir mi correo</button>
+    </form>
+  </aside>
+
+</div>
+</div>
+</div>
+</div>
+
+<!-- ===================== Column 2: mobile post-submit (×2) + Privacy notice stacked ===================== -->
+<div class="col">
+<div class="col-row">
+<div>
+<p class="cap" style="max-width:380px">Composer &lt; 768 · post-submit, just returned
+<span>Flow 1 step 7: form swapped for the post-submit state; focus on the status heading (&lt;h3 tabindex=-1&gt;, described by the FR-12 sentence). Actions full-width, ranked: Listo · Editar datos · Copiar correo.</span></p>
+<div class="phone"><div class="phone-screen vp vp-m sheet" role="dialog" aria-modal="true" aria-labelledby="cmp-tm">
+  <div class="panel-hd">
+    <h2 id="cmp-tm" class="t-h2">Cotiza tu proyecto</h2>
+    <button class="btn-icon" aria-label="Cerrar"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="succ">
+    <h3 class="t-h3 succ-h ring-light" tabindex="-1" aria-describedby="fr12a"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Abrimos tu app de correo</h3>
+    <p id="fr12a" class="t-body">Si no se abrió tu correo, escríbenos a proyectos1@kvainstalaciones.mx</p>
+  </div>
+  <div class="acts">
+    <button class="btn btn-primary-light btn-block">Listo</button>
+    <button class="btn btn-secondary btn-block">Editar datos</button>
+    <div class="copy-line">
+      <button class="btn btn-text" aria-label="Copiar correo proyectos1@kvainstalaciones.mx"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg>Copiar correo</button>
+      <span class="copy-status on-light" role="status" aria-atomic="true"></span>
+    </div>
+  </div>
+</div></div>
+</div>
+
+<div>
+<p class="cap" style="max-width:380px">Composer &lt; 768 · post-submit, after "Copiar correo"
+<span>Flow 1 edge case (no email app): Copy status "Copiado" (copy-status-on-light, held 2.5s, announced); focus stays on the copy control.</span></p>
+<div class="phone"><div class="phone-screen vp vp-m sheet" role="dialog" aria-modal="true" aria-labelledby="cmp-tm2">
+  <div class="panel-hd">
+    <h2 id="cmp-tm2" class="t-h2">Cotiza tu proyecto</h2>
+    <button class="btn-icon" aria-label="Cerrar"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="succ">
+    <h3 class="t-h3 succ-h" tabindex="-1" aria-describedby="fr12b"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Abrimos tu app de correo</h3>
+    <p id="fr12b" class="t-body">Si no se abrió tu correo, escríbenos a proyectos1@kvainstalaciones.mx</p>
+  </div>
+  <div class="acts">
+    <button class="btn btn-primary-light btn-block">Listo</button>
+    <button class="btn btn-secondary btn-block">Editar datos</button>
+    <div class="copy-line">
+      <button class="btn btn-text ring-light" aria-label="Copiar correo proyectos1@kvainstalaciones.mx"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg>Copiar correo</button>
+      <span class="copy-status on-light" role="status" aria-atomic="true"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Copiado</span>
+    </div>
+  </div>
+</div></div>
+</div>
+</div>
+
+<div>
+<p class="cap" style="max-width:404px">Privacy notice &lt; 768 · stacked over the composer sheet
+<span>Flow 1 step 5: opened from "Leer el Aviso de privacidad"; full-screen sheet above its own scrim; the composer beneath is inert, values intact (offset only to show the stack). No logo. Body is a scroll region; sticky "Cerrar" returns focus to the link (FR-14).</span></p>
+<div class="stack">
+  <div class="phone ghost" aria-hidden="true"><div class="phone-screen vp vp-m sheet" inert>
+    <div class="notice-scrim"></div>
+    <div class="panel-hd">
+      <p class="t-h2">Cotiza tu proyecto</p>
+      <span class="btn-icon"><svg class="i"><use href="#i-close"/></svg></span>
+    </div>
+    <div class="fld"><span class="t-field-label">Tu correo electrónico</span><span class="inp">laura.ramirez@empresa.com.mx</span></div>
+  </div></div>
+  <div class="phone front"><div class="phone-screen vp vp-m notice" role="dialog" aria-modal="true" aria-labelledby="pn-t">
+    <div class="notice-body t-body" tabindex="0" aria-labelledby="pn-t">
+      <h2 id="pn-t" class="t-h2">Aviso de privacidad</h2>
+      <p><strong>Responsable:</strong> kVA Instalaciones. <span class="note">razón social y domicilio pendientes (PRD Q6)</span></p>
+      <p><strong>Datos que usamos:</strong> tu correo electrónico y el servicio que elijas.</p>
+      <p><strong>Para qué:</strong> responder tu solicitud de cotización.</p>
+      <p><strong>Cómo:</strong> este sitio no envía ni guarda tus datos; prepara un correo que tú envías desde tu app de correo a proyectos1@kvainstalaciones.mx. Sin cookies ni servicios de terceros.</p>
+      <p><strong>Conservación:</strong> <span class="note">periodo pendiente (PRD Q6)</span></p>
+    </div>
+    <div class="notice-bar"><button class="btn btn-secondary">Cerrar</button></div>
+  </div></div>
+</div>
+</div>
+</div>
+
+</div>
+</body>
+</html>

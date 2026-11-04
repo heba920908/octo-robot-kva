@@ -1,0 +1,54 @@
+<section id="contacto" class="contact" aria-labelledby="contacto-title" data-kva-surface="dark">
+  <app-responsive-image class="contact-bg" [image]="backgroundImage" />
+  <div class="contact-overlay" aria-hidden="true"></div>
+  <div class="contact-wrap">
+    <div class="contact-block">
+      <img
+        class="contact-logo"
+        [src]="logo.src"
+        [attr.srcset]="logoSrcset"
+        [attr.width]="logo.width"
+        [attr.height]="logo.height"
+        [alt]="logoAlt"
+      />
+      <div class="kva-section-heading">
+        <h2 id="contacto-title" class="kva-type-h1" tabindex="-1">{{ title }}</h2>
+        <span class="kva-corner-rule kva-corner-rule--mirrored" aria-hidden="true"></span>
+      </div>
+      @if (contactName; as personName) {
+        <h3 class="contact-name kva-type-h3">{{ personName }}</h3>
+      }
+      <ul class="contact-channels">
+        <li class="channel-row">
+          <span class="channel-email">
+            <a #emailText class="channel-link" [href]="emailHref">{{ email }}</a>
+            <button
+              #copyButton
+              type="button"
+              class="copy-button"
+              [hidden]="!enhanced()"
+              [attr.aria-label]="copyLabel"
+            >
+              <mat-icon svgIcon="copy" aria-hidden="true" />
+            </button>
+            <span class="copy-status" role="status" aria-live="polite" aria-atomic="true">
+              @if (showCopiedIcon()) {
+                <mat-icon svgIcon="check" aria-hidden="true" />
+              }
+              {{ liveStatus() }}
+            </span>
+          </span>
+          @if (phone; as contactPhone) {
+            <a
+              class="channel-link"
+              [href]="contactPhone.href"
+              [attr.aria-label]="contactPhone.name"
+              >{{ contactPhone.display }}</a
+            >
+          }
+        </li>
+      </ul>
+      <a class="contact-cta" [href]="emailHref">{{ ctaLabel }}</a>
+    </div>
+  </div>
+</section>

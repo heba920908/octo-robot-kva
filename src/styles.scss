@@ -1,0 +1,248 @@
+@use 'styles/tokens';
+@use 'styles/theme';
+@use 'styles/fonts';
+
+body {
+  margin: 0;
+  color: var(--kva-color-ink);
+  background-color: var(--kva-color-paper);
+  font-family: var(--kva-typography-body-font-family), 'Outfit Fallback', sans-serif;
+  font-size: var(--kva-typography-body-font-size);
+  font-weight: var(--kva-typography-body-font-weight);
+  line-height: var(--kva-typography-body-line-height);
+}
+
+h1 {
+  font-family: var(--kva-typography-display-font-family), 'Quicksand Fallback', sans-serif;
+  font-size: var(--kva-typography-display-font-size);
+  font-weight: var(--kva-typography-display-font-weight);
+  line-height: var(--kva-typography-display-line-height);
+  letter-spacing: var(--kva-typography-display-letter-spacing);
+}
+
+@each $role in display, h1, h2, h3, stat, overline {
+  .kva-type-#{$role} {
+    font-family: var(--kva-typography-#{$role}-font-family), 'Quicksand Fallback', sans-serif;
+    font-size: var(--kva-typography-#{$role}-font-size);
+    font-weight: var(--kva-typography-#{$role}-font-weight);
+    line-height: var(--kva-typography-#{$role}-line-height);
+    letter-spacing: var(--kva-typography-#{$role}-letter-spacing);
+  }
+}
+
+@each $role in lead, body, small, label, field-label {
+  .kva-type-#{$role} {
+    font-family: var(--kva-typography-#{$role}-font-family), 'Outfit Fallback', sans-serif;
+    font-size: var(--kva-typography-#{$role}-font-size);
+    font-weight: var(--kva-typography-#{$role}-font-weight);
+    line-height: var(--kva-typography-#{$role}-line-height);
+    letter-spacing: var(--kva-typography-#{$role}-letter-spacing, normal);
+  }
+}
+
+@each $heading in h2, h3 {
+  #{$heading} {
+    @extend .kva-type-#{$heading};
+  }
+}
+
+h1,
+.kva-type-display,
+.kva-type-h1,
+.kva-type-h2,
+.kva-type-h3,
+.kva-type-stat,
+.kva-type-overline {
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.kva-type-label {
+  text-transform: uppercase;
+}
+
+.kva-project-title {
+  text-transform: none;
+}
+
+@media (width < 768px) {
+  h1,
+  .kva-type-display {
+    font-size: clamp(26px, 8.5vw, 32px);
+  }
+}
+
+@media (width < 330px) {
+  h1,
+  .kva-type-display {
+    font-weight: 400;
+  }
+}
+
+:root {
+  --kva-shell-margin: var(--kva-spacing-margin-mobile);
+  --kva-shell-edge: max(
+    var(--kva-shell-margin),
+    calc((100vw - var(--kva-spacing-content-max)) / 2)
+  );
+  --kva-shell-section-y: var(--kva-spacing-section-y);
+  --kva-shell-columns: 4;
+  --kva-shell-header-offset: var(--kva-spacing-header-h);
+  --kva-shell-header-height: var(--kva-component-header-min-height);
+  --kva-shell-z-header: 10;
+  --kva-shell-z-skip: 20;
+  --kva-header-logo-height: var(--kva-spacing-logo-header);
+  --kva-header-wordmark-display: none;
+  --kva-header-links-display: block;
+  --kva-header-menu-button-display: inline-flex;
+  --kva-header-nav-enhanced-display: none;
+  --kva-header-nav-flex: 1 0 100%;
+  --kva-header-nav-order: 4;
+  --kva-header-cta-full-display: none;
+  --kva-header-cta-short-display: inline;
+  --kva-header-transition:
+    background-color var(--kva-motion-duration-base) var(--kva-motion-easing-standard),
+    border-color var(--kva-motion-duration-base) var(--kva-motion-easing-standard);
+  --kva-contact-column: 1 / -1;
+  --kva-contact-align: flex-start;
+  --kva-contact-text-align: left;
+  --kva-contact-rule-left: calc(-1 * var(--kva-shell-edge));
+  --kva-contact-rule-right: auto;
+  --kva-contact-rule-arm-left: auto;
+  --kva-contact-rule-arm-right: 0;
+  --kva-hero-align: flex-start;
+  --kva-hero-text-align: left;
+  --kva-hero-logo-display: none;
+  --kva-hero-ornament-display: none;
+  --kva-hero-actions-direction: column;
+  --kva-hero-actions-align: stretch;
+  --kva-hero-actions-width: 100%;
+  --kva-hero-pad-y: var(--kva-spacing-10);
+  --kva-hero-pt: max(
+    var(--kva-hero-pad-y),
+    calc(var(--kva-shell-header-height) + var(--kva-spacing-4))
+  );
+}
+
+@media (width >= 768px) {
+  :root {
+    --kva-shell-margin: var(--kva-spacing-margin-tablet);
+    --kva-header-wordmark-display: inline;
+    --kva-header-cta-full-display: inline;
+    --kva-header-cta-short-display: none;
+    --kva-hero-align: center;
+    --kva-hero-text-align: center;
+    --kva-hero-logo-display: block;
+    --kva-hero-ornament-display: block;
+    --kva-hero-actions-direction: row;
+    --kva-hero-actions-align: center;
+    --kva-hero-actions-width: auto;
+    --kva-hero-pad-y: var(--kva-spacing-section-y);
+  }
+}
+
+@media (scripting: enabled) {
+  :root {
+    --kva-header-links-display: none;
+  }
+}
+
+@media (width >= 1024px) {
+  :root {
+    --kva-shell-margin: var(--kva-spacing-margin-desktop);
+    --kva-shell-section-y: var(--kva-spacing-section-y-lg);
+    --kva-shell-columns: 12;
+    --kva-shell-header-offset: var(--kva-spacing-header-h-lg);
+    --kva-shell-header-height: var(--kva-component-header-lg-min-height);
+    --kva-header-logo-height: var(--kva-spacing-logo-header-lg);
+    --kva-header-links-display: flex;
+    --kva-header-menu-button-display: none;
+    --kva-header-nav-enhanced-display: flex;
+    --kva-header-nav-flex: 0 1 auto;
+    --kva-header-nav-order: 1;
+    --kva-contact-column: 7 / 13;
+    --kva-contact-align: flex-end;
+    --kva-contact-text-align: right;
+    --kva-contact-rule-left: calc(-1 * var(--kva-spacing-8));
+    --kva-contact-rule-right: calc(-1 * var(--kva-shell-edge));
+    --kva-contact-rule-arm-left: 0;
+    --kva-contact-rule-arm-right: auto;
+  }
+}
+
+@media (scripting: none) and (width < 1024px) {
+  :root {
+    --kva-hero-pt: max(
+      var(--kva-hero-pad-y),
+      calc(var(--kva-shell-header-height) + var(--kva-spacing-target-min) + var(--kva-spacing-4))
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --kva-motion-press-offset: var(--kva-spacing-0);
+    --kva-header-transition: none;
+  }
+}
+
+:root[data-kva-header='condensed'] {
+  --kva-shell-header-offset: var(--kva-component-header-condensed-min-height);
+}
+
+html[data-kva-layer] {
+  overflow: hidden;
+}
+
+html {
+  scroll-padding-top: calc(var(--kva-shell-header-offset) + var(--kva-spacing-4));
+}
+
+h2[tabindex='-1'] {
+  scroll-margin-top: calc(var(--kva-shell-header-offset) + var(--kva-spacing-4));
+}
+
+.kva-section-heading {
+  display: inline-block;
+  position: relative;
+  max-width: 100%;
+}
+
+.kva-section-heading > h2 {
+  margin: 0;
+}
+
+.kva-corner-rule {
+  display: block;
+  position: relative;
+  height: var(--kva-spacing-rule-hairline);
+  margin-top: var(--kva-spacing-4);
+  margin-left: calc(-1 * var(--kva-shell-edge));
+  width: calc(100% + var(--kva-spacing-8) + var(--kva-shell-edge));
+  background-color: var(--kva-rule-color, var(--kva-color-ink));
+}
+
+.kva-corner-rule::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: var(--kva-spacing-rule-hairline);
+  height: var(--kva-spacing-6);
+  background-color: var(--kva-rule-color, var(--kva-color-ink));
+}
+
+.kva-corner-rule--mirrored {
+  margin-left: var(--kva-contact-rule-left);
+  margin-right: var(--kva-contact-rule-right);
+}
+
+.kva-corner-rule--mirrored::after {
+  left: var(--kva-contact-rule-arm-left);
+  right: var(--kva-contact-rule-arm-right);
+}
+
+[data-kva-surface='dark'] {
+  --kva-rule-color: var(--kva-color-paper);
+}

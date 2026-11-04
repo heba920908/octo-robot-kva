@@ -1,0 +1,65 @@
+<header
+  #bar
+  class="header"
+  [class.is-enhanced]="enhanced()"
+  [class.is-condensed]="condensed()"
+  [class.is-menu-open]="menuOpen()"
+  data-kva-surface="dark"
+>
+  <div class="header-inner">
+    <a
+      class="header-logo"
+      [href]="'#' + homeId"
+      [attr.aria-label]="logoLabel"
+      [attr.data-section-target]="homeId"
+    >
+      <img
+        class="header-logo-img"
+        [src]="logo.src"
+        [attr.srcset]="logoSrcset"
+        [attr.width]="logo.width"
+        [attr.height]="logo.height"
+        [alt]="logoAlt"
+      />
+      <span class="header-wordmark kva-type-label">{{ wordmark }}</span>
+    </a>
+    <nav id="menu-movil" class="header-nav" [attr.aria-label]="navLabel">
+      <ul class="header-links">
+        @for (link of links; track link.id) {
+          <li>
+            <a
+              class="header-link"
+              [href]="'#' + link.id"
+              [attr.aria-current]="current() === link.id ? 'location' : null"
+              [attr.data-section-target]="link.id"
+              >{{ link.label }}</a
+            >
+          </li>
+        }
+      </ul>
+      @if (showCta) {
+        <a class="header-cta header-cta-sheet" href="#contacto" data-section-target="contacto">{{
+          ctaLabel
+        }}</a>
+      }
+    </nav>
+    @if (showCta) {
+      <a class="header-cta" href="#contacto" data-section-target="contacto">
+        <span class="header-cta-full">{{ ctaLabel }}</span>
+        <span class="header-cta-short">{{ ctaShortLabel }}</span>
+      </a>
+    }
+    <button
+      id="menu-toggle"
+      class="header-menu-button"
+      type="button"
+      data-menu-toggle
+      [hidden]="!enhanced()"
+      [attr.aria-label]="menuLabel"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="menu-movil"
+    >
+      <mat-icon [svgIcon]="menuIcon()" aria-hidden="true" />
+    </button>
+  </div>
+</header>

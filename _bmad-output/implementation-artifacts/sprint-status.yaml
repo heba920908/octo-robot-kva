@@ -1,0 +1,83 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 10-27-2026 17:02
+last_updated: 2026-11-04
+project: agency-portfolio
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: done
+  1-1-brand-design-tokens-and-material-theme: done
+  1-2-self-hosted-fonts-and-icon-set: done
+  1-3-content-facade-and-ui-strings-content-doc: done
+  1-4-image-derivative-pipeline-and-shared-responsive-image: done
+  1-5-footer-with-direct-contact-links-and-in-page-privacy-notice: done
+  1-6-contact-section-with-direct-links-and-copy-address-fallback: done
+  1-7-hero-section: done
+  1-8-sticky-header-and-section-navigation: done
+  1-9-mobile-menu: done
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-services-section-with-the-four-brochure-service-cards: backlog
+  2-2-collapsible-sub-service-lists-on-mobile: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-open-the-contact-composer-from-any-contact-cta: backlog
+  3-2-privacy-notice-dialog: backlog
+  3-3-compose-and-hand-off-a-tagged-lead-email: backlog
+  3-4-service-cta-pre-fills-the-contact-composer: backlog
+  3-5-whatsapp-cta-slot: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-project-grid-with-the-nine-brochure-projects: backlog
+  4-2-filter-projects-by-service: backlog
+  4-3-project-detail-view: backlog
+  4-4-project-photo-carousel: backlog
+  4-5-quote-a-similar-project: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-nosotros-section: backlog
+  5-2-confirmed-trust-items: backlog
+  5-3-clientes-list-with-permission: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-search-and-share-metadata-with-structured-data: backlog
+  6-2-share-image-robots-txt-and-sitemap-xml: backlog
+  6-3-scroll-reveal-and-motion: backlog
+  6-4-no-javascript-and-accessibility-verification: backlog
+  6-5-launch-readiness-checks: backlog
+  epic-6-retrospective: optional
