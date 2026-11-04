@@ -338,6 +338,26 @@ describe('production validation exclusion (AC5)', () => {
       'Sub-service "Mantenimiento preventivo y correctivo a:',
     ],
     [
+      'a rendered Sub-service disclosure toggle in the prerendered Services',
+      (html: string) =>
+        html.replace(
+          '</ul><a class="service-cta"',
+          '</ul><button type="button" class="service-toggle" aria-expanded="false">Ver los 9 servicios</button><a class="service-cta"',
+        ),
+      'Prerendered #servicios must not render a Sub-service disclosure toggle',
+    ],
+    [
+      'a hidden Sub-service list in the prerendered Services',
+      (html: string) => html.replace('</h3><ul>', '</h3><ul hidden>'),
+      'Prerendered #servicios must not hide any Sub-service list or item',
+    ],
+    [
+      'a hidden Sub-service item in the prerendered Services',
+      (html: string) =>
+        html.replace('<li>Gestoría técnica</li>', '<li style="display:none">Gestoría técnica</li>'),
+      'Prerendered #servicios must not hide any Sub-service list or item',
+    ],
+    [
       'the Hero secondary CTA to #servicios',
       (html: string) => html.replace('<a href="#servicios">Ver servicios</a>', ''),
       'Header and Hero must link to the rendered #servicios section',

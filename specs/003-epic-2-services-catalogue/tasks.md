@@ -18,9 +18,9 @@ Each story is authorized by its own approved BMAD story spec. Test first.
 
 ## US11 - Collapsible Sub-service Lists
 
-- [ ] T206 [US11] Test first then add behaviors/service-card-disclosure.behavior.ts/.spec.ts (AC1).
-- [ ] T207 [US11] Test first then wire the per-card adapter and toggle in features/services (AC2-AC4).
-- [ ] T208 [US11] Extend static checks; full gates, browser checks, review; advance only Story 2.2.
+- [x] T206 [US11] Test first then add behaviors/service-card-disclosure.behavior.ts/.spec.ts (AC1).
+- [x] T207 [US11] Test first then wire the per-card adapter and toggle in features/services (AC2-AC4).
+- [x] T208 [US11] Extend static checks; full gates, browser checks, review; advance only Story 2.2.
 
 | Acceptance | Tasks      |
 | ---------- | ---------- |

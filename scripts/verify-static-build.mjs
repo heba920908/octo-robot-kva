@@ -174,6 +174,14 @@ if (existsSync(indexPath)) {
     }
   }
   check(
+    !/<button\b|\bservice-toggle\b|\baria-expanded=|\baria-controls=/i.test(servicesSection),
+    'Prerendered #servicios must not render a Sub-service disclosure toggle',
+  );
+  check(
+    !/<(?:ul|li)\b[^>]*(?:\bhidden\b|\bstyle=)/i.test(servicesSection),
+    'Prerendered #servicios must not hide any Sub-service list or item',
+  );
+  check(
     (html.match(/<a\b(?=[^>]*\bhref="#servicios")[^>]*>/gi) ?? []).length >= 2 &&
       /<a\b(?=[^>]*\bhref="#servicios")[^>]*>\s*Ver servicios\s*<\/a>/i.test(heroSection),
     'Header and Hero must link to the rendered #servicios section',
