@@ -31,6 +31,24 @@ describe('App', () => {
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(siteContent.brandName);
   });
 
+  it('places the skip link first, then the sticky header, before main#main (1.8-AC-01, AC-05)', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const main = root.querySelector('main') as HTMLElement;
+    const focusable = root.querySelector('a[href], button, [tabindex="0"]') as HTMLElement;
+
+    expect(root.firstElementChild?.tagName).toBe('APP-SKIP-LINK');
+    expect(focusable.getAttribute('href')).toBe('#main');
+    expect(root.children[1].tagName).toBe('APP-HEADER');
+    expect(root.querySelector('app-header a[href="#inicio"]')).not.toBeNull();
+    expect(root.querySelector('app-header a[href="#contacto"]')).not.toBeNull();
+    expect(root.querySelector('a[href="#servicios"]')).toBeNull();
+    expect(main.id).toBe('main');
+    expect(main.getAttribute('tabindex')).toBe('-1');
+    expect(root.querySelector('.site-header')).toBeNull();
+  });
+
   it('sets the document title and description from site content', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

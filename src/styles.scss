@@ -89,6 +89,17 @@ h1,
   --kva-shell-section-y: var(--kva-spacing-section-y);
   --kva-shell-columns: 4;
   --kva-shell-header-offset: var(--kva-spacing-header-h);
+  --kva-shell-header-height: var(--kva-component-header-min-height);
+  --kva-shell-z-header: 10;
+  --kva-shell-z-skip: 20;
+  --kva-header-logo-height: var(--kva-spacing-logo-header);
+  --kva-header-wordmark-display: none;
+  --kva-header-links-display: none;
+  --kva-header-cta-full-display: none;
+  --kva-header-cta-short-display: inline;
+  --kva-header-transition:
+    background-color var(--kva-motion-duration-base) var(--kva-motion-easing-standard),
+    border-color var(--kva-motion-duration-base) var(--kva-motion-easing-standard);
   --kva-contact-column: 1 / -1;
   --kva-contact-align: flex-start;
   --kva-contact-text-align: left;
@@ -104,11 +115,18 @@ h1,
   --kva-hero-actions-align: stretch;
   --kva-hero-actions-width: 100%;
   --kva-hero-pad-y: var(--kva-spacing-10);
+  --kva-hero-pt: max(
+    var(--kva-hero-pad-y),
+    calc(var(--kva-shell-header-height) + var(--kva-spacing-4))
+  );
 }
 
 @media (width >= 768px) {
   :root {
     --kva-shell-margin: var(--kva-spacing-margin-tablet);
+    --kva-header-wordmark-display: inline;
+    --kva-header-cta-full-display: inline;
+    --kva-header-cta-short-display: none;
     --kva-hero-align: center;
     --kva-hero-text-align: center;
     --kva-hero-logo-display: block;
@@ -126,6 +144,9 @@ h1,
     --kva-shell-section-y: var(--kva-spacing-section-y-lg);
     --kva-shell-columns: 12;
     --kva-shell-header-offset: var(--kva-spacing-header-h-lg);
+    --kva-shell-header-height: var(--kva-component-header-lg-min-height);
+    --kva-header-logo-height: var(--kva-spacing-logo-header-lg);
+    --kva-header-links-display: flex;
     --kva-contact-column: 7 / 13;
     --kva-contact-align: flex-end;
     --kva-contact-text-align: right;
@@ -139,7 +160,12 @@ h1,
 @media (prefers-reduced-motion: reduce) {
   :root {
     --kva-motion-press-offset: var(--kva-spacing-0);
+    --kva-header-transition: none;
   }
+}
+
+:root[data-kva-header='condensed'] {
+  --kva-shell-header-offset: var(--kva-component-header-condensed-min-height);
 }
 
 html {

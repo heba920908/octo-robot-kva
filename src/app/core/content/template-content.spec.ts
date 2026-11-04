@@ -248,6 +248,48 @@ describe('production validation exclusion (AC5)', () => {
       'Hero section #inicio must be prerendered',
     ],
     [
+      'the skip link',
+      (html: string) =>
+        html.replace('<a class="skip-link" href="#main">', '<a class="skip-link" href="#x">'),
+      'skip link to #main must be the first focusable',
+    ],
+    [
+      'the skip link as the first focusable element',
+      (html: string) => html.replace('<app-skip-link>', '<a href="#other">x</a><app-skip-link>'),
+      'skip link to #main must be the first focusable',
+    ],
+    [
+      'the header',
+      (html: string) => html.replace(/<app-header>[\s\S]*?<\/app-header>/, ''),
+      'Sticky header must be prerendered',
+    ],
+    [
+      'the header logo link to #inicio',
+      (html: string) => html.replace('href="#inicio" aria-label', 'href="#x" aria-label'),
+      'Header logo link must target #inicio',
+    ],
+    [
+      'the header logo accessible name',
+      (html: string) => html.replace('aria-label="kVA Instalaciones"', 'aria-label="Otro"'),
+      'Header logo link must target #inicio',
+    ],
+    [
+      'the header CTA to #contacto',
+      (html: string) =>
+        html.replace('class="header-cta" href="#contacto"', 'class="header-cta" href="#x"'),
+      'Header CTA must link to #contacto',
+    ],
+    [
+      'a header link to a missing section',
+      (html: string) => html.replace('</header>', '<a href="#servicios">s</a></header>'),
+      'Header must not link to #servicios',
+    ],
+    [
+      'the main focus target',
+      (html: string) => html.replace('<main id="main" tabindex="-1">', '<main id="main">'),
+      'main#main must be prerendered with tabindex="-1"',
+    ],
+    [
       'a dangling #servicios CTA',
       (html: string) => html.replace('<a href="#contacto">', '<a href="#servicios">'),
       'No CTA may point at #servicios',

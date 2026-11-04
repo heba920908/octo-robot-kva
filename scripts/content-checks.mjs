@@ -286,9 +286,9 @@ export function runStaticVerificationFixture(contamination = '', mutateHtml = (h
       <title>kVA Instalaciones | Fixture</title><link rel="icon" href="media/kva-icon.png">
       <link rel="preload" as="image" type="image/avif" imagesrcset="media/backgrounds/cover-blueprint-tools-320.avif 320w" imagesizes="100vw" fetchpriority="high">
       <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'">
-      </head><body><app-root ng-server-context="ssg"><section id="inicio"><h1>kVA Instalaciones</h1><a href="#contacto">Cotiza tu proyecto</a></section>
+      </head><body><app-root ng-server-context="ssg"><app-skip-link><a class="skip-link" href="#main">Saltar al contenido</a></app-skip-link><app-header><header class="header"><a class="header-logo" href="#inicio" aria-label="kVA Instalaciones"><img alt=""></a><a class="header-cta" href="#contacto">Cotiza tu proyecto</a></header></app-header><main id="main" tabindex="-1"><section id="inicio"><h1>kVA Instalaciones</h1><a href="#contacto">Cotiza tu proyecto</a></section>
       <section id="contacto"><img class="contact-logo" src="media/logo/kva-logo-white-40.png" alt=""><h2 id="contacto-title" tabindex="-1">Contacto</h2><h3>Ing. Alfredo Hernández</h3><button class="copy-button" hidden></button><a class="contact-cta" href="mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto">Cotiza tu proyecto</a></section>
-      <section id="aviso"></section><footer>
+      <section id="aviso"></section></main><footer>
       <a href="mailto:proyectos1@kvainstalaciones.mx?subject=%5Bkvainstalaciones.mx%5D%20Contacto">e</a>
       <a href="tel:+525640003344">t</a><a href="#aviso">a</a></footer></app-root>
       <script id="ng-state" type="application/json">{}</script></body></html>`,

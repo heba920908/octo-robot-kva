@@ -6,6 +6,7 @@
   "required": [
     "skipLink",
     "logoLink",
+    "headerWordmark",
     "navServices",
     "navProjects",
     "navAbout",
@@ -144,6 +145,9 @@
       "$ref": "#/$defs/plain"
     },
     "logoLink": {
+      "$ref": "#/$defs/plain"
+    },
+    "headerWordmark": {
       "$ref": "#/$defs/plain"
     },
     "navServices": {

@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-27
 
-**Status**: US1-US7 implemented, verified and reviewed; US8-US9 drafted
+**Status**: US1-US8 implemented, verified and reviewed; US9 drafted
 
 **Input**: BMAD Epic 1 in
 [epics.md](../../_bmad-output/planning-artifacts/epics.md) (Stories 1.1–1.9). Constitution
@@ -30,7 +30,7 @@ pattern.
 | US5        | 1.5        | Footer with direct contact links and in-page privacy notice | Implemented, verified and reviewed |
 | US6        | 1.6        | Contact section with direct links and copy-address fallback | Implemented, verified and reviewed |
 | US7        | 1.7        | Hero section                                                | Implemented, verified and reviewed |
-| US8        | 1.8        | Sticky header and section navigation                        | Drafted                            |
+| US8        | 1.8        | Sticky header and section navigation                        | Implemented, verified and reviewed |
 | US9        | 1.9        | Mobile menu                                                 | Drafted                            |
 
 A drafted story MUST be clarified (`speckit-clarify`) and added to [plan.md](./plan.md)
@@ -414,6 +414,17 @@ current-link indication; with reduced motion, check that scrolling is instant.
 
 ---
 
+**Clarification (2026-11-03)**: The approved Story 1.8 spec resolves all critical ambiguities;
+no questions remain. Add the `section-navigation` model (`activate-link`, `scroll-spy`,
+`skip-to-main`), a root `SectionNavigation` adapter, `core/layers` (`LayerController`) as sole
+owner of `replaceState`/`popstate`, and `focus`/`scroll`/`navigate` executors in `EffectRunner`.
+The header is a zero-height sticky host with a solid-`ink` no-JS state; transparent-at-top is a
+post-hydration enhancement. Between 768 and 1023 px no section links show until Story 1.9. Hero
+CTAs use the same navigation behavior. Add `headerLogo` (40/80 px white logo) to site content
+and the `headerWordmark` UI string. No menu, inert, focus trap, composer or `pushState`.
+
+**Planning contract**: [contracts/section-navigation.md](contracts/section-navigation.md).
+
 ### User Story 9 - Mobile menu (Priority: P2) — BMAD 1.9
 
 A Visitor on a phone or tablet opens a menu to reach any section.
@@ -522,7 +533,8 @@ choose a link, and check focus and history each time.
 - **FR-018** (US7): The Hero MUST show the headline, lead, CTAs and a validated proof point
   within the 360×640 first screen (FR4).
 - **FR-019** (US8): The header MUST stay visible, link only to visible sections, and move
-  focus and update the fragment on navigation (FR1, FR2).
+  focus and update the fragment on navigation (FR1, FR2). Only `core/layers` may call
+  `history.replaceState` or listen for `popstate`; effects run only in `core/effects`.
 - **FR-020** (US9): Below 1024 px, a disclosure menu MUST provide the section links with the
   focus, inert and history rules of AD-5 (FR1).
 

@@ -1,0 +1,34 @@
+:host {
+  display: block;
+}
+
+.skip-link:not(:focus) {
+  position: absolute;
+  width: var(--kva-spacing-rule-hairline);
+  height: var(--kva-spacing-rule-hairline);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: var(--kva-spacing-2);
+  left: var(--kva-spacing-2);
+  z-index: var(--kva-shell-z-skip);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--kva-spacing-target-min);
+  padding-inline: var(--kva-spacing-4);
+  color: var(--kva-component-skip-link-text-color);
+  background-color: var(--kva-component-skip-link-background-color);
+  font-family: var(--kva-typography-label-font-family), 'Outfit Fallback', sans-serif;
+  font-size: var(--kva-typography-label-font-size);
+  font-weight: var(--kva-typography-label-font-weight);
+  text-transform: uppercase;
+  text-decoration: none;
+  outline: var(--kva-component-focus-ring-inset-width) solid
+    var(--kva-component-focus-ring-inset-stroke-color);
+  outline-offset: var(--kva-spacing-rule-medium);
+}

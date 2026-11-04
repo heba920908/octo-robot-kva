@@ -6,10 +6,10 @@ and [data-model.md](../data-model.md).
 
 ## CLI
 
-| Command | Behaviour | Exit code |
-|---|---|---|
-| `npm run tokens:build` (`node scripts/design-tokens.mjs`) | Regenerates `src/styles/_tokens.scss` and `src/app/core/schemas/design-tokens.json` from DESIGN.md | 0 on success; 1 on an invalid source, naming the token |
-| `npm run tokens:check` (`node scripts/design-tokens.mjs --check`) | Writes nothing; prints each drifting token or file | 0 when no drift; 1 on drift or an invalid source |
+| Command                                                           | Behaviour                                                                                          | Exit code                                              |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `npm run tokens:build` (`node scripts/design-tokens.mjs`)         | Regenerates `src/styles/_tokens.scss` and `src/app/core/schemas/design-tokens.json` from DESIGN.md | 0 on success; 1 on an invalid source, naming the token |
+| `npm run tokens:check` (`node scripts/design-tokens.mjs --check`) | Writes nothing; prints each drifting token or file                                                 | 0 when no drift; 1 on drift or an invalid source       |
 
 ## Module surface (`scripts/design-tokens.d.mts`)
 

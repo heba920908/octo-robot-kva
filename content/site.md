@@ -22,6 +22,11 @@ footerLogo:
   src2x: media/logo/kva-logo-white-48.png
   width: 46
   height: 24
+headerLogo:
+  src: media/logo/kva-logo-white-40.png
+  src2x: media/logo/kva-logo-white-80.png
+  width: 76
+  height: 40
 contactLogo:
   src: media/logo/kva-logo-white-40.png
   src2x: media/logo/kva-logo-white-80.png
@@ -41,4 +46,5 @@ Site-wide identity, metadata and published contact channels. Typed Executable co
   responsible party until kVA provides them.
 - `footerYear` is the footer copyright year; update it with the content, not at render time.
 - `footerLogo` names the 24 px white-logo derivative and its 2x file with intrinsic size.
+- `headerLogo` names the 40 px white-logo derivative and its 2x file with intrinsic size for the sticky header; CSS renders it at 32 px (< 1024 px) or 40 px.
 - `contactLogo` names the 40 px white-logo derivative and its 2x file with intrinsic size for the Contact section (`#contacto`).

@@ -9,7 +9,7 @@
   overflow: hidden;
   box-sizing: border-box;
   min-height: min(100svh, var(--kva-spacing-hero-max));
-  padding-block: var(--kva-hero-pad-y);
+  padding: var(--kva-hero-pt) 0 var(--kva-hero-pad-y);
   color: var(--kva-component-hero-text-color);
   background-color: var(--kva-color-ink);
 }
@@ -20,8 +20,7 @@
   inset: 0;
 }
 
-.hero-bg ::ng-deep picture,
-.hero-bg ::ng-deep img {
+.hero-bg ::ng-deep :is(picture, img) {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -49,7 +48,6 @@
   flex-direction: column;
   align-items: var(--kva-hero-align);
   gap: var(--kva-spacing-5);
-  box-sizing: border-box;
   min-width: 0;
   max-width: 60ch;
   text-align: var(--kva-hero-text-align);

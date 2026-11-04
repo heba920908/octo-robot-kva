@@ -1,6 +1,7 @@
 export const uiStrings = {
   skipLink: { text: 'Saltar al contenido', parameters: [] },
   logoLink: { text: 'kVA Instalaciones', parameters: [] },
+  headerWordmark: { text: 'Instalaciones', parameters: [] },
   navServices: { text: 'Servicios', parameters: [] },
   navProjects: { text: 'Proyectos', parameters: [] },
   navAbout: { text: 'Nosotros', parameters: [] },

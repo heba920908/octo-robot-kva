@@ -92,6 +92,28 @@ if (existsSync(indexPath)) {
   check((html.match(/<h1\b/gi) ?? []).length === 1, 'Page must contain exactly one h1');
   check(html.includes('kVA Instalaciones'), 'Brand name must be prerendered');
   check(/<footer\b/i.test(html), 'Footer must be prerendered');
+  const appBody = html.match(/<app-root\b[^>]*>([\s\S]*)/i)?.[1] ?? '';
+  check(
+    /^\s*(?:<app-skip-link\b[^>]*>\s*)?<a\b(?=[^>]*\bhref="#main")/i.test(appBody),
+    'The skip link to #main must be the first focusable element',
+  );
+  const headerRegion = html.match(/<app-header\b[\s\S]*?<\/app-header>/i)?.[0] ?? '';
+  check(headerRegion.length > 0, 'Sticky header must be prerendered');
+  check(
+    /<a\b(?=[^>]*\bhref="#inicio")(?=[^>]*\baria-label="kVA Instalaciones")[^>]*>/i.test(
+      headerRegion,
+    ),
+    'Header logo link must target #inicio and be named "kVA Instalaciones"',
+  );
+  check(
+    /<a\b(?=[^>]*\bhref="#contacto")(?=[^>]*\bclass="[^"]*header-cta)[^>]*>/i.test(headerRegion),
+    'Header CTA must link to #contacto',
+  );
+  check(!/href="#servicios"/i.test(headerRegion), 'Header must not link to #servicios');
+  check(
+    /<main\b(?=[^>]*\bid="main")(?=[^>]*\btabindex="-1")[^>]*>/i.test(html),
+    'main#main must be prerendered with tabindex="-1"',
+  );
   const heroSection = html.match(/<section[^>]+id="inicio"[^>]*>[\s\S]*?<\/section>/i)?.[0] ?? '';
   check(heroSection.length > 0, 'Hero section #inicio must be prerendered');
   check((heroSection.match(/<h1\b/gi) ?? []).length === 1, 'Hero #inicio must contain the page h1');

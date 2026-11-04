@@ -247,3 +247,25 @@ secondary CTA renders only when the list includes `servicios`.
 `--kva-hero-align`, `--kva-hero-text-align`, `--kva-hero-logo-display`,
 `--kva-hero-ornament-display`, `--kva-hero-actions-direction`, `--kva-hero-actions-align` and
 `--kva-hero-pad-y`: mobile values at `:root`, centered/row/logo/ornament values at `>= 768px`.
+
+## US8 - Sticky Header and Section Navigation
+
+### SectionNavigationState / Event (`section-navigation.behavior.ts`)
+
+`{ current: string | null }`. Events: `activate-link { target, visible, reducedMotion }`,
+`scroll-spy { current: string | null }`, `skip-to-main`. Effects come only from the closed
+`Effect` union: `scroll`, `focus`, `navigate`. Unsupported pairs return `null`.
+
+### Content additions
+
+`ui-strings`: `headerWordmark` "Instalaciones". `site`: `headerLogo { src, src2x, width, height }`
+(`kva-logo-white-40.png` 76x40 with `kva-logo-white-80.png`).
+
+### Header shell properties (`src/styles.scss`)
+
+`--kva-header-wordmark-display` (>= 768), `--kva-header-links-display` (>= 1024),
+`--kva-header-cta-full-display` / `--kva-header-cta-short-display` (768 boundary),
+`--kva-header-logo-height` (32 -> 40 px at >= 1024), `--kva-shell-header-height` (64 -> 80 px)
+the condensed `--kva-shell-header-offset` (`<html data-kva-header="condensed">`), `--kva-shell-z-header`,
+`--kva-shell-z-skip`, `--kva-header-transition` (`none` under reduced motion) and `--kva-hero-pt`
+(Hero top padding clearing the header).

@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import designTokens from '../schemas/design-tokens.json';
+import { LayerController } from '../layers/layers';
 import {
   ANNOUNCEMENT_DELAY_MS,
   COPY_STATUS_HOLD_MS,
@@ -8,6 +9,67 @@ import {
   type AnnounceEffect,
   type CopyEffect,
 } from './effects';
+
+describe('EffectRunner focus, scroll and navigate (1.8-AC-03, AC-04)', () => {
+  let runner: EffectRunner;
+  let doc: Document;
+  let target: HTMLElement;
+
+  beforeEach(() => {
+    runner = TestBed.inject(EffectRunner);
+    doc = TestBed.inject(DOCUMENT);
+    target = doc.createElement('h2');
+    target.id = 'contacto-title';
+    target.tabIndex = -1;
+    target.scrollIntoView = vi.fn();
+    doc.body.appendChild(target);
+  });
+
+  afterEach(() => {
+    target.remove();
+    vi.restoreAllMocks();
+  });
+
+  it('focuses the target, scrolling only unless preventScroll is requested', () => {
+    const focus = vi.spyOn(target, 'focus');
+
+    expect(runner.focus({ kind: 'focus', target: 'contacto-title', preventScroll: true })).toBe(
+      true,
+    );
+    expect(focus).toHaveBeenLastCalledWith({ preventScroll: true });
+    expect(doc.activeElement).toBe(target);
+
+    runner.focus({ kind: 'focus', target: 'contacto-title' });
+    expect(focus).toHaveBeenLastCalledWith({ preventScroll: false });
+  });
+
+  it('does nothing for a missing focus or scroll target', () => {
+    expect(runner.focus({ kind: 'focus', target: 'ausente' })).toBe(false);
+    expect(runner.scroll({ kind: 'scroll', target: 'ausente', instant: false })).toBe(false);
+  });
+
+  it.each([
+    [false, 'smooth'],
+    [true, 'auto'],
+  ])('scrolls to the target (instant=%s -> %s)', (instant, behavior) => {
+    expect(runner.scroll({ kind: 'scroll', target: 'contacto-title', instant })).toBe(true);
+
+    expect(target.scrollIntoView).toHaveBeenCalledWith({ behavior, block: 'start' });
+  });
+
+  it('delegates fragment replacement to the layer controller and never pushes history', () => {
+    const replace = vi.spyOn(TestBed.inject(LayerController), 'replaceFragment');
+
+    expect(runner.navigate({ kind: 'navigate', fragment: '#contacto', replace: true })).toBe(true);
+    expect(replace).toHaveBeenCalledExactlyOnceWith('#contacto');
+
+    replace.mockClear();
+    expect(runner.navigate({ kind: 'navigate', fragment: '#contacto', replace: false })).toBe(
+      false,
+    );
+    expect(replace).not.toHaveBeenCalled();
+  });
+});
 
 describe('EffectRunner (1.6-AC-03, AC-04, AC-05)', () => {
   let runner: EffectRunner;

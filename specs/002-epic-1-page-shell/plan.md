@@ -315,3 +315,24 @@ Constitution pre/post-design: PASS. II N/A (Hero adds no user action; anchors ar
 III test-first colocated specs; IV hero schema plus existing tokens (no token changes);
 V standalone `OnPush`; VI eager LCP image with preload, native links, reflow at 320 px.
 US8-US9 remain unplanned. No commit, branch or publication is authorized.
+
+## US8 Plan (2026-11-03)
+
+The approved Story 1.8 spec is the sole implementation intent. Follow
+[contracts/section-navigation.md](contracts/section-navigation.md). No new dependencies.
+
+1. T056: Clarify/plan US8 in spec.md, plan.md, data-model.md, tasks.md and the contract.
+2. T057: Test then implement `behaviors/section-navigation.behavior.ts` (`1.8-AC-03`).
+3. T058: Test then add `core/layers/layers.ts`, `EffectRunner` focus/scroll/navigate and the
+   history-ownership guard (`1.8-AC-03`, `1.8-AC-04`).
+4. T059: Test then add the `SectionNavigation` adapter (`1.8-AC-03`, `1.8-AC-04`).
+5. T060: Test then add `headerWordmark` and `headerLogo` content (`1.8-AC-01`).
+6. T061: Test then implement `features/header`, `skip-link`, Hero tweaks, `app.*` and shell
+   properties in `styles.scss` (`1.8-AC-01`, `1.8-AC-02`, `1.8-AC-04`, `1.8-AC-05`).
+7. T062: Extend the static verifier, content checks and template fixtures.
+8. T063: Full gates, browser matrix, review; advance only Story 1.8.
+
+Constitution pre/post-design: PASS. II by the `section-navigation` model and its table and
+adapter tests; III test-first colocated specs; IV token-fed SCSS with shell custom properties;
+V standalone `OnPush` and signals; VI native anchors without JavaScript, 44 px targets, reduced
+motion honored. US9 remains unplanned. No commit, branch or publication is authorized.

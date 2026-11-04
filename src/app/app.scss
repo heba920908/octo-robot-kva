@@ -2,9 +2,6 @@
   display: block;
 }
 
-.site-header {
-  box-sizing: border-box;
-  max-width: calc(var(--kva-spacing-content-max) + 2 * var(--kva-shell-margin));
-  margin-inline: auto;
-  padding-inline: var(--kva-shell-margin);
+.site-main:focus {
+  outline: none;
 }

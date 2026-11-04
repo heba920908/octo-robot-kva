@@ -115,7 +115,7 @@ describe('site contact, facts and footer content (1.5-AC-01)', () => {
     expect(validate(withContact(change))).toBe(false);
   });
 
-  it.each(['facts', 'footerYear', 'footerLogo', 'contactLogo', 'contact'])(
+  it.each(['facts', 'footerYear', 'footerLogo', 'headerLogo', 'contactLogo', 'contact'])(
     'requires %s',
     (field) => {
       const validate = createValidator();
@@ -146,6 +146,20 @@ describe('site contact, facts and footer content (1.5-AC-01)', () => {
     expect([header.readUInt32BE(0), header.readUInt32BE(4)]).toEqual([logo.width, logo.height]);
     const header2x = readFileSync(`public/${logo.src2x}`).subarray(16, 24);
     expect([header2x.readUInt32BE(0), header2x.readUInt32BE(4)]).toEqual([91, 48]);
+  });
+
+  it('points the header logo at existing 40px/80px white derivatives with intrinsic size (1.8-AC-01)', () => {
+    const logo = siteContent.headerLogo;
+    expect(logo).toEqual({
+      src: 'media/logo/kva-logo-white-40.png',
+      src2x: 'media/logo/kva-logo-white-80.png',
+      width: 76,
+      height: 40,
+    });
+    const png = readFileSync(`public/${logo.src}`).subarray(16, 24);
+    expect([png.readUInt32BE(0), png.readUInt32BE(4)]).toEqual([logo.width, logo.height]);
+    const png2x = readFileSync(`public/${logo.src2x}`).subarray(16, 24);
+    expect([png2x.readUInt32BE(0), png2x.readUInt32BE(4)]).toEqual([152, 80]);
   });
 
   it('points the contact logo at existing 40px/80px white derivatives with intrinsic size (1.6-AC-02)', () => {

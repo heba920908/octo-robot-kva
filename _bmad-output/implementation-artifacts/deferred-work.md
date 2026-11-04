@@ -10,3 +10,6 @@
 - source_spec: `spec-1-7-hero-section.md`
   summary: Supply a wider Hero photo derivative if the source allows.
   evidence: Review R11: `cover-blueprint-tools` caps at 740 px and is stretched by `object-fit: cover` at 1440 px under the overlay.
+- source_spec: `spec-1-8-sticky-header-and-section-navigation.md`
+  summary: Add browser-level tests for header breakpoint visibility (767/768/1023/1024) and scroll-spy band geometry.
+  evidence: Review R13: both are asserted only by SCSS/source text; verified manually in the Pages preview this story. Needs a Playwright story since the repo has no browser test runner.

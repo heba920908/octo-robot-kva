@@ -205,3 +205,25 @@ FR-018 (PRD FR4) and Story 1.7 AC1-5 govern; US8-US9 remain unplanned.
 | AC3        | T049, T052-T055            |
 | AC4        | T049, T052, T055           |
 | AC5        | T049, T051-T052, T054-T055 |
+
+## US8 - Sticky Header and Section Navigation
+
+The approved Story 1.8 spec authorizes US8 only. Execute sequentially, test first.
+FR-019 (PRD FR1-FR3) and Story 1.8 AC1-5 govern; US9 remains unplanned.
+
+- [x] T056 [US8] Clarify/plan spec.md, plan.md, data-model.md, tasks.md and contracts/section-navigation.md before Act (AC1-5).
+- [x] T057 [US8] Test first then add behaviors/section-navigation.behavior.ts/.spec.ts (AC3).
+- [x] T058 [US8] Test first then add core/layers/layers.ts/.spec.ts, EffectRunner focus/scroll/navigate and the history-ownership guard (AC3, AC4).
+- [x] T059 [US8] Test first then add core/navigation/section-navigation.ts/.spec.ts adapter (AC3, AC4).
+- [x] T060 [US8] Test first then add `headerWordmark` UI string and `headerLogo` site content (AC1).
+- [x] T061 [US8] Test first then implement `features/header/*`, skip-link, Hero tweaks, `app.*` and `--kva-header-*` shell properties (AC1, AC2, AC4, AC5).
+- [x] T062 [US8] Extend scripts/verify-static-build.mjs, scripts/content-checks.mjs fixture and template-content.spec.ts (AC1, AC5).
+- [x] T063 [US8] Full gates, browser checks at 360x640/320/768/1024/1440 and no-JS, review; advance only Story 1.8 (AC1-5).
+
+| Acceptance | Tasks                        |
+| ---------- | ---------------------------- |
+| AC1        | T056, T060-T063              |
+| AC2        | T056, T061, T063             |
+| AC3        | T056-T059, T063              |
+| AC4        | T056, T058, T059, T061, T063 |
+| AC5        | T056, T061-T063              |

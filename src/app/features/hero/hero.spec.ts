@@ -59,6 +59,39 @@ describe('Hero section (#inicio) (1.7)', () => {
     expect(links[1].textContent?.trim()).toBe('Ver servicios');
   });
 
+  it('lets the h1 take programmatic focus for the header logo link (1.8-AC-04)', () => {
+    const { element } = render();
+    const heading = element.querySelector('h1#inicio-title') as HTMLElement;
+
+    expect(heading.getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('navigates through the section-navigation behavior with native fallback for modified clicks (1.8)', () => {
+    const section = document.createElement('section');
+    section.id = 'servicios';
+    section.scrollIntoView = vi.fn();
+    const target = document.createElement('h2');
+    target.id = 'servicios-title';
+    target.tabIndex = -1;
+    section.appendChild(target);
+    document.body.appendChild(section);
+    const { element } = render(['hero', 'servicios', 'contacto']);
+    const secondary = element.querySelector('a[href="#servicios"]') as HTMLAnchorElement;
+    const modified = new MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true });
+    const plain = new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 });
+
+    secondary.dispatchEvent(modified);
+    expect(modified.defaultPrevented).toBe(false);
+    expect(section.scrollIntoView).not.toHaveBeenCalled();
+
+    secondary.dispatchEvent(plain);
+    expect(plain.defaultPrevented).toBe(true);
+    expect(section.scrollIntoView).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(target);
+    section.remove();
+    window.history.replaceState(null, '', '/');
+  });
+
   it('shows the cover photo eager with high priority over an ink ground (AC3)', () => {
     const { element } = render();
     const section = element.querySelector('section#inicio') as HTMLElement;

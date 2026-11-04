@@ -8,6 +8,7 @@ EXPERIENCE; Hero copy remains Hero-owned. Future controls are data only.
 | ---------------------- | --------------------------------------------------------------------- | --------------- |
 | `skipLink`             | Saltar al contenido                                                   | -               |
 | `logoLink`             | kVA Instalaciones                                                     | -               |
+| `headerWordmark`       | Instalaciones                                                         | -               |
 | `navServices`          | Servicios                                                             | -               |
 | `navProjects`          | Proyectos                                                             | -               |
 | `navAbout`             | Nosotros                                                              | -               |

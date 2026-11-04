@@ -1,0 +1,147 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: var(--kva-shell-z-header);
+  height: 0;
+}
+
+.header {
+  --header-height: var(--kva-shell-header-height);
+  position: absolute;
+  inset: 0 0 auto;
+  box-sizing: border-box;
+  color: var(--kva-component-header-text-color);
+  background-color: var(--kva-component-header-condensed-background-color);
+  border-bottom: var(--kva-spacing-rule-hairline) solid var(--kva-color-clear);
+  transition: var(--kva-header-transition);
+}
+
+.header.is-enhanced {
+  background-color: var(--kva-component-header-background-color);
+}
+
+.header.is-condensed {
+  --header-height: var(--kva-component-header-condensed-min-height);
+  background-color: var(--kva-component-header-condensed-background-color);
+  border-bottom-color: var(--kva-component-divider-on-dark-stroke-color);
+}
+
+.header-inner {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--kva-spacing-4);
+  min-height: var(--header-height);
+  max-width: calc(var(--kva-spacing-content-max) + 2 * var(--kva-shell-margin));
+  margin-inline: auto;
+  padding-inline: var(--kva-shell-margin);
+}
+
+.header-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kva-spacing-3);
+  min-height: var(--kva-spacing-target-min);
+  color: var(--kva-component-header-text-color);
+  text-decoration: none;
+}
+
+.header-logo-img {
+  display: block;
+  width: auto;
+  height: var(--kva-header-logo-height);
+}
+
+.header-wordmark {
+  display: var(--kva-header-wordmark-display);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--kva-spacing-6);
+  margin-inline-start: auto;
+}
+
+.header-nav {
+  display: var(--kva-header-links-display);
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+  gap: var(--kva-spacing-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.header-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--kva-spacing-target-min);
+  color: var(--kva-component-nav-link-text-color);
+  font-family: var(--kva-component-nav-link-font-family), 'Outfit Fallback', sans-serif;
+  font-size: var(--kva-component-nav-link-font-size);
+  font-weight: var(--kva-component-nav-link-font-weight);
+  line-height: var(--kva-component-nav-link-line-height);
+  letter-spacing: var(--kva-component-nav-link-letter-spacing);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.header-link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: var(--kva-spacing-rule-hairline);
+  text-underline-offset: var(--kva-spacing-1);
+}
+
+.header-link[aria-current='location']::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 var(--kva-spacing-2);
+  height: var(--kva-component-nav-link-current-min-height);
+  background-color: var(--kva-component-nav-link-current-stroke-color);
+}
+
+.header-cta {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--kva-component-button-primary-min-height);
+  padding: var(--kva-spacing-3) var(--kva-component-button-primary-padding);
+  border-radius: var(--kva-component-button-primary-rounded);
+  color: var(--kva-component-button-primary-text-color);
+  background-color: var(--kva-component-button-primary-background-color);
+  font-family: var(--kva-component-button-primary-font-family), 'Outfit Fallback', sans-serif;
+  font-size: var(--kva-component-button-primary-font-size);
+  font-weight: var(--kva-component-button-primary-font-weight);
+  line-height: var(--kva-component-button-primary-line-height);
+  letter-spacing: var(--kva-component-button-primary-letter-spacing);
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.header-cta:hover {
+  background-color: var(--kva-component-button-primary-hover-background-color);
+}
+
+.header-cta-full {
+  display: var(--kva-header-cta-full-display);
+}
+
+.header-cta-short {
+  display: var(--kva-header-cta-short-display);
+}
+
+.header-logo:focus-visible,
+.header-link:focus-visible,
+.header-cta:focus-visible {
+  outline: var(--kva-component-focus-ring-width) solid var(--kva-component-focus-ring-stroke-color);
+  outline-offset: var(--kva-spacing-rule-medium);
+}

@@ -1,14 +1,16 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject, type OnDestroy } from '@angular/core';
+import { LayerController } from '../layers/layers';
 
 /** Closed effect union; only the effect runner executes these. */
 
 export type OverlayId = 'mobile-menu' | 'contact-composer' | 'project-detail' | 'privacy-notice';
 
-/** Move keyboard focus to the element whose id is `target`. */
+/** Move keyboard focus to the element whose id is `target`; `preventScroll` leaves motion to a scroll effect. */
 export interface FocusEffect {
   readonly kind: 'focus';
   readonly target: string;
+  readonly preventScroll?: boolean;
 }
 
 /** Open or close an overlay through the layer controller. */
@@ -58,8 +60,30 @@ export interface AnnounceOptions {
 @Injectable({ providedIn: 'root' })
 export class EffectRunner implements OnDestroy {
   private readonly document = inject(DOCUMENT);
+  private readonly layers = inject(LayerController);
   private announceDelayId: ReturnType<typeof setTimeout> | null = null;
   private announceHoldId: ReturnType<typeof setTimeout> | null = null;
+
+  /** Focus the target; false when absent. */
+  focus(effect: FocusEffect): boolean {
+    const element = this.document.getElementById(effect.target);
+    if (!element) return false;
+    element.focus({ preventScroll: effect.preventScroll === true });
+    return true;
+  }
+
+  /** Scroll the target to the top, honouring scroll-padding; false when absent. */
+  scroll(effect: ScrollEffect): boolean {
+    const element = this.document.getElementById(effect.target);
+    if (!element || typeof element.scrollIntoView !== 'function') return false;
+    element.scrollIntoView({ behavior: effect.instant ? 'auto' : 'smooth', block: 'start' });
+    return true;
+  }
+
+  /** Only history replacement exists; a new entry is never created. */
+  navigate(effect: NavigateEffect): boolean {
+    return effect.replace && this.layers.replaceFragment(effect.fragment);
+  }
 
   async copy(effect: CopyEffect): Promise<boolean> {
     const clipboard = this.document.defaultView?.navigator?.clipboard;
