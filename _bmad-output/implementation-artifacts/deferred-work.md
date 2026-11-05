@@ -25,3 +25,27 @@
 - source_spec: `spec-1-9-mobile-menu.md`
   summary: Verify the scroll lock on iOS Safari and avoid scrollbar-gutter layout shift while the menu is open.
   evidence: Review R11: `html { overflow: hidden }` does not stop touch scrolling on iOS and removes the desktop scrollbar; only Chromium was checked.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-services-section-with-the-four-brochure-service-cards.md`
+  summary: Confirm editorial copy for the four Service descriptions and all of Servicios de Datos, then drop the `[ASSUMPTION]` flags.
+  evidence: Descriptions are agent-written from the brochure; Services 1 and 3 contain outcome phrases ("conforme a norma", "evitar paros e inspecciones fallidas") not stated in the Sub-services.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-services-section-with-the-four-brochure-service-cards.md`
+  summary: Give each Service CTA a distinct accessible name once Epic 3 wires the composer pre-fill.
+  evidence: All four links read the same text and go to `#contacto` (WCAG 2.4.4 link purpose); real until Epic 3 replaces them.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-1-services-section-with-the-four-brochure-service-cards.md`
+  summary: Automated layout check for the Services grid column counts and CTA alignment.
+  evidence: Verified today by regex on SCSS plus a manual browser pass; the repo has no browser test harness and AGENTS.md forbids adding Playwright without a story.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-collapsible-sub-service-lists-on-mobile.md`
+  summary: Decide where focus lands when the viewport widens past 768 px while the Sub-service toggle is focused.
+  evidence: The toggle is removed from the DOM, so focus falls back to body; not covered by the spec's matrix.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-collapsible-sub-service-lists-on-mobile.md`
+  summary: Measure CLS from hydration collapsing the Service lists on narrow viewports (launch checks, Story 6.5).
+  evidence: Prerendered HTML is full by spec, and the JS collapse after hydration shrinks the cards; unmeasured.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-collapsible-sub-service-lists-on-mobile.md`
+  summary: Check scroll position after collapsing a long list on real devices, and show all Sub-services when printing.
+  evidence: Collapsing a 9-item list can move the toggle off-screen; collapsed cards print only four items.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-collapsible-sub-service-lists-on-mobile.md`
+  summary: Raise or remove the 5 s timeout of "matches every real original, candidate, budget and editorial alt without fabrication" in `images.content.spec.ts`.
+  evidence: Intermittent timeout under the full parallel suite (1 of 3 runs on merged epic-2); passes alone and on the Epic 1 baseline. Pre-existing test; the suite grew by about 80 tests.

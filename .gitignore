@@ -78,3 +78,5 @@ yarn-debug.log*
 
 # Agent sandbox (scratchpads, behaviour logs, schema snapshots, test output)
 /.agents/workspace/
+.playwright-mcp/
+.playwright/test-results/

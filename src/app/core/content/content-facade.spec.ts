@@ -1,6 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { ContentFacade, formatUiString, populatedSections } from './content-facade';
+import {
+  ContentFacade,
+  formatUiString,
+  populatedSections,
+  resolveServices,
+} from './content-facade';
 import { hero } from './hero.content';
+import { images } from './images.content';
+import { services } from './services.content';
 import { siteContent } from './site.content';
 import { privacyNotice } from './privacy-notice.content';
 import { uiStrings } from './ui-strings.content';
@@ -16,12 +23,50 @@ describe('ContentFacade (AC2-3)', () => {
     expect(facade.hero).toEqual(hero);
     expect(Object.isFrozen(facade.hero)).toBe(true);
     expect(Object.isFrozen(facade.hero.logo)).toBe(true);
-    expect(facade.visibleSections).toEqual(['hero', 'contacto']);
-    expect(facade.visibleSections).not.toContain('servicios');
+    expect(facade.visibleSections).toEqual(['hero', 'servicios', 'contacto']);
     expect(Object.isFrozen(facade.visibleSections)).toBe(true);
     expect(Object.isFrozen(facade.site)).toBe(true);
     expect(Object.isFrozen(facade.ui.menu)).toBe(true);
     expect(Object.isFrozen(facade.ui.servicesExpand.parameters)).toBe(true);
+  });
+
+  it('exposes frozen Services sorted by order and registers servicios (2.1-AC-02, 2.1-AC-06)', () => {
+    const facade = TestBed.inject(ContentFacade);
+
+    expect(facade.services.map((service) => service.id)).toEqual(
+      services.map((service) => service.id),
+    );
+    expect(facade.services.map((service) => service.order)).toEqual([1, 2, 3, 4]);
+    expect(Object.isFrozen(facade.services)).toBe(true);
+    expect(Object.isFrozen(facade.services[0])).toBe(true);
+    expect(Object.isFrozen(facade.services[0].subServices)).toBe(true);
+  });
+
+  it('sorts by order and resolves image ids with the Service alt, failing on unknown ids', () => {
+    const base = { description: 'd', subServices: ['a'] };
+    const resolved = resolveServices([
+      { ...base, id: 'b', name: 'B', order: 2 },
+      {
+        ...base,
+        id: 'a',
+        name: 'A',
+        order: 1,
+        image: { id: 'wiring-technician', alt: 'Texto propio' },
+      },
+    ]);
+
+    expect(resolved.map((service) => service.id)).toEqual(['a', 'b']);
+    expect(resolved[0].image).toEqual({ ...images['wiring-technician'], alt: 'Texto propio' });
+    expect(resolved[1].image).toBeUndefined();
+    expect(() =>
+      resolveServices([
+        { ...base, id: 'd', name: 'D1', order: 1 },
+        { ...base, id: 'd', name: 'D2', order: 2 },
+      ]),
+    ).toThrow(/duplicate.*d/i);
+    expect(() =>
+      resolveServices([{ ...base, id: 'c', name: 'C', order: 1, image: { id: 'nope', alt: 'x' } }]),
+    ).toThrow(/c.*nope/);
   });
 
   it('formats known strings, zero, Spanish, numbers and plain text', () => {

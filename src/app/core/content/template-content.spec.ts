@@ -280,9 +280,10 @@ describe('production validation exclusion (AC5)', () => {
       'Header CTA must link to #contacto',
     ],
     [
-      'a header link to a missing section',
-      (html: string) => html.replace('</header>', '<a href="#servicios">s</a></header>'),
-      'Header must not link to #servicios',
+      'the header link to #servicios',
+      (html: string) =>
+        html.replace('class="header-link" href="#servicios"', 'class="header-link"'),
+      'Header must link to #servicios',
     ],
     [
       'the menu navigation landmark',
@@ -305,9 +306,61 @@ describe('production validation exclusion (AC5)', () => {
       'main#main must be prerendered with tabindex="-1"',
     ],
     [
-      'a dangling #servicios CTA',
-      (html: string) => html.replace('<a href="#contacto">', '<a href="#servicios">'),
-      'No CTA may point at #servicios',
+      'the Services section',
+      (html: string) => html.replace('<section id="servicios">', '<section id="otros">'),
+      'Services section #servicios must be prerendered',
+    ],
+    [
+      'the Services section title',
+      (html: string) => html.replace('id="servicios-title"', 'id="otro-title"'),
+      'Services section h2 title must be prerendered in #servicios',
+    ],
+    [
+      'four Service cards',
+      (html: string) =>
+        html.replace('<article><h3>Instalaciones</h3>', '<div><h3>Instalaciones</h3>'),
+      'Services section must prerender at least four service cards',
+    ],
+    [
+      'a Service card CTA to #contacto',
+      (html: string) => html.replace('class="service-cta" href="#contacto"', 'class="service-cta"'),
+      'Every service card must prerender a CTA linking to #contacto',
+    ],
+    [
+      'a Sub-service',
+      (html: string) => html.replace('<li>Gestoría técnica</li>', ''),
+      'Sub-service "Gestoría técnica" of desarrollo-e-ingenieria-de-proyecto must be prerendered',
+    ],
+    [
+      'the whole maintenance Sub-service text',
+      (html: string) =>
+        html.replace('Sistemas de iluminación</li>', 'Sistemas</li><li>de iluminación</li>'),
+      'Sub-service "Mantenimiento preventivo y correctivo a:',
+    ],
+    [
+      'a rendered Sub-service disclosure toggle in the prerendered Services',
+      (html: string) =>
+        html.replace(
+          '</ul><a class="service-cta"',
+          '</ul><button type="button" class="service-toggle" aria-expanded="false">Ver los 9 servicios</button><a class="service-cta"',
+        ),
+      'Prerendered #servicios must not render a Sub-service disclosure toggle',
+    ],
+    [
+      'a hidden Sub-service list in the prerendered Services',
+      (html: string) => html.replace('</h3><ul>', '</h3><ul hidden>'),
+      'Prerendered #servicios must not hide any Sub-service list or item',
+    ],
+    [
+      'a hidden Sub-service item in the prerendered Services',
+      (html: string) =>
+        html.replace('<li>Gestoría técnica</li>', '<li style="display:none">Gestoría técnica</li>'),
+      'Prerendered #servicios must not hide any Sub-service list or item',
+    ],
+    [
+      'the Hero secondary CTA to #servicios',
+      (html: string) => html.replace('<a href="#servicios">Ver servicios</a>', ''),
+      'Header and Hero must link to the rendered #servicios section',
     ],
   ])('rejects static output without %s', (_name, mutate, message) => {
     const result = runStaticVerificationFixture('', mutate);

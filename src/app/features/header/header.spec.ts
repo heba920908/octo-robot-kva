@@ -76,6 +76,14 @@ describe('Header (1.8-AC-01, AC-02, AC-04)', () => {
     expect(cta.querySelector('.header-cta-short')?.textContent?.trim()).toBe('Cotiza');
   });
 
+  it('shows the Servicios link and Hero target with the launch facade (2.1-AC-02)', () => {
+    const { element } = render();
+    const links = Array.from(element.querySelectorAll<HTMLAnchorElement>('a.header-link'));
+
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(['#servicios', '#contacto']);
+    expect(links[0].textContent?.trim()).toBe('Servicios');
+  });
+
   it('orders links Servicios, Proyectos, Nosotros, Confianza, Contacto (AC-01)', () => {
     const { element } = render([
       'hero',
@@ -150,6 +158,10 @@ describe('Header (1.8-AC-01, AC-02, AC-04)', () => {
     let original: unknown;
 
     beforeEach(() => {
+      TestBed.overrideProvider(ContentFacade, {
+        useFactory: () =>
+          Object.assign(new ContentFacade(), { visibleSections: ['hero', 'contacto'] }),
+      });
       original = (window as unknown as Record<string, unknown>)['IntersectionObserver'];
       FakeObserver.instances.length = 0;
       (window as unknown as Record<string, unknown>)['IntersectionObserver'] = FakeObserver;

@@ -2,6 +2,9 @@
 <app-header />
 <main id="main" class="site-main" tabindex="-1">
   <app-hero />
+  @if (showServices) {
+    <app-services />
+  }
   <app-contact />
   <app-privacy />
 </main>

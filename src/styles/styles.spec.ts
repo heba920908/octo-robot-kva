@@ -37,7 +37,7 @@ describe('global token and Material styles', () => {
         path === 'src/styles.scss'
           ? content
               .replace(/@media \(width < (?:768|330)px\)/g, '')
-              .replace(/@media \(width >= (?:768|1024)px\)/g, '')
+              .replace(/@media \(width >= (?:768|1024|1440)px\)/g, '')
               .replace(/@media \(scripting: none\) and \(width < 1024px\)/g, '')
               .replace(/@media \(scripting: enabled\)/g, '')
               .replace('clamp(26px, 8.5vw, 32px)', '')

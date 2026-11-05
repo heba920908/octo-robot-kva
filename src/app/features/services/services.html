@@ -1,0 +1,49 @@
+<section id="servicios" class="services" aria-labelledby="servicios-title" data-kva-surface="light">
+  <div class="services-wrap">
+    <div class="kva-section-heading">
+      <h2 id="servicios-title" class="kva-type-h1" tabindex="-1">{{ title }}</h2>
+      <span class="kva-corner-rule" aria-hidden="true"></span>
+    </div>
+    <div #grid class="services-grid">
+      @for (card of cards(); track card.service.id) {
+        @let service = card.service;
+        <article
+          class="service-card"
+          [attr.data-service-id]="service.id"
+          [attr.aria-labelledby]="'service-title-' + service.id"
+        >
+          @if (service.image; as image) {
+            <div class="service-image">
+              <app-responsive-image [image]="image" [sizes]="imageSizes" />
+            </div>
+          }
+          <div class="service-body">
+            <div class="service-title">
+              <span class="service-frame" aria-hidden="true"></span>
+              <h3 class="service-name" [id]="'service-title-' + service.id">{{ service.name }}</h3>
+            </div>
+            <p class="service-description kva-type-body">{{ service.description }}</p>
+            <ul class="service-list kva-type-body" [id]="'service-list-' + service.id">
+              @for (item of card.items; track $index) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+            @if (card.toggleable) {
+              <button
+                type="button"
+                class="service-toggle"
+                [id]="'service-toggle-' + service.id"
+                [attr.aria-expanded]="card.expanded"
+                [attr.aria-controls]="'service-list-' + service.id"
+              >
+                {{ card.toggleLabel }}
+                <mat-icon svgIcon="chevron-down" aria-hidden="true" />
+              </button>
+            }
+            <a class="service-cta" href="#contacto">{{ service.cta || quoteLabel }}</a>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
